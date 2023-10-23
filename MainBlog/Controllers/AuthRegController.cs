@@ -99,6 +99,7 @@ namespace MainBlog.Controllers
                     using (StreamWriter fs = new StreamWriter(filePath, true))
                     {
                         fs.WriteAsync($"{DateTime.UtcNow} Неудачная попытка залогиниться! Почта: {model.Email}, пароль {PasswordHash.HashPassword(model.Password)}");
+                        fs.Close();
                     }
                     return Content($"{new Exception("Пользователь не найден!")}");
                 }

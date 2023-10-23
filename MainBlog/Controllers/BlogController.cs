@@ -15,12 +15,12 @@ namespace MainBlog.Controllers
     {
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
-        private IWebHostEnvironment _webHostEnvironment;
+        private IWebHostEnvironment _env;
         public BlogController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _webHostEnvironment = environment;
+            _env = environment;
         }
        
 
@@ -82,8 +82,14 @@ namespace MainBlog.Controllers
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
+                string filePath = Path.Combine(_env.ContentRootPath, "Logs", "DeleteUsersLogs.txt");
+                using (StreamWriter fs = new StreamWriter(filePath, true))
+                {
+                    fs.WriteAsync($"{DateTime.UtcNow} Пользователь удалён! Почта: {user.Email}, пароль {user.PasswordHash}");
+                    fs.Close();
+                }
                 // Обработка успешного удаления пользователя
-                return RedirectToAction("ShowUsers", "Blog");
+                return RedirectToAction("ShowUsers", "Blog"); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!сделать без обновления страницы!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
             else
             {
