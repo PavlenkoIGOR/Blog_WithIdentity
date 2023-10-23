@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Data\DB\" />
+    <Folder Include="Logs\" />
   </ItemGroup>
 
   <ItemGroup>
