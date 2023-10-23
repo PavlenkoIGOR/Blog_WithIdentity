@@ -17,6 +17,47 @@ namespace MainBlog.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
 
+            modelBuilder.Entity("MainBlog.Models.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TegId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("MainBlog.Models.Teg", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tegs");
+                });
+
             modelBuilder.Entity("MainBlog.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -60,6 +101,9 @@ namespace MainBlog.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PostId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("RegistrationDate")
@@ -215,6 +259,28 @@ namespace MainBlog.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PostTeg", b =>
+                {
+                    b.Property<int>("PostsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TegsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PostsId", "TegsId");
+
+                    b.HasIndex("TegsId");
+
+                    b.ToTable("PostTeg");
+                });
+
+            modelBuilder.Entity("MainBlog.Models.Post", b =>
+                {
+                    b.HasOne("MainBlog.Models.User", null)
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -264,6 +330,26 @@ namespace MainBlog.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PostTeg", b =>
+                {
+                    b.HasOne("MainBlog.Models.Post", null)
+                        .WithMany()
+                        .HasForeignKey("PostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MainBlog.Models.Teg", null)
+                        .WithMany()
+                        .HasForeignKey("TegsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MainBlog.Models.User", b =>
+                {
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

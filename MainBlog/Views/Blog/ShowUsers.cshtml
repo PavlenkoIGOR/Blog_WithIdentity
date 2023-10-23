@@ -57,9 +57,9 @@
 
                     </td>
                     <td>
-                        @using (Html.BeginForm("DeleteUser", "Account", new { Id = item.Id }))
+                    @using (Html.BeginForm("DeleteUser", "Blog", new { Id = item.Id }))
                         {
-                            @Html.ActionLink("Удалить", "DeleteUser", "Account", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px" })
+                            @Html.ActionLink("Удалить", "DeleteUser", "Blog", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px" })
                             @* <button class="btn btn-danger btn-xs" type="submit">Удалить</button> *@
                         }
                     </td>

@@ -12,12 +12,12 @@ namespace MainBlog.Controllers
     {
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
-        private IWebHostEnvironment _webHostEnvironment;
+        private IWebHostEnvironment _env;
         public AuthRegController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _webHostEnvironment = environment;
+            _env = environment;
         }
         #region RegistrateUser
         [HttpGet]
@@ -42,11 +42,13 @@ namespace MainBlog.Controllers
 
                 
 
-                if (result != null)
+                if (/*result != null*/result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Administrator");
-                    Response.Cookies.Append("RegisteredUsername", user.UserName);
-                    string logFile = Path.Combine(_webHostEnvironment.ContentRootPath, "Logs", "RegistrationLogs.txt");
+                    string[] roles = new[] { "Administrator", "Moderator", "User" };
+                    await _userManager.AddToRoleAsync(user, roles[2]);
+                    //await _signInManager.SignInAsync(user, false);
+                    Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
+                    string logFile = Path.Combine(_env.ContentRootPath, "Logs", "RegistrationLogs.txt");
                     using (StreamWriter sw = new StreamWriter(logFile, true))
                     {
                         sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
@@ -93,17 +95,16 @@ namespace MainBlog.Controllers
                 User user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
                 {
+                    string filePath = Path.Combine(_env.ContentRootPath, "Logs", "LoginLogs.txt");
+                    using (StreamWriter fs = new StreamWriter(filePath, true))
+                    {
+                        fs.WriteAsync($"{DateTime.UtcNow} Неудачная попытка залогиниться! Почта: {model.Email}, пароль {PasswordHash.HashPassword(model.Password)}");
+                    }
                     return Content($"{new Exception("Пользователь не найден!")}");
                 }
                 //var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, true);
                 //if (result.Succeeded)
                 //{
-                //    string filePath = Path.Combine(_env.ContentRootPath, "Logs", "Succeeded.txt");
-                //    using (StreamWriter fs = new StreamWriter(filePath, true))
-                //    {
-                //        fs.WriteAsync($"Пользователь {user.Email} незасаксидед...");
-                //    }
-
                 //}
                 //var claims = new List<Claim>
                 //{
@@ -113,9 +114,8 @@ namespace MainBlog.Controllers
                 //var user = _mapper.Map<User>(model);
 
                 //var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, false);
-
-                //return View("LoginUser", "Users");
                 return RedirectToAction("UserPosts", "Blog");
+                //return RedirectToAction("Index", "Home");
             }
             else if (String.IsNullOrEmpty(model.Email) || String.IsNullOrEmpty(model.Password))
                 throw new ArgumentNullException("Запрос не корректен");
@@ -126,5 +126,7 @@ namespace MainBlog.Controllers
             return RedirectToAction("Index", "Home");
         }
         #endregion
+
+
     }
 }

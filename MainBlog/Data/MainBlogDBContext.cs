@@ -8,6 +8,8 @@ namespace MainBlog.Data
 {
     public class MainBlogDBContext : IdentityDbContext<User>
     {
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Teg> Tegs { get; set; }
         public MainBlogDBContext(DbContextOptions<MainBlogDBContext> options) : base(options)
         {
 

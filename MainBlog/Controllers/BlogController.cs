@@ -2,6 +2,7 @@
 using MainBlog.Models;
 using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -68,7 +69,31 @@ namespace MainBlog.Controllers
         public async Task<IActionResult> EditUser()
         {
 
-            return RedirectToAction("ShowUsers", "Home");
+            return RedirectToAction("ShowUsers", "Blog");
+        }
+        [HttpGet]
+        public async Task<ActionResult> DeleteUser(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+            if (user == null)
+            {
+                return Content("user не найден");                
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                // Обработка успешного удаления пользователя
+                return RedirectToAction("ShowUsers", "Blog");
+            }
+            else
+            {
+                // Обработка ошибок при удалении пользователя
+                var errors = result.Errors;
+                // ...
+
+                return Content("Error");
+            }
+            return RedirectToAction("ShowUsers");
         }
     }
 }
