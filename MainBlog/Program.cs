@@ -30,7 +30,7 @@ namespace MainBlog
                     opts.Password.RequireLowercase = false;
                     opts.Password.RequireUppercase = false;
                     opts.Password.RequireDigit = false;
-                })
+                }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<MainBlogDBContext>();
 
             //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -66,7 +66,7 @@ namespace MainBlog
             using (var scope = app.Services.CreateScope())
             {
                 var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var roles = new[] { "Administrator","Moderator", "User"};
+                string [] roles = new[] { "Administrator","Moderator", "User"};
                 foreach (var role in roles)
                 {
                     if (!await roleManger.RoleExistsAsync(role))

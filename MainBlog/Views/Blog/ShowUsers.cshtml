@@ -1,0 +1,77 @@
+﻿@model IEnumerable<MainBlog.ViewModels.UsersViewModel>
+@* @using MainBlog.ViewModels
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignInManager;
+@inject UserManager<IdentityUser> UserManager; *@
+@{
+    ViewData["Title"] = "ShowUsers";
+}
+   
+@* @if (User.IsInRole("Administrator"))
+{ *@
+    <h1>Пользователи</h1>
+
+    <p>
+        <a asp-action="Create"></a>
+    </p>
+    <table border="1" cellpadding="5" width="100%">
+        <thead>
+            <tr >
+                <td bgcolor="steelblue"  colspan="6" style="color: bisque">Таблица учётных записей</td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayName("Role")
+                </th>
+                <th>
+                    @Html.DisplayName("Изменить роль")
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.RoleType)
+                    </td>
+                    <td>
+                        <form asp-controller="Account" asp-action="Show">
+                            <select asp-items="Html.GetEnumSelectList<MainBlog.ViewModels.RolesViewModel>()">
+                                <option value="Выбрать роль">Выбрать роль</option>                                
+                            </select>
+                        </form>
+
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("DeleteUser", "Account", new { Id = item.Id }))
+                        {
+                            @Html.ActionLink("Удалить", "DeleteUser", "Account", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px" })
+                            @* <button class="btn btn-danger btn-xs" type="submit">Удалить</button> *@
+                        }
+                    </td>
+                    <td>
+                        <button asp-controller="Account" asp-action="EditUser">Сохранить</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+@* }
+else
+{
+    <h1>Нахер иди!</h1>
+} *@

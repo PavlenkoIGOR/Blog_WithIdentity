@@ -1,0 +1,14 @@
+﻿@model MainBlog.Models.Post
+@{
+    ViewData["Title"] = "Ваш Блог";
+    // Layout = null;
+}
+
+<div style="width: 100%; height: 100%; background-color: darkred">
+    <div id="PostField" style="background-color: steelblue">
+        <form asp-controller="AccountController" asp-action="">
+            <input asp-for="Text" style="overflow-y: scroll;"/>
+            <input type="submit" value="Опубликовать" />
+        </form>
+    </div>
+</div>

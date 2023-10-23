@@ -19,7 +19,7 @@ namespace MainBlog.Controllers
             _signInManager = signInManager;
             _webHostEnvironment = environment;
         }
-
+        #region RegistrateUser
         [HttpGet]
         public IActionResult RegistrateUser()
         {
@@ -75,5 +75,56 @@ namespace MainBlog.Controllers
             }
             return View(viewModel);
         }
+        #endregion
+        
+        #region Login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            //return RedirectToAction("Login", "AuthReg");
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
+                {
+                    return Content($"{new Exception("Пользователь не найден!")}");
+                }
+                //var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, true);
+                //if (result.Succeeded)
+                //{
+                //    string filePath = Path.Combine(_env.ContentRootPath, "Logs", "Succeeded.txt");
+                //    using (StreamWriter fs = new StreamWriter(filePath, true))
+                //    {
+                //        fs.WriteAsync($"Пользователь {user.Email} незасаксидед...");
+                //    }
+
+                //}
+                //var claims = new List<Claim>
+                //{
+                //    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                //    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.RoleType)
+                //};
+                //var user = _mapper.Map<User>(model);
+
+                //var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, false);
+
+                //return View("LoginUser", "Users");
+                return RedirectToAction("UserPosts", "Blog");
+            }
+            else if (String.IsNullOrEmpty(model.Email) || String.IsNullOrEmpty(model.Password))
+                throw new ArgumentNullException("Запрос не корректен");
+            else
+            {
+                ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion
     }
 }

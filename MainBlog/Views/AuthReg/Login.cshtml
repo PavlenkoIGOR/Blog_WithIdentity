@@ -1,0 +1,23 @@
+﻿@model MainBlog.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Логинимся!";
+}
+
+<h1>Логинься!</h1>
+<hr />
+<div style="position: relative; background-color: greenyellow;">
+    <form asp-controller="AuthReg" asp-action="Login" style="display: grid">
+
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span style="color:red;" asp-validation-for="Email"></span>
+
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span style="color:red;" asp-validation-for="Password"></span>
+        <div>
+            <input class="radio" asp-for="RememberMe" type="radio" value="true"/>RememberMe<Br>
+        </div>
+        <input type="submit" value="Войти" />
+    </form>
+</div>
