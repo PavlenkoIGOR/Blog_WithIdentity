@@ -6,8 +6,8 @@
 <h1>Логинься!</h1>
 <hr />
 <div style="position: relative; background-color: greenyellow;">
-    <form asp-controller="AuthReg" asp-action="Login" style="display: grid">
-
+    <form method="post" asp-controller="AuthReg" asp-action="Login" style="display: grid">
+        <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
         <label asp-for="Email"></label>
         <input asp-for="Email" />
         <span style="color:red;" asp-validation-for="Email"></span>

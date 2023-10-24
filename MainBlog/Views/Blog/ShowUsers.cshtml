@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<MainBlog.ViewModels.UsersViewModel>
-@* @using MainBlog.ViewModels
+@using MainBlog.ViewModels
 @using Microsoft.AspNetCore.Identity;
-@inject SignInManager<IdentityUser> SignInManager;
-@inject UserManager<IdentityUser> UserManager; *@
+@inject SignInManager<User> SignInManager;
+@inject UserManager<User> UserManager;
 @{
     ViewData["Title"] = "ShowUsers";
+
 }
    
-@* @if (User.IsInRole("Administrator"))
-{ *@
+
     <h1>Пользователи</h1>
 
     <p>
@@ -57,9 +57,11 @@
 
                     </td>
                     <td>
-                    @using (Html.BeginForm("DeleteUser", "Blog", new { Id = item.Id }))
+                        @* ниже: создание <form></form> *@
+                    @using (Html.BeginForm("DeleteUser", "Blog", new { Id = item.Id }, FormMethod.Post))
                         {
-                            @Html.ActionLink("Удалить", "DeleteUser", "Blog", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px" })
+                        @* ниже: создание кнопки и привязка к контроллеру *@
+                        @Html.ActionLink("Удалить", "DeleteUser", "Blog", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px" })
                             @* <button class="btn btn-danger btn-xs" type="submit">Удалить</button> *@
                         }
                     </td>
@@ -70,8 +72,4 @@
             }
         </tbody>
     </table>
-@* }
-else
-{
-    <h1>Нахер иди!</h1>
-} *@
+

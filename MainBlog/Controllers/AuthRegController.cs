@@ -1,6 +1,7 @@
 ﻿using Blog;
 using MainBlog.Models;
 using MainBlog.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -81,14 +82,16 @@ namespace MainBlog.Controllers
         
         #region Login
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string rtrnUrl)
         {
+            ViewBag.returnUrl = rtrnUrl;
             //return RedirectToAction("Login", "AuthReg");
-            return View();
+            return View(new LoginViewModel { ReturnUrl = rtrnUrl });
         }
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string retrnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -103,10 +106,12 @@ namespace MainBlog.Controllers
                     }
                     return Content($"{new Exception("Пользователь не найден!")}");
                 }
-                //var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, true);
-                //if (result.Succeeded)
-                //{
-                //}
+                await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
+                Microsoft.AspNetCore.Identity.SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, PasswordHash.HashPassword(model.Password), false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
+                if (signInResult.Succeeded)
+                {
+                    return Redirect(retrnUrl ?? "/");
+                }
                 //var claims = new List<Claim>
                 //{
                 //    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),

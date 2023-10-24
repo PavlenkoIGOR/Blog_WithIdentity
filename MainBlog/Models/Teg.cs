@@ -9,9 +9,7 @@ namespace MainBlog.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        [ForeignKey("Id")]
-        public int PostId { get; set; }
-        public ICollection<Post> Posts { get; set; }
+        public List<Post> Posts { get; set; }
 
         public Teg() 
         {

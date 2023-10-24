@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.userPostsTextArea {
+    overflow-y: visible;
+    height: 100px;
+    width: 100%;
+    background-color: bisque;
+}

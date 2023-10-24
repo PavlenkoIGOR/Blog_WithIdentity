@@ -1,26 +1,31 @@
 ﻿using Blog;
+using MainBlog.Data;
 using MainBlog.Models;
 using MainBlog.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Xml.Linq;
 
 namespace MainBlog.Controllers
 {
     public class BlogController : Controller
     {
+        private MainBlogDBContext _context;
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
-        public BlogController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+        public BlogController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _env = environment;
+            _context = blogDBContext;
         }
        
 
@@ -63,7 +68,54 @@ namespace MainBlog.Controllers
         [HttpGet]
         public IActionResult UserPosts()
         {
-            return View("UserPosts");
+
+            return View(new UserPostsViewModel());
+        }
+        [HttpPost]
+        public IActionResult AddUserPosts(UserPostsViewModel viewModel)
+        {
+            var currentUser = HttpContext.User;
+            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
+
+            //Необходимая логика обработки текста из Textarea
+            string postContent = viewModel.Text;
+            Post post = new Post()
+            {
+                //Name = viewModel.Name, //название статьи
+                PublicationDate = DateTime.UtcNow,
+                Text = postContent,
+                UserId = userId,
+                CommentId = "1"
+                //Tegs = viewModel.Tegs,
+            };
+            _context.Posts.AddAsync(post);
+            _context.SaveChanges();
+
+            if (_signInManager.IsSignedIn(User))
+            {
+                string logFile1 = Path.Combine(_env.ContentRootPath, "Logs", "UserPostsLogs.txt");
+                using (StreamWriter sw = new StreamWriter(logFile1, true))
+                {
+                    sw.WriteLineAsync($"signInManager сработал");
+                    sw.Close();
+                }
+                // Получаем данные текущего аутентифицированного пользователя
+
+                if (ModelState.IsValid)
+                {
+                    using (StreamWriter sw = new StreamWriter(logFile1, true))
+                    {
+                        sw.WriteLineAsync($"{viewModel.Name} Валидна. {viewModel.PublicationDate}. ");
+                        sw.Close();
+                    }
+
+                    // Верните результат или выполните другие действия
+                    return RedirectToAction("UserPosts", "Blog");
+                }
+            }
+
+                
+            return RedirectToAction("UserPosts", "Blog");
         }
 
         public async Task<IActionResult> EditUser()
@@ -100,6 +152,21 @@ namespace MainBlog.Controllers
                 return Content("Error");
             }
             return RedirectToAction("ShowUsers");
+        }
+
+        //[Authorize]
+        [HttpGet]
+        public ActionResult ForAuthUsersOnly()
+        {
+            return Content("Аутентифицирован!");
+        }
+
+
+        [HttpPost]
+        public IActionResult PublicatePost(UserPostsViewModel viewModel)
+        {
+
+            return Content("Опубликовано!");
         }
     }
 }
