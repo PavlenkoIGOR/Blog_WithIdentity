@@ -299,7 +299,7 @@ namespace MainBlog.Migrations
             modelBuilder.Entity("MainBlog.Models.Comment", b =>
                 {
                     b.HasOne("MainBlog.Models.Post", "Post")
-                        .WithMany("Comment")
+                        .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -386,7 +386,7 @@ namespace MainBlog.Migrations
 
             modelBuilder.Entity("MainBlog.Models.Post", b =>
                 {
-                    b.Navigation("Comment");
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("MainBlog.Models.User", b =>

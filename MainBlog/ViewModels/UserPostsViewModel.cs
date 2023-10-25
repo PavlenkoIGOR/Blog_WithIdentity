@@ -12,6 +12,7 @@ namespace MainBlog.ViewModels
         public string Text { get; set; }
 
         public DateTime PublicationDate { get; set; }
+
         public List<Teg> Tegs { get; set; }
 
         //public string RoleType { get; set; }

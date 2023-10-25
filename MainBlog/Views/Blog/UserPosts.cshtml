@@ -2,14 +2,18 @@
 @{
     ViewData["Title"] = "Ваш Блог";
     // Layout = null;
+    string registeredUsername = Context.Request.Cookies["RegisteredUsername"];
+    
 }
+
+<H1>Страница пользователя @registeredUsername</H1>
 
 <div style="width: 100%; height: 100%; background-color: darkred">
     <div id="PostField" style="background-color: steelblue">
         <form method="post" asp-controller="Blog" asp-action="AddUserPosts">
             @Html.TextAreaFor(m => m.Name, new { @class = "userPostsTextArea" })
             @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
-            <button type="submit">Отправить</button>
+            <button type="submit">Опубликовать</button>
         </form>
 
     </div>

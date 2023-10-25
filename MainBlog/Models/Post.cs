@@ -10,20 +10,21 @@ namespace MainBlog.Models
         public string Text { get; set; }
         public DateTime PublicationDate { get; set; }
 
-        [ForeignKey("Id")]
+        [ForeignKey("User")]
         public string UserId { get; set; }
-        public User User { get; set; }
+        [Required]
+        public User User { get; set; } = null!;
 
 
-        [ForeignKey("Id")]
+        [ForeignKey("Comment")]
         public string CommentId { get; set; }
-        public ICollection<Comment> Comment { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
         public List<Teg> Tegs { get; set; } //EF - сама создаст пром.таблицу TegsPosts
         public Post()
         {
             Tegs = new List<Teg>();
-            Comment = new List<Comment>();
+            Comments = new List<Comment>();
             User = new User();
         }
     }

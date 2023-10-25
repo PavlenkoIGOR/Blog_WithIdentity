@@ -85,8 +85,8 @@ namespace MainBlog.Controllers
                 PublicationDate = DateTime.UtcNow,
                 Text = postContent,
                 UserId = userId,
-                CommentId = "1"
-                //Tegs = viewModel.Tegs,
+                CommentId = "1",
+                Tegs=viewModel.Tegs,
             };
             _context.Posts.AddAsync(post);
             _context.SaveChanges();
@@ -137,7 +137,7 @@ namespace MainBlog.Controllers
                 string filePath = Path.Combine(_env.ContentRootPath, "Logs", "DeleteUsersLogs.txt");
                 using (StreamWriter fs = new StreamWriter(filePath, true))
                 {
-                    fs.WriteAsync($"{DateTime.UtcNow} Пользователь удалён! Почта: {user.Email}, пароль {user.PasswordHash}");
+                    fs.WriteLineAsync($"{DateTime.UtcNow} Пользователь удалён! Почта: {user.Email}, пароль {user.PasswordHash}");
                     fs.Close();
                 }
                 // Обработка успешного удаления пользователя

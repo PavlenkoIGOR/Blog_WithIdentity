@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 
 namespace MainBlog.Controllers
 {
@@ -52,26 +53,13 @@ namespace MainBlog.Controllers
                     string logFile = Path.Combine(_env.ContentRootPath, "Logs", "RegistrationLogs.txt");
                     using (StreamWriter sw = new StreamWriter(logFile, true))
                     {
+
                         sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
+
                         sw.Close();
                     }
                     return RedirectToAction("GreetingPage", "Home");
                 }
-                //var claims = new List<Claim>
-                //{
-                //    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                //    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.RoleType)
-                //};
-
-                ////ClaimsIdentity системный класс, который хранит все наши клаймы
-                //ClaimsIdentity claimsIdentity = new ClaimsIdentity
-                //(
-                //    claims,
-                //    "AppCookie", //в дальнейшем в HTTPContext можно будет найти под эти именем(можно называть как угодно).
-                //    ClaimsIdentity.DefaultNameClaimType, //имя по умолчанию
-                //    ClaimsIdentity.DefaultRoleClaimType //тип по умолчанию
-                //);
-
                 // Сохраним имя пользователя в TempData
                 //TempData["RegisteredUsername"] = user.Name;
                 // Или сохраним имя пользователя в куки

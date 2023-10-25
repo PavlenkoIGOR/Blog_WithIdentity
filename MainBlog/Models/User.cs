@@ -9,7 +9,7 @@ namespace MainBlog.Models
         public int Age { get; set; }
         public DateTime RegistrationDate { get; set; }
 
-        [ForeignKey("Id")]
+        [ForeignKey("User")]
         public int PostId { get; set; }
         public ICollection<Post> Posts { get; set; }
         public User() 
