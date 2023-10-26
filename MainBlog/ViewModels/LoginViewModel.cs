@@ -17,6 +17,6 @@ namespace MainBlog.ViewModels
         [Display(Name = "Remember Me?")]
         public bool RememberMe;
 
-        public string ReturnUrl { get; set; }
+        //public string ReturnUrl { get; set; }
     }
 }

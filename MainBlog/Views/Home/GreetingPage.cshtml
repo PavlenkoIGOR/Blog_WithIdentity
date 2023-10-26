@@ -2,7 +2,9 @@
     ViewData["Title"] = "Приветствие!";
     // Или получите имя пользователя из куки
     string registeredUsername = Context.Request.Cookies["RegisteredUsername"];
+    string loginUsername = Context.Request.Cookies["LoginUsername"];
 }
+
 <style>
     #h1 {
         display: flex;
@@ -12,3 +14,5 @@
     }
 </style>
 <h1 id="H1">Добро пожаловать, @registeredUsername !</h1>
+<br/>
+<h1 id="H1">С возвращением, @loginUsername !</h1>

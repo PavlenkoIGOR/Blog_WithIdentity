@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Data\DB\" />
+    <Folder Include="Views\Comment\" />
   </ItemGroup>
 
   <ItemGroup>

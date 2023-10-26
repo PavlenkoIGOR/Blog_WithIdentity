@@ -67,6 +67,10 @@ namespace MainBlog
             using (var scope = app.Services.CreateScope())
             {
                 var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                //1. scope.ServiceProvider` -это объект - поставщик служб, связанных с текущим зондом(`scope`).
+                //2. `GetRequiredService()` -это метод - расширение, который загружает сервис указанного типа `T` из поставщика служб.
+                //3. `RoleManager` -это класс, предоставляемый ASP.NET Core Identity для управления ролями пользователей в приложении.
+
                 string [] roles = new[] { "Administrator","Moderator", "User"};
                 foreach (var role in roles)
                 {
