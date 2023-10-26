@@ -50,7 +50,7 @@ namespace MainBlog.Controllers
                     await _userManager.AddToRoleAsync(user, roles[2]);
                     await _signInManager.SignInAsync(user, false);
 
-                    //Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
+                    Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
                     string logFile = Path.Combine(_env.ContentRootPath, "Logs", "RegistrationLogs.txt");
                     using (StreamWriter sw = new StreamWriter(logFile, true))
                     {
@@ -88,8 +88,15 @@ namespace MainBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)//, string retrnUrl)
         {
+            string filePath22 = Path.Combine(_env.ContentRootPath, "Logs", "LoginStateLogs.txt");
             if (ModelState.IsValid)
             {                
+                using (StreamWriter fs = new StreamWriter(filePath22, true))
+                {
+                    fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid!");
+                    fs.Close();
+                }
+                
                 User user = await _userManager.FindByEmailAsync(model.Email);
 
                 if (user == null || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
@@ -100,6 +107,7 @@ namespace MainBlog.Controllers
                         fs.WriteLineAsync($"{DateTime.UtcNow} Неудачная попытка залогиниться! Почта: {model.Email}, пароль {PasswordHash.HashPassword(model.Password)}");
                         fs.Close();
                     }
+                    
                     return Content($"{new Exception("Пользователь не найден!")}");
                 }
                 await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
@@ -126,6 +134,11 @@ namespace MainBlog.Controllers
             else
             {
                 ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+            }
+            using (StreamWriter fs = new StreamWriter(filePath22, true))
+            {
+                fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid = false!");
+                fs.Close();
             }
             return RedirectToAction("Index", "Home");
         }

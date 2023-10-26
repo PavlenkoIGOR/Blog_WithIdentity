@@ -31,11 +31,13 @@ namespace MainBlog.Controllers
             return View(new UserPostsViewModel());
         }
         [HttpPost]
-        public IActionResult AddUserPosts(UserPostsViewModel viewModel)
+        public async Task<IActionResult> AddUserPosts(UserPostsViewModel viewModel)
         {
             var currentUser = HttpContext.User;
             var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
 
+            var user = User;
+            var infoAboutUser = await _userManager.GetUserAsync(user);
             //Необходимая логика обработки текста из Textarea
             string postContent = viewModel.Text;
             Post post = new Post()
