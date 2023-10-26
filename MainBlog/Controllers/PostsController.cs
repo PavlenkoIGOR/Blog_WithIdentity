@@ -45,7 +45,7 @@ namespace MainBlog.Controllers
                 //Name = viewModel.Name, //название статьи
                 PublicationDate = DateTime.UtcNow,
                 Text = postContent,
-                UserId = userId,
+                UserId = infoAboutUser.Id,
                 CommentId = "1",
                 Tegs = viewModel.Tegs,
             };

@@ -67,8 +67,11 @@ namespace MainBlog.Controllers
 
         
 
-        public async Task<IActionResult> EditUser()
+        public async Task<IActionResult> EditUser(string userRole)
         {
+            //userRole;
+                var user = User;
+          
 
             return RedirectToAction("ShowUsers", "Blog");
         }

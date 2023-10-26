@@ -49,8 +49,8 @@
                         @Html.DisplayFor(model => item.RoleType)
                     </td>
                     <td>
-                        <form asp-controller="Account" asp-action="Show">
-                            <select asp-items="Html.GetEnumSelectList<MainBlog.ViewModels.RolesViewModel>()">
+                        <form asp-controller="Blog" asp-action="EditUser">
+                        <select asp-items="Html.GetEnumSelectList<MainBlog.ViewModels.RolesViewModel>()" name="userRole">
                                 <option value="Выбрать роль">Выбрать роль</option>                                
                             </select>
                         </form>
@@ -66,10 +66,13 @@
                         }
                     </td>
                     <td>
-                        <button asp-controller="Account" asp-action="EditUser">Сохранить</button>
+                        <button asp-controller="Blog" asp-action="EditUser">Сохранить</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
+
+
+    
