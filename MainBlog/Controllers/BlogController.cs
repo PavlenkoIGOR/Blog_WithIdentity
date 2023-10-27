@@ -31,30 +31,36 @@ namespace MainBlog.Controllers
 
         #region ShowUsers
         //[Authorize]
-        //[Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin"
+        [Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin"
         [HttpGet]
         public IActionResult ShowUsers()
         {
-            //if (user != null)
-            //{
-            //    FormsAuthentication.SetCookie(model.Name, true); //добавить using System.Web.Security
-            //    return Redirection("Index", "Home");
-            //}
-
-            var users = _userManager.Users.Select(u => new UsersViewModel()
+            if (User.IsInRole("Administrator"))
             {
-                Id = u.Id,
-                Name = u.UserName,
-                Age = u.Age,
-                Email = u.Email,
-                RoleType = _userManager.GetRolesAsync(u).Result.FirstOrDefault()
-            }).ToList();
-            //var data2 = _context.Roles.ToList();
-            //var roles = from item1 in data1
-            //            join item2 in data2 on item1.RoleId equals item2.Id
-            //            select item1.Role.RoleType;
-            //ViewBag.Roles = roles;
-            return View(users);
+
+
+                //if (user != null)
+                //{
+                //    FormsAuthentication.SetCookie(model.Name, true); //добавить using System.Web.Security
+                //    return Redirection("Index", "Home");
+                //}
+
+                var users = _userManager.Users.Select(u => new UsersViewModel()
+                {
+                    Id = u.Id,
+                    Name = u.UserName,
+                    Age = u.Age,
+                    Email = u.Email,
+                    RoleType = _userManager.GetRolesAsync(u).Result.FirstOrDefault()
+                }).ToList();
+                //var data2 = _context.Roles.ToList();
+                //var roles = from item1 in data1
+                //            join item2 in data2 on item1.RoleId equals item2.Id
+                //            select item1.Role.RoleType;
+                //ViewBag.Roles = roles;
+                return View(users);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

@@ -33,37 +33,42 @@ namespace MainBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> RegistrateUser(RegistrateViewModel viewModel)
         {
+            User user = null;
             if (ModelState.IsValid)
             {
-                User user = new User();
-                user.UserName = viewModel.Name;
-                user.Age = viewModel.Age;
-                user.Email = viewModel.Email;
-                user.PasswordHash = PasswordHash.HashPassword(viewModel.ComparePassword);
-                user.RegistrationDate = DateTime.UtcNow;
-                
-                var result = await _userManager.CreateAsync(user, user.PasswordHash);
-                
-                if (result.Succeeded)
+                user = await _userManager.FindByEmailAsync(viewModel.Email);
+                if (user == null)
                 {
-                    string[] roles = new[] { "Administrator", "Moderator", "User" };
-                    await _userManager.AddToRoleAsync(user, roles[2]);
-                    await _signInManager.SignInAsync(user, false);
+                    user = new User();
+                    user.UserName = viewModel.Name;
+                    user.Age = viewModel.Age;
+                    user.Email = viewModel.Email;
+                    user.PasswordHash = PasswordHash.HashPassword(viewModel.ComparePassword);
+                    user.RegistrationDate = DateTime.UtcNow;
 
-                    Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
-                    string logFile = Path.Combine(_env.ContentRootPath, "Logs", "RegistrationLogs.txt");
-                    using (StreamWriter sw = new StreamWriter(logFile, true))
+                    var result = await _userManager.CreateAsync(user, user.PasswordHash);
+
+                    if (result.Succeeded)
                     {
+                        string[] roles = new[] { "Administrator", "Moderator", "User" };
+                        await _userManager.AddToRoleAsync(user, roles[0]);
+                        await _signInManager.SignInAsync(user, false);
 
-                        sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
+                        Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
+                        string logFile = Path.Combine(_env.ContentRootPath, "Logs", "RegistrationLogs.txt");
+                        using (StreamWriter sw = new StreamWriter(logFile, true))
+                        {
 
-                        sw.Close();
+                            sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
+
+                            sw.Close();
+                        }
+                        return RedirectToAction("GreetingPage", "Home");
                     }
-                    return RedirectToAction("GreetingPage", "Home");
+                    // Сохраним имя пользователя в TempData
+                    //TempData["RegisteredUsername"] = user.Name;
+                    // Или сохраним имя пользователя в куки
                 }
-                // Сохраним имя пользователя в TempData
-                //TempData["RegisteredUsername"] = user.Name;
-                // Или сохраним имя пользователя в куки
             }
             return View(viewModel);
         }
