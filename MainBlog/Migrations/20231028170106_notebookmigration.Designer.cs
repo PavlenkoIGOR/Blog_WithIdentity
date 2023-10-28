@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MainBlog.Migrations
 {
     [DbContext(typeof(MainBlogDBContext))]
-    [Migration("20231026200907_InitialCreate1")]
-    partial class InitialCreate1
+    [Migration("20231028170106_notebookmigration")]
+    partial class notebookmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
 
             modelBuilder.Entity("MainBlog.Models.Comment", b =>
                 {
