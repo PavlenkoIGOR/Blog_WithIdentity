@@ -33,7 +33,7 @@ namespace MainBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> RegistrateUser(RegistrateViewModel viewModel)
         {
-            User user = null;
+            User user = null!;
             if (ModelState.IsValid)
             {
                 user = await _userManager.FindByEmailAsync(viewModel.Email);
@@ -56,10 +56,10 @@ namespace MainBlog.Controllers
 
                         Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
                         string logFile = Path.Combine(_env.ContentRootPath, "Logs", "RegistrationLogs.txt");
-                        using (StreamWriter sw = new StreamWriter(logFile, true))
+                        using (StreamWriter sw = new(logFile, true))
                         {
 
-                            sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
+                            await sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
 
                             sw.Close();
                         }
@@ -100,9 +100,9 @@ namespace MainBlog.Controllers
             string filePath22 = Path.Combine(_env.ContentRootPath, "Logs", "LoginStateLogs.txt");
             if (ModelState.IsValid)
             {                
-                using (StreamWriter fs = new StreamWriter(filePath22, true))
+                using (StreamWriter fs = new(filePath22, true))
                 {
-                    fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid!");
+                    await fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid!");
                     fs.Close();
                 }
                 
@@ -111,9 +111,9 @@ namespace MainBlog.Controllers
                 if (user == null || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
                 {
                     string filePath = Path.Combine(_env.ContentRootPath, "Logs", "LoginLogs.txt");
-                    using (StreamWriter fs = new StreamWriter(filePath, true))
+                    using (StreamWriter fs = new(filePath, true))
                     {
-                        fs.WriteLineAsync($"{DateTime.UtcNow} Неудачная попытка залогиниться! Почта: {model.Email}, пароль {PasswordHash.HashPassword(model.Password)}");
+                        await fs.WriteLineAsync($"{DateTime.UtcNow} Неудачная попытка залогиниться! Почта: {model.Email}, пароль {PasswordHash.HashPassword(model.Password)}");
                         fs.Close();
                     }
                     
@@ -125,9 +125,13 @@ namespace MainBlog.Controllers
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    Response.Cookies.Append("LoginUsername", user.UserName); //запись в куки
-                    //return Redirect(retrnUrl ?? "/");
+                    //Response.Cookies.Append("LoginUsername", user.UserName); //запись в куки
+
                     return RedirectToAction("GreetingPage", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный логин и/или пароль");
                 }
                 //var claims = new List<Claim>
                 //{
@@ -141,14 +145,14 @@ namespace MainBlog.Controllers
                 //return RedirectToAction("Index", "Home");
             }
             else if (String.IsNullOrEmpty(model.Email) || String.IsNullOrEmpty(model.Password))
-                throw new ArgumentNullException("Запрос не корректен");
+                throw new ArgumentNullException(model.Email);
             else
             {
                 ModelState.AddModelError("", "Неправильный логин и (или) пароль");
             }
-            using (StreamWriter fs = new StreamWriter(filePath22, true))
+            using (StreamWriter fs = new(filePath22, true))
             {
-                fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid = false!");
+                await fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid = false!");
                 fs.Close();
             }
             return RedirectToAction("Index", "Home");
@@ -156,13 +160,13 @@ namespace MainBlog.Controllers
         #endregion
         #region Logout
 
+        [Route("")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
-
             await _signInManager.SignOutAsync();
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
             return RedirectToAction("Index", "Home");
         }
         #endregion

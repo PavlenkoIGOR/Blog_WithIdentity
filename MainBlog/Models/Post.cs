@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MainBlog.Models
@@ -8,13 +9,15 @@ namespace MainBlog.Models
         [Key]
         public int Id { get; set; }
         public string Text { get; set; }
+        
         public DateTime PublicationDate { get; set; }
 
         [ForeignKey("User")]
         public string UserId { get; set; }
+        
         [Required]
+        //[Comment("Vghjdfkjhdfkjhg")]
         public User User { get; set; } = null!;
-
 
         [ForeignKey("Comment")]
         public string CommentId { get; set; }

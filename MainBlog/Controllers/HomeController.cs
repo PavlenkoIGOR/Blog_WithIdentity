@@ -11,23 +11,26 @@ namespace MainBlog.Controllers
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
+        //private readonly Imylog _imylog;
+
         public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
             _env = environment;
+            //_imylog = imylog;
         }
 
         public IActionResult Index()
         {
-            string registeredUsername = HttpContext.Request.Cookies["RegisteredUsername"];
-            ViewBag.RegisteredUsername = registeredUsername;
+
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
+            _logger.LogInformation("Nen ldfgdfg");
             return View();
         }
 

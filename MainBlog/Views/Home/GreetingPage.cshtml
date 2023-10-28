@@ -1,8 +1,13 @@
-﻿﻿@{
+﻿﻿﻿@using Microsoft.AspNetCore.Identity;
+@using MainBlog.Models;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager;
+@{
     ViewData["Title"] = "Приветствие!";
     // Или получите имя пользователя из куки
     string registeredUsername = Context.Request.Cookies["RegisteredUsername"];
     string loginUsername = Context.Request.Cookies["LoginUsername"];
+    var user = UserManager.Users.FirstOrDefault(x => x.UserName == "User1");
 }
 
 <style>
@@ -13,6 +18,15 @@
         vertical-align: middle;
     }
 </style>
-<h1 id="H1">Добро пожаловать, @registeredUsername !</h1>
-<br/>
-<h1 id="H1">С возвращением, @loginUsername !</h1>
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        <h1 id="H1">Добро пожаловать, @User.Identity.Name !</h1>
+        <br />
+        <h1 id="H1">С возвращением, @User.Identity.Name</h1>
+    }
+    else
+    {
+        <h1>Пожалуйста, пройдите регистрацию или выполните вход на сайт!</h1>
+    }
+}

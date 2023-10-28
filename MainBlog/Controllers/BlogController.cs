@@ -93,7 +93,7 @@ namespace MainBlog.Controllers
                 string filePath = Path.Combine(_env.ContentRootPath, "Logs", "DeleteUsersLogs.txt");
                 using (StreamWriter fs = new StreamWriter(filePath, true))
                 {
-                    fs.WriteLineAsync($"{DateTime.UtcNow} Пользователь удалён! Почта: {user.Email}, пароль {user.PasswordHash}");
+                    await fs.WriteLineAsync($"{DateTime.UtcNow} Пользователь удалён! Почта: {user.Email}, пароль {user.PasswordHash}");
                     fs.Close();
                 }
                 // Обработка успешного удаления пользователя

@@ -36,8 +36,8 @@ namespace MainBlog.Controllers
             var currentUser = HttpContext.User;
             var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
 
-            var user = User;
-            var infoAboutUser = await _userManager.GetUserAsync(user);
+            //var user = User;
+            //var infoAboutUser = await _userManager.GetUserAsync(user);
             //Необходимая логика обработки текста из Textarea
             string postContent = viewModel.Text;
             Post post = new Post()
@@ -45,38 +45,39 @@ namespace MainBlog.Controllers
                 //Name = viewModel.Name, //название статьи
                 PublicationDate = DateTime.UtcNow,
                 Text = postContent,
-                UserId = infoAboutUser.Id,
+                UserId = userId!,
                 CommentId = "1",
-                Tegs = viewModel.Tegs,
+                Tegs = new List<Teg>() { new Teg() { Name = "Name1" }, new Teg() { Name = "Name2" } }
             };
-            _context.Posts.AddAsync(post);
-            _context.SaveChanges();
-
-            if (_signInManager.IsSignedIn(User))
-            {
-                string logFile1 = Path.Combine(_env.ContentRootPath, "Logs", "UserPostsLogs.txt");
-                using (StreamWriter sw = new StreamWriter(logFile1, true))
-                {
-                    sw.WriteLineAsync($"signInManager сработал");
-                    sw.Close();
-                }
-                // Получаем данные текущего аутентифицированного пользователя
-
-                if (ModelState.IsValid)
-                {
-                    using (StreamWriter sw = new StreamWriter(logFile1, true))
-                    {
-                        sw.WriteLineAsync($"{viewModel.Name} Валидна. {viewModel.PublicationDate}. ");
-                        sw.Close();
-                    }
-
-                    // Верните результат или выполните другие действия
-                    return RedirectToAction("UserPosts", "Posts");
-                }
-            }
-
+            await _context.Posts.AddAsync(post);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("UserPosts", "Posts");
+            //if (_signInManager.IsSignedIn(User))
+            //{
+            //    string logFile1 = Path.Combine(_env.ContentRootPath, "Logs", "UserPostsLogs.txt");
+            //    using (StreamWriter sw = new StreamWriter(logFile1, true))
+            //    {
+            //        await sw.WriteLineAsync($"signInManager сработал");
+            //        sw.Close();
+            //    }
+            //    // Получаем данные текущего аутентифицированного пользователя
+
+            //    if (ModelState.IsValid)
+            //    {
+            //        using (StreamWriter sw = new StreamWriter(logFile1, true))
+            //        {
+            //            await sw.WriteLineAsync($"{viewModel.Name} Валидна. {viewModel.PublicationDate}. ");
+            //            sw.Close();
+            //        }
+
+            //        // Верните результат или выполните другие действия
+            //        return RedirectToAction("UserPosts", "Posts");
+            //    }
+            //}
+
+
+            //return RedirectToAction("UserPosts", "Posts");
         }
     }
 }

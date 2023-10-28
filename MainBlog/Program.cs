@@ -19,6 +19,7 @@ namespace MainBlog
             //builder.Services.AddDbContext<MainBlogDBContext>(options =>  options.UseSqlite(connectionString));
             //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            builder.Services.AddTransient<IServiceCollection, ServiceCollection>();
 
             builder.Services.AddDbContext<MainBlogDBContext>(options => options.UseSqlite(connectionString)).AddDatabaseDeveloperPageExceptionFilter()
                 //.AddUnitOfWork()
@@ -59,6 +60,8 @@ namespace MainBlog
 
             app.UseAuthorization();
             app.UseAuthentication();
+
+            //app.UseMiddleware<Authensdfgdsfg>();
 
             app.MapControllerRoute(
                 name: "default",
