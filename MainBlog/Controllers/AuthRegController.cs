@@ -69,6 +69,10 @@ namespace MainBlog.Controllers
                     //TempData["RegisteredUsername"] = user.Name;
                     // Или сохраним имя пользователя в куки
                 }
+                else
+                {
+                    
+                }
             }
             return View(viewModel);
         }
@@ -119,6 +123,8 @@ namespace MainBlog.Controllers
                 Microsoft.AspNetCore.Identity.SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, PasswordHash.HashPassword(model.Password), false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
                 if (signInResult.Succeeded)
                 {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
                     Response.Cookies.Append("LoginUsername", user.UserName); //запись в куки
                     //return Redirect(retrnUrl ?? "/");
                     return RedirectToAction("GreetingPage", "Home");

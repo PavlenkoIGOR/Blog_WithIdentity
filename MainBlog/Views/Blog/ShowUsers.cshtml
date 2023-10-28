@@ -5,9 +5,14 @@
 @inject UserManager<User> UserManager;
 @{
     ViewData["Title"] = "ShowUsers";
+    //SignInManager.IsSignedIn();
 
 }
-   
+@if (User.IsInRole("Administrator"))
+{
+
+
+
 
     <h1>Пользователи</h1>
 
@@ -16,8 +21,8 @@
     </p>
     <table border="1" cellpadding="5" width="100%">
         <thead>
-            <tr >
-                <td bgcolor="steelblue"  colspan="6" style="color: bisque">Таблица учётных записей</td>
+            <tr>
+                <td bgcolor="steelblue" colspan="6" style="color: bisque">Таблица учётных записей</td>
             </tr>
             <tr>
                 <th>
@@ -36,7 +41,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+         /*   @foreach (var item in Model)
             {
                 <tr>
                     <td>
@@ -50,18 +55,18 @@
                     </td>
                     <td>
                         <form asp-controller="Blog" asp-action="EditUser">
-                        <select asp-items="Html.GetEnumSelectList<MainBlog.ViewModels.RolesViewModel>()" name="userRole">
-                                <option value="Выбрать роль">Выбрать роль</option>                                
+                            <select asp-items="Html.GetEnumSelectList<MainBlog.ViewModels.RolesViewModel>()" name="userRole">
+                                <option value="Выбрать роль">Выбрать роль</option>
                             </select>
                         </form>
 
                     </td>
                     <td>
                         @* ниже: создание <form></form> *@
-                    @using (Html.BeginForm("DeleteUser", "Blog", new { Id = item.Id }, FormMethod.Post))
+                        @using (Html.BeginForm("DeleteUser", "Blog", new { Id = item.Id }, FormMethod.Post))
                         {
-                        @* ниже: создание кнопки и привязка к контроллеру *@
-                        @Html.ActionLink("Удалить", "DeleteUser", "Blog", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px" })
+                            @* ниже: создание кнопки и привязка к контроллеру *@
+                            @Html.ActionLink("Удалить", "DeleteUser", "Blog", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px" })
                             @* <button class="btn btn-danger btn-xs" type="submit">Удалить</button> *@
                         }
                     </td>
@@ -69,10 +74,9 @@
                         <button asp-controller="Blog" asp-action="EditUser">Сохранить</button>
                     </td>
                 </tr>
-            }
+            }*/
         </tbody>
     </table>
 
+}
 
-
-    

@@ -31,14 +31,12 @@ namespace MainBlog.Controllers
 
         #region ShowUsers
         //[Authorize]
-        [Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin"
+        //[Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin"
         [HttpGet]
         public IActionResult ShowUsers()
         {
             if (User.IsInRole("Administrator"))
             {
-
-
                 //if (user != null)
                 //{
                 //    FormsAuthentication.SetCookie(model.Name, true); //добавить using System.Web.Security

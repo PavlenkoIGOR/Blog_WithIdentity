@@ -33,9 +33,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="UserPosts">Страница с постами пользователя</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="ShowUsers">Показать всех пользователей</a>
-                        </li>
+
+
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="ShowUsers">Показать всех пользователей</a>
+                            </li>
+                        }
+
+
                         <li class="nav-item__Reg">
                             <a class="nav-link text-dar" asp-area="" asp-controller="Blog" asp-action="ForAuthUsersOnly">ТолькоДляАутентифицированных</a>
                         </li>
