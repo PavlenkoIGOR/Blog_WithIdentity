@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Claims;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace MainBlog.Controllers
 {
@@ -51,10 +49,10 @@ namespace MainBlog.Controllers
                     if (result.Succeeded)
                     {
                         string[] roles = new[] { "Administrator", "Moderator", "User" };
-                        await _userManager.AddToRoleAsync(user, roles[0]);
+                        await _userManager.AddToRoleAsync(user, roles[2]);
                         await _signInManager.SignInAsync(user, false);
 
-                        Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
+                        //Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
                         string logFile = Path.Combine(_env.ContentRootPath, "Logs", "RegistrationLogs.txt");
                         using (StreamWriter sw = new(logFile, true))
                         {
@@ -86,11 +84,9 @@ namespace MainBlog.Controllers
 
         #region Login
         [HttpGet]
-        public IActionResult Login()//(string rtrnUrl)
+        public IActionResult Login()//string rtrnUrl)
         {
-            //ViewBag.returnUrl = rtrnUrl;
-            //return RedirectToAction("Login", "AuthReg");
-            return View();// View(new LoginViewModel { ReturnUrl = rtrnUrl });
+            return View();//new LoginViewModel { ReturnUrl = rtrnUrl });
         }
         [HttpPost]
         [AllowAnonymous]
@@ -119,8 +115,8 @@ namespace MainBlog.Controllers
                     
                     return Content($"{new Exception("Пользователь не найден!")}");
                 }
-                await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
-                Microsoft.AspNetCore.Identity.SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, PasswordHash.HashPassword(model.Password), false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
+                //await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
+                SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, PasswordHash.HashPassword(model.Password), false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
                 if (signInResult.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -133,16 +129,9 @@ namespace MainBlog.Controllers
                 {
                     ModelState.AddModelError("", "Неправильный логин и/или пароль");
                 }
-                //var claims = new List<Claim>
-                //{
-                //    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                //    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.RoleType)
-                //};
-                //var user = _mapper.Map<User>(model);
 
                 //var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, false);
                 return RedirectToAction("UserPosts", "Blog");
-                //return RedirectToAction("Index", "Home");
             }
             else if (String.IsNullOrEmpty(model.Email) || String.IsNullOrEmpty(model.Password))
                 throw new ArgumentNullException(model.Email);
@@ -160,13 +149,21 @@ namespace MainBlog.Controllers
         #endregion
         #region Logout
 
-        [Route("")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
+
+            //string logFile = Path.Combine(_env.ContentRootPath, "Logs", "LogOutLogs.txt");
+            //using (StreamWriter sw = new(logFile, true))
+            //{
+
+            //    await sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
+
+            //    sw.Close();
+            //}
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
             return RedirectToAction("Index", "Home");
         }
         #endregion

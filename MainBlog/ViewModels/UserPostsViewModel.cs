@@ -10,19 +10,15 @@ namespace MainBlog.ViewModels
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
         public DateTime PublicationDate { get; set; }
-        //public List<Teg> Teg { get; set; }
         public string tegs { get; set; }
         public UserPostsViewModel() 
         {
-            //Tegs = new List<Teg>();
         }
         public List<Teg> HasWritingTags()
         {
-            //var noPunctuationText = new string(tegs.Where(c => !char.IsPunctuation(c)).ToArray());
             List<Teg> Tegs = new List<Teg>();
             char[] delimiters = new char[] { ' ', '\r', '\n', ',' };
             var words = tegs.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            //string[] tegsArr = tegs.Split(' ', ',');
             foreach (string teg in words)
             {
                 Teg teg1 = new Teg();
