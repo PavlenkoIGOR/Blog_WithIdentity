@@ -46,7 +46,6 @@ namespace MainBlog.Controllers
                 PublicationDate = DateTime.UtcNow,
                 Text = postContent,
                 UserId = userId!,
-                CommentId = "1",
                 Tegs = viewModel.HasWritingTags()//new List<Teg>() { new Teg() { Name = "Name1" }, new Teg() { Name = "Name2" } }
             };
             await _context.Posts.AddAsync(post);

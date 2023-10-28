@@ -8,28 +8,16 @@ namespace MainBlog.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Text { get; set; }
-        
+        public string Text { get; set; }        
         public DateTime PublicationDate { get; set; }
 
-        [ForeignKey("User")]
         public string UserId { get; set; }
-        
-        [Required]
-        //[Comment("Vghjdfkjhdfkjhg")]
+        //[Comment("Vghjdfkjhdfkjhg")] //так можно сделать комментарий для таблицы в БД
         public User User { get; set; } = null!;
 
-        [ForeignKey("Comment")]
-        public string CommentId { get; set; }
-        public ICollection<Comment> Comments { get; set; }
+        public List<Comment> Comments { get; set; } = new();
 
-        public List<Teg> Tegs { get; set; } //EF - сама создаст пром.таблицу TegsPosts
-        public Post()
-        {
-            Tegs = new List<Teg>();
-            Comments = new List<Comment>();
-            User = new User();
-        }
+        public List<Teg> Tegs { get; set; } = new(); //EF - сама создаст пром.таблицу TegsPosts
     }
 }
 

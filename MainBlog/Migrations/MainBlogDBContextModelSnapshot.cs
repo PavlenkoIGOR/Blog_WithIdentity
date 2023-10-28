@@ -43,10 +43,6 @@ namespace MainBlog.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CommentId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("PublicationDate")
                         .HasColumnType("TEXT");
 
@@ -123,9 +119,6 @@ namespace MainBlog.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PostId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("RegistrationDate")
@@ -298,13 +291,11 @@ namespace MainBlog.Migrations
 
             modelBuilder.Entity("MainBlog.Models.Comment", b =>
                 {
-                    b.HasOne("MainBlog.Models.Post", "Post")
+                    b.HasOne("MainBlog.Models.Post", null)
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("MainBlog.Models.Post", b =>

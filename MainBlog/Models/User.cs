@@ -8,13 +8,6 @@ namespace MainBlog.Models
     {
         public int Age { get; set; }
         public DateTime RegistrationDate { get; set; }
-
-        [ForeignKey("User")]
-        public int PostId { get; set; }
-        public ICollection<Post> Posts { get; set; }
-        public User() 
-        {
-            Posts = new List<Post>();
-        }
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
     }
 }

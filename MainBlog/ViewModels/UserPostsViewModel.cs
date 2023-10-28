@@ -11,7 +11,7 @@ namespace MainBlog.ViewModels
         public string Text { get; set; }
         public DateTime PublicationDate { get; set; }
         //public List<Teg> Teg { get; set; }
-        public string tegs = string.Empty;
+        public string tegs { get; set; }
         public UserPostsViewModel() 
         {
             //Tegs = new List<Teg>();
