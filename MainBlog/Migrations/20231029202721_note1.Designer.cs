@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MainBlog.Migrations
 {
     [DbContext(typeof(MainBlogDBContext))]
-    [Migration("20231028212902_notebookmigration")]
-    partial class notebookmigration
+    [Migration("20231029202721_note1")]
+    partial class note1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

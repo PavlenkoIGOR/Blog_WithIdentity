@@ -41,7 +41,7 @@ namespace MainBlog.Controllers
                     user.UserName = viewModel.Name;
                     user.Age = viewModel.Age;
                     user.Email = viewModel.Email;
-                    user.PasswordHash = PasswordHash.HashPassword(viewModel.ComparePassword);
+                    user.PasswordHash = viewModel.ComparePassword;
                     user.RegistrationDate = DateTime.UtcNow;
 
                     var result = await _userManager.CreateAsync(user, user.PasswordHash);
@@ -104,7 +104,7 @@ namespace MainBlog.Controllers
                 
                 User user = await _userManager.FindByEmailAsync(model.Email);
 
-                if (user == null || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
+                if (user == null)// || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
                 {
                     string filePath = Path.Combine(_env.ContentRootPath, "Logs", "LoginLogs.txt");
                     using (StreamWriter fs = new(filePath, true))
@@ -116,7 +116,7 @@ namespace MainBlog.Controllers
                     return Content($"{new Exception("Пользователь не найден!")}");
                 }
                 //await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
-                SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, PasswordHash.HashPassword(model.Password), false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
+                SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
                 if (signInResult.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -149,8 +149,8 @@ namespace MainBlog.Controllers
         #endregion
         #region Logout
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -163,7 +163,7 @@ namespace MainBlog.Controllers
 
             //    sw.Close();
             //}
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
             return RedirectToAction("Index", "Home");
         }
         #endregion

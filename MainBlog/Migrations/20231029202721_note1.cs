@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MainBlog.Migrations
 {
     /// <inheritdoc />
-    public partial class notebookmigration : Migration
+    public partial class note1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
