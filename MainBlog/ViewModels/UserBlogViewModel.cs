@@ -4,14 +4,14 @@ using System.Runtime.CompilerServices;
 
 namespace MainBlog.ViewModels
 {
-    public class UserPostsViewModel
+    public class UserBlogViewModel
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
         public DateTime PublicationDate { get; set; }
         public string tegs { get; set; }
-        public UserPostsViewModel() 
+        public UserBlogViewModel() 
         {
         }
         public List<Teg> HasWritingTags()

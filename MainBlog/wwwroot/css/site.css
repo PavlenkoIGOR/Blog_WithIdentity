@@ -19,6 +19,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-image: url(../img/bg.jpg)
 }
 
 .userPostsTextArea {
@@ -35,4 +36,12 @@ body {
     width: 35px;
     background-image: url('../img/exit.png');
     background-size: cover;
+}
+#postBlock {
+    background-color: rgba(200,200,200,0.9);
+    border: solid 1px blue;
+    margin: 5px 0 5px 0;
+}
+#textBlock {
+ background-color: floralwhite;
 }

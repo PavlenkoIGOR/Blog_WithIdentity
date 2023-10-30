@@ -27,22 +27,16 @@ namespace MainBlog.Controllers
             _env = environment;
             _context = blogDBContext;
         }
-       
 
-        #region ShowUsers
+
+        #region ShowUsers Настроено!
         //[Authorize]
-        //[Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin"
+        //[Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin". На данный момент настроено через проверку в View Index
         [HttpGet]
         public IActionResult ShowUsers()
         {
             if (User.IsInRole("Administrator"))
             {
-                //if (user != null)
-                //{
-                //    FormsAuthentication.SetCookie(model.Name, true); //добавить using System.Web.Security
-                //    return Redirection("Index", "Home");
-                //}
-
                 var users = _userManager.Users.Select(u => new UsersViewModel()
                 {
                     Id = u.Id,
@@ -69,8 +63,8 @@ namespace MainBlog.Controllers
         }
         #endregion
 
-        
 
+        #region EditUser
         public async Task<IActionResult> EditUser(string userRole)
         {
             //userRole;
@@ -79,6 +73,10 @@ namespace MainBlog.Controllers
 
             return RedirectToAction("ShowUsers", "Blog");
         }
+        #endregion
+
+        
+        #region DeleteUser Настроено!
         [HttpGet]
         public async Task<ActionResult> DeleteUser(string Id)
         {
@@ -109,6 +107,30 @@ namespace MainBlog.Controllers
             }
             return RedirectToAction("ShowUsers");
         }
+        #endregion
+
+
+        #region ShowAllPosts
+        [HttpGet]
+        public async Task<IActionResult> AllPostsPage()
+        {
+            var post = _context.Posts.Select(p => new AllPostsViewModel {
+                Author = p.User.UserName,
+                PublicationTime = p.PublicationDate,
+                Title = p.Title,
+                Text = p.Text
+            });
+            return View(post);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AllPostsPage(string selectedRole)
+        {
+            //var data = _context.Users.ToList();
+            return View(/*data*/);
+        }
+        #endregion
+
+
 
         //[Authorize]
         [HttpGet]
@@ -119,7 +141,7 @@ namespace MainBlog.Controllers
 
 
         [HttpPost]
-        public IActionResult PublicatePost(UserPostsViewModel viewModel)
+        public IActionResult PublicatePost(UserBlogViewModel viewModel)
         {
 
             return Content("Опубликовано!");

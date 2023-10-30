@@ -7,15 +7,11 @@ namespace MainBlog.Models
     {
         [Key]
         public int Id { get; set; }
-        public string CommentText { get; set; }
+        public string? CommentText { get; set; }
 
         [ForeignKey("Id")]
         public int PostId { get; set; }
-        public Post Post { get; }
-        
-        public Comment()
-        {
-            Post = new Post();
-        }
+        public Post Post { get; } = new();
+       
     }
 }

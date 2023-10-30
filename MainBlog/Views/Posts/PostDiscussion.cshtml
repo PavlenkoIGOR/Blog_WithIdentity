@@ -1,0 +1,23 @@
+﻿@model MainBlog.ViewModels.DiscussionPostViewModel
+﻿﻿@using Microsoft.AspNetCore.Identity;
+@using MainBlog.Models;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Ваш Блог";
+    // Layout = null;
+    //string registeredUsername = Context.Request.Cookies["RegisteredUsername"];
+}
+<div>
+    <div>
+        <h1>Вы смотрите пост "@Model.Title"</h1>
+    </div>
+    <div id="textPost">
+        @Model.Text
+    </div>
+    <div>
+        <span>Комментарии</span>
+    </div>
+</div>
+
+

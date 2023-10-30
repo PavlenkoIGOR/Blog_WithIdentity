@@ -25,13 +25,13 @@ namespace MainBlog.Controllers
 
         //[Authorize]
         [HttpGet]
-        public IActionResult UserPosts()
+        public IActionResult UserBlog()
         {
 
-            return View(new UserPostsViewModel());
+            return View(new UserBlogViewModel());
         }
         [HttpPost]
-        public async Task<IActionResult> AddUserPosts(UserPostsViewModel viewModel)
+        public async Task<IActionResult> UserBlog(UserBlogViewModel viewModel)
         {
             var currentUser = HttpContext.User;
             var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
@@ -43,15 +43,16 @@ namespace MainBlog.Controllers
             Post post = new Post()
             {
                 //Name = viewModel.Name, //название статьи
+                Title = viewModel.Title,
                 PublicationDate = DateTime.UtcNow,
                 Text = postContent,
                 UserId = userId!,
-                Tegs = viewModel.HasWritingTags()//new List<Teg>() { new Teg() { Name = "Name1" }, new Teg() { Name = "Name2" } }
+                Tegs = viewModel.HasWritingTags()
             };
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("UserPosts", "Posts");
+            return RedirectToAction("UserBlog", "Posts");
             //if (_signInManager.IsSignedIn(User))
             //{
             //    string logFile1 = Path.Combine(_env.ContentRootPath, "Logs", "UserPostsLogs.txt");
@@ -78,5 +79,27 @@ namespace MainBlog.Controllers
 
             //return RedirectToAction("UserPosts", "Posts");
         }
+        [HttpGet]
+        public async Task<IActionResult> PostDiscussion(string id)
+        {
+            DiscussionPostViewModel viewModel = new DiscussionPostViewModel();
+            
+            var postForDisscussion = _context.Posts.FirstOrDefault(x => x.Id == Convert.ToInt32(id)+1);
+            viewModel.Author = postForDisscussion.User.UserName;
+            viewModel.Text = postForDisscussion.Text;
+            viewModel.UsersComments = postForDisscussion.Comments.ToList();
+            viewModel.PublicationDate = postForDisscussion.PublicationDate;
+            //var postForDisscussion = _context.Posts.Select(p => new DiscussionPostViewModel { 
+            //    Id = p.Id,
+            //    Author = p.User.UserName,
+            //    Title = p.Title,
+            //    Text = p.Text,
+            //    UsersComments = p.Comments,
+            //    PublicationDate = p.PublicationDate
+            //});
+            return View(viewModel);
+        }
     }
 }
+
+

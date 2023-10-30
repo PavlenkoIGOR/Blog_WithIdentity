@@ -1,4 +1,4 @@
-﻿@model MainBlog.ViewModels.UserPostsViewModel
+﻿@model MainBlog.ViewModels.UserBlogViewModel
 ﻿﻿@using Microsoft.AspNetCore.Identity;
 @using MainBlog.Models;
 @inject SignInManager<User> SignInManager
@@ -23,8 +23,8 @@ else
 
     <div style="width: 100%; height: 100%; background-color: darkred">
         <div id="PostField" style="background-color: steelblue">
-            <form method="post" asp-controller="Posts" asp-action="AddUserPosts">
-                @Html.TextAreaFor(m => m.Name, new { @class = "userPostsTextArea" })
+            <form method="post" asp-controller="Posts" asp-action="UserBlog">
+                @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" })
                 @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
                 <span style="color:bisque">Введите незвание тегов через запятую в формате "#Название тега"</span>
                 @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })

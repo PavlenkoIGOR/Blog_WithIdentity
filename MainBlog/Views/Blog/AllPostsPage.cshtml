@@ -1,0 +1,35 @@
+﻿@model IEnumerable<MainBlog.ViewModels.AllPostsViewModel>
+@using MainBlog.ViewModels
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> SignInManager;
+@inject UserManager<User> UserManager;
+@{
+    ViewData["Title"] = "Все посты";
+}
+@{
+    foreach (var post in Model)
+    {
+        <div id="postBlock" style="cursor:pointer;">
+            <div>
+                @Html.DisplayFor(p => post.Author)
+            </div>
+            <div>
+                @Html.DisplayFor(p => post.Title)
+            </div>
+            <div>
+                @Html.DisplayFor(p => post.PublicationTime)
+            </div>
+            <div id="textBlock">
+                @Html.DisplayFor(p => post.Text)
+            </div>
+            <div>
+                <a href="@Url.Action("PostDiscussion", "Posts", new {id = post.Id})">Перейти к обсуждению</a>
+            </div>
+        </div>
+    }
+}
+<script>
+    document.querySelectorAll('.postBlock').addEventListener('click', function () { window.location.href = '/Posts/PostDiscussion?Id=id'; }
+</script>
+
+
