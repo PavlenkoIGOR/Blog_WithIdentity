@@ -27,3 +27,12 @@ body {
     width: 100%;
     background-color: bisque;
 }
+
+/*мои элементы*/
+#logoutBttn {
+    border: 0;
+    height: 35px;
+    width: 35px;
+    background-image: url('../img/exit.png');
+    background-size: cover;
+}

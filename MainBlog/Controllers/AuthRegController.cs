@@ -149,20 +149,21 @@ namespace MainBlog.Controllers
         #endregion
         #region Logout
 
-        [HttpGet]
-        //[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken] //ValidateAntiForgeryToken будет работать только, с HttpPost, причем в cshtml надо указать именно <form method="post">
         public async Task<IActionResult> Logout()
         {
+            User a = await _signInManager.UserManager.GetUserAsync(User);
+
+            string logFile = Path.Combine(_env.ContentRootPath, "Logs", "LogOutLogs.txt");
+            using (StreamWriter sw = new(logFile, true))
+            {
+
+                await sw.WriteLineAsync($"{a.Email} выпилился в {DateTime.UtcNow}");
+
+                sw.Close();
+            }
             await _signInManager.SignOutAsync();
-
-            //string logFile = Path.Combine(_env.ContentRootPath, "Logs", "LogOutLogs.txt");
-            //using (StreamWriter sw = new(logFile, true))
-            //{
-
-            //    await sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
-
-            //    sw.Close();
-            //}
             //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
             return RedirectToAction("Index", "Home");
         }

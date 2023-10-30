@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using MainBlog.Models;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<div class="righ-align">
+    @if (SignInManager.IsSignedIn(User))
+    {
+      <form method="post" asp-controller="AuthReg" asp-action="Logout">
+            @* <input style="border: 0;" class="loguotBttn" type="submit" value="Выход" /> *@
+            <button id="logoutBttn" ></button>
+        </form>
+    }
+</div>
+
