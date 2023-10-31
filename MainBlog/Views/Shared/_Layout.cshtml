@@ -31,18 +31,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой Блог</a>
-                        </li>
 
-                         @{
+                        @{
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой Блог</a>
+                                </li>
+                            }
+                        }
+
+                        @{
                             if (User.IsInRole("Administrator"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="ShowUsers">Показать всех пользователей</a>
                                 </li>
-                             }
-                         }
+                            }
+                        }
 
                         <li class="nav-item__Reg">
                             <a class="nav-link text-dar" asp-area="" asp-controller="Blog" asp-action="ForAuthUsersOnly">ТолькоДляАутентифицированных</a>

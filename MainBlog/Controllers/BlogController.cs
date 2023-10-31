@@ -37,7 +37,7 @@ namespace MainBlog.Controllers
         {
             if (User.IsInRole("Administrator"))
             {
-                var users = _userManager.Users.Select(u => new UsersViewModel()
+                var users = _userManager.Users.Select(u => new CommentViewModel()
                 {
                     Id = u.Id,
                     Name = u.UserName,
@@ -115,6 +115,7 @@ namespace MainBlog.Controllers
         public async Task<IActionResult> AllPostsPage()
         {
             var post = _context.Posts.Select(p => new AllPostsViewModel {
+                Id = p.Id,
                 Author = p.User.UserName,
                 PublicationTime = p.PublicationDate,
                 Title = p.Title,

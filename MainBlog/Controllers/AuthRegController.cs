@@ -49,7 +49,7 @@ namespace MainBlog.Controllers
                     if (result.Succeeded)
                     {
                         string[] roles = new[] { "Administrator", "Moderator", "User" };
-                        await _userManager.AddToRoleAsync(user, roles[2]);
+                        await _userManager.AddToRoleAsync(user, roles[0]);
                         await _signInManager.SignInAsync(user, false);
 
                         //Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки

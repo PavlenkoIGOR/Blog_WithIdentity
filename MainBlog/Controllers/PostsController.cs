@@ -79,25 +79,42 @@ namespace MainBlog.Controllers
 
             //return RedirectToAction("UserPosts", "Posts");
         }
+
+
+
+
         [HttpGet]
-        public async Task<IActionResult> PostDiscussion(string id)
+        public async Task<IActionResult> PostDiscussion(int id)
         {
-            DiscussionPostViewModel viewModel = new DiscussionPostViewModel();
-            
-            var postForDisscussion = _context.Posts.FirstOrDefault(x => x.Id == Convert.ToInt32(id)+1);
-            viewModel.Author = postForDisscussion.User.UserName;
-            viewModel.Text = postForDisscussion.Text;
-            viewModel.UsersComments = postForDisscussion.Comments.ToList();
-            viewModel.PublicationDate = postForDisscussion.PublicationDate;
-            //var postForDisscussion = _context.Posts.Select(p => new DiscussionPostViewModel { 
-            //    Id = p.Id,
-            //    Author = p.User.UserName,
-            //    Title = p.Title,
-            //    Text = p.Text,
-            //    UsersComments = p.Comments,
-            //    PublicationDate = p.PublicationDate
-            //});
-            return View(viewModel);
+            var post = await _context.Posts.Where(x => x.Id == id).Select(p => new DiscussionPostViewModel
+            {
+                Id = p.Id,
+                Author = p.User.UserName,
+                PublicationTime = p.PublicationDate,
+                Title = p.Title,
+                Text = p.Text,
+                UsersComments = p.Comments
+            }).FirstOrDefaultAsync();
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetComment(DiscussionPostViewModel discussionPVM)
+        {
+            //var comment = _context.Comments.Where(d => d.PostId == discussionPVM.Id).Select(d=>d).FirstOrDefaultAsync();
+            Comment comment1 = new Comment()
+            {
+                Id = discussionPVM.Id,
+                //CommentText = discussionPVM.UsersComments.FirstOrDefault()
+            };
+            //_context.Comments.AddAsync(comment);
+            return RedirectToAction("PostDiscussion", "Posts");
         }
     }
 }
