@@ -11,7 +11,9 @@ namespace MainBlog.Models
 
         [ForeignKey("Id")]
         public int PostId { get; set; }
-        public Post Post { get; } = new();
-       
+        public Post Post { get; set; } = null!;
+
+        public string UserId { get; set; }
+        public User User { get; set; } = null!;
     }
 }

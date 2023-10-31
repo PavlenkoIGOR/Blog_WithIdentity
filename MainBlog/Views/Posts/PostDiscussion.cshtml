@@ -16,7 +16,13 @@
         @Model.Text
     </div>
     <div>
-        <button id="SetCommentButton" formmethod="post" asp-controller="" asp-action="">Комментировать</button>
+        
+    </div>
+    <div style="position:relative;">
+        <form style="display: inline-grid;" method="post" asp-controller="Posts" asp-action="SetComment">
+        <textarea asp-for="CommentText"></textarea>
+        <button id="SetCommentButton" type="submit">Комментировать</button>
+        </form>
     </div>
     <div>
         <span>Комментарии</span>

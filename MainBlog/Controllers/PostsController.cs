@@ -88,7 +88,7 @@ namespace MainBlog.Controllers
         {
             var post = await _context.Posts.Where(x => x.Id == id).Select(p => new DiscussionPostViewModel
             {
-                Id = p.Id,
+                Id = id,
                 Author = p.User.UserName,
                 PublicationTime = p.PublicationDate,
                 Title = p.Title,
@@ -107,15 +107,20 @@ namespace MainBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> SetComment(DiscussionPostViewModel discussionPVM)
         {
+            var currentUser = HttpContext.User;
+            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
+
             //var comment = _context.Comments.Where(d => d.PostId == discussionPVM.Id).Select(d=>d).FirstOrDefaultAsync();
-            Comment comment1 = new Comment()
+            Comment comment = new Comment()
             {
-                Id = discussionPVM.Id,
-                //CommentText = discussionPVM.UsersComments.FirstOrDefault()
+                UserId = userId!,
+                CommentText = discussionPVM.CommentText,
+                PostId = discussionPVM.Id
             };
-            //_context.Comments.AddAsync(comment);
+            await _context.Comments.AddAsync(comment);
             return RedirectToAction("PostDiscussion", "Posts");
         }
+
     }
 }
 

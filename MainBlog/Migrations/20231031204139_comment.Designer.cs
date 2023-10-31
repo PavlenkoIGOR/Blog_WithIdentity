@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MainBlog.Migrations
 {
     [DbContext(typeof(MainBlogDBContext))]
-    [Migration("20231030182505_first")]
-    partial class first
+    [Migration("20231031204139_comment")]
+    partial class comment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,15 +27,20 @@ namespace MainBlog.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CommentText")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PostId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -298,11 +303,21 @@ namespace MainBlog.Migrations
 
             modelBuilder.Entity("MainBlog.Models.Comment", b =>
                 {
-                    b.HasOne("MainBlog.Models.Post", null)
+                    b.HasOne("MainBlog.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MainBlog.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MainBlog.Models.Post", b =>
@@ -389,6 +404,8 @@ namespace MainBlog.Migrations
 
             modelBuilder.Entity("MainBlog.Models.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
