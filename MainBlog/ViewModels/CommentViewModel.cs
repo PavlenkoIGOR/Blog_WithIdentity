@@ -2,10 +2,10 @@
 {
     public class CommentViewModel
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public string Email { get; set; }
-        public string RoleType { get; set; }
+        public string Author { get; set; }
+        public DateTime PublicationDate { get; set; }
+        public int CommentId { get; set; }
+        public int PostId { get; set; }
+        public string CommentText { get; set; }
     }
 }

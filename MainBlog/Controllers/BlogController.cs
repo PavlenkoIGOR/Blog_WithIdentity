@@ -37,7 +37,7 @@ namespace MainBlog.Controllers
         {
             if (User.IsInRole("Administrator"))
             {
-                var users = _userManager.Users.Select(u => new CommentViewModel()
+                var users = _userManager.Users.Select(u => new UsersViewModel()
                 {
                     Id = u.Id,
                     Name = u.UserName,

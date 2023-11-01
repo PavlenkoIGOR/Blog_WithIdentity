@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MainBlog.Migrations
 {
     [DbContext(typeof(MainBlogDBContext))]
-    [Migration("20231031204139_comment")]
+    [Migration("20231101211509_comment")]
     partial class comment
     {
         /// <inheritdoc />
@@ -26,7 +26,11 @@ namespace MainBlog.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CommentPublicationTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CommentText")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PostId")

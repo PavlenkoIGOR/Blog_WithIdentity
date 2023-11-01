@@ -8,13 +8,13 @@ namespace MainBlog.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Title { get; set; } = null!;
-        public string Text { get; set; }        
+        public string Title { get; set; }
+        public string Text { get; set; }     
         public DateTime PublicationDate { get; set; }
 
         public string UserId { get; set; }
         //[Comment("Vghjdfkjhdfkjhg")] //так можно сделать комментарий для таблицы в БД
-        public User User { get; set; } = null!;
+        public User User { get; set; }
 
         public List<Comment> Comments { get; set; } = new();
 
@@ -22,3 +22,17 @@ namespace MainBlog.Models
     }
 }
 
+/*
+    public class Post
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Title { get; set; } = null!;
+        public string Text { get; set; }        
+        public DateTime PublicationDate { get; set; }
+        public string UserId { get; set; }
+        public User User { get; set; } = null!;
+        public List<Comment> Comments { get; set; } = new();
+        public List<Teg> Tegs { get; set; } = new();
+    }
+ */

@@ -3,6 +3,7 @@ using MainBlog.Models;
 using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace MainBlog.Controllers
@@ -21,21 +22,28 @@ namespace MainBlog.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SetComment(DiscussionPostViewModel discussionPVM)
-        {
-            var currentUser = HttpContext.User;
-            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
+        //[HttpGet]
+        //public async Task<IActionResult> PostDiscussion(DiscussionPostViewModel cVM)
+        //{
+        //    var post = await _context.Posts.Where(x => x.Id == cVM.PostVM.Id).Select(p => new DiscussionPostViewModel
+        //    {
+        //        new PostViewModel
+        //        {
+        //            Id = cVM.PostVM.Id,
+        //        AuthorOfPost = p.User.UserName,
+        //        PublicationTime = p.PublicationDate,
+        //        Title = p.Title,
+        //        Text = p.Text,
+        //        UsersComments = p.Comments,
+        //        }
+        //    }).FirstOrDefaultAsync();
 
-            //var comment = _context.Comments.Where(d => d.PostId == discussionPVM.Id).Select(d=>d).FirstOrDefaultAsync();
-            Comment comment = new Comment()
-            {
-                UserId = userId!,
-                CommentText = discussionPVM.CommentText,
-                PostId = discussionPVM.Id
-            };
-            await _context.Comments.AddAsync(comment);
-            return RedirectToAction("PostDiscussion", "Posts");
-        }
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(post);
+        //}
     }
 }

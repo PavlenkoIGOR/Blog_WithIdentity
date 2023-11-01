@@ -23,7 +23,11 @@ namespace MainBlog.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CommentPublicationTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CommentText")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PostId")
