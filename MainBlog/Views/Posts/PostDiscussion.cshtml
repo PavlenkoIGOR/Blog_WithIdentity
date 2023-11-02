@@ -21,6 +21,8 @@
         {
             <textarea asp-for="CommentVM.CommentText"></textarea>
             <button id="SetCommentButton" type="submit">Оставить комментарий</button>
+            @Html.HiddenFor(model => model.PostVM.Id)
+            @Html.HiddenFor(model => model.CommentVM.CommentText)
         }
         @*         <form style="display: inline-grid;" method="post" asp-controller="Posts" asp-action="SetComment">
             <textarea asp-for="CommentVM.CommentText"></textarea>
@@ -37,7 +39,7 @@
     @foreach (var comment in Model.PostVM.CommentsOfPost)
     {
         <div>
-            <div>@comment.User.Id</div>
+            @* <div>@comment.User.Id</div> **************************************** почему null? *@ 
             <div>@comment.CommentPublicationTime</div>
             <div>
                 @comment.CommentText

@@ -41,7 +41,10 @@ else
     @foreach (var item in Model.UserPosts)
     {
         <div style="color: bisque; background-color:steelblue">
-            здесь будут теги
+            @foreach (var teg in item.Tegs)
+            {
+                @teg.TegTitle
+            }
         </div>
         <div style="background-color:bisque;"> @item.Text</div>
         <div style="color: bisque; background-color:steelblue">
