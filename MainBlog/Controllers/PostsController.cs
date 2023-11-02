@@ -25,10 +25,14 @@ namespace MainBlog.Controllers
 
         //[Authorize]
         [HttpGet]
-        public IActionResult UserBlog()
+        public async Task<IActionResult> UserBlog()
         {
+            var currentUser = HttpContext.User;
+            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
 
-            return View(new UserBlogViewModel());
+            UserBlogViewModel model = new UserBlogViewModel();
+            model.UserPosts = await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
+            return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> UserBlog(UserBlogViewModel viewModel)
@@ -151,6 +155,7 @@ namespace MainBlog.Controllers
             }
 
             return View("PostDiscussion", dpVM);
+            //return RedirectToAction("PostDiscussion", "Posts");
         }
         [HttpPost]
         public async Task<IActionResult> SetComment(DiscussionPostViewModel cVM)

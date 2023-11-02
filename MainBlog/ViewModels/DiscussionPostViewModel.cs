@@ -20,3 +20,14 @@ namespace MainBlog.ViewModels
         public CommentViewModel CommentVM { get; set; } = new();
     }
 }
+
+/*
+namespace MainBlog.ViewModels
+{
+    public class DiscussionPostViewModel
+    {
+        public PostViewModel PostVM { get; set; } = new();
+        public CommentViewModel CommentVM { get; set; } = new();
+    }
+}
+ */

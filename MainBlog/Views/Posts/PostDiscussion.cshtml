@@ -17,14 +17,19 @@
     <div>
     </div>
     <div style="position:relative;">
-        <form style="display: inline-grid;" method="post" asp-controller="Posts" asp-action="SetComment">
+        @using (Html.BeginForm("SetComment", "Posts", new {  Id = Model.PostVM.Id }, FormMethod.Post))
+        {
+            <textarea asp-for="CommentVM.CommentText"></textarea>
+            <button id="SetCommentButton" type="submit">Оставить комментарий</button>
+        }
+        @*         <form style="display: inline-grid;" method="post" asp-controller="Posts" asp-action="SetComment">
             <textarea asp-for="CommentVM.CommentText"></textarea>
 
             @Html.HiddenFor(model => model.PostVM.Id)
             @Html.HiddenFor(model => model.CommentVM.CommentText)
 
             <button id="SetCommentButton" type="submit">Оставить комментарий</button>
-        </form>
+        </form> *@
     </div>
     <div>
         <span>Комментарии</span>
@@ -32,7 +37,7 @@
     @foreach (var comment in Model.PostVM.CommentsOfPost)
     {
         <div>
-            <div>@comment.UserId</div>
+            <div>@comment.User.Id</div>
             <div>@comment.CommentPublicationTime</div>
             <div>
                 @comment.CommentText

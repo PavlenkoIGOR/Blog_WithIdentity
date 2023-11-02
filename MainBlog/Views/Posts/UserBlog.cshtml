@@ -7,7 +7,7 @@
     ViewData["Title"] = "Ваш Блог";
     // Layout = null;
     //string registeredUsername = Context.Request.Cookies["RegisteredUsername"];
-    
+
 }
 @* @if (SignInManager.IsSignedIn(User))
 {
@@ -19,71 +19,54 @@ else
     </form>
 
 } *@
-    <H1>Страница пользователя @User.Identity.Name</H1>
+<H1>Страница пользователя @User.Identity.Name</H1>
 
-    <div style="width: 100%; height: 100%; background-color: darkred">
-        <div id="PostField" style="background-color: steelblue">
-            <form method="post" asp-controller="Posts" asp-action="UserBlog">
-                @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" })
-                @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
-                <span style="color:bisque">Введите незвание тегов через запятую в формате "#Название тега"</span>
-                @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
-                <button type="submit">Опубликовать</button>
-            </form>
+<div style="width: 100%; height: 100%; background-color: darkred">
+    <div id="PostField" style="background-color: steelblue">
+        <form method="post" asp-controller="Posts" asp-action="UserBlog">
+            @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" })
+            @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
+            <span style="color:bisque">Введите незвание тегов через запятую в формате "#Название тега"</span>
+            @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
+            <button type="submit">Опубликовать</button>
+        </form>
 
-        </div>
-        <div id="allUserPosts">
-        </div>
     </div>
-    <table border="1" style="border-color: steelblue; border-block-color:antiquewhite;" cellpadding="5" width="100%">
+    <div id="allUserPosts">
+    </div>
+</div>
+<div style="position: relative; display:inline-block;">
+    <div style="color: bisque; background-color:steelblue; text-align: center;">Все Ваши посты</div>
 
-        <thead>
-            <tr>
-                <td bgcolor="steelblue" colspan="2" style="color: bisque">Все Ваши посты</td>
-            </tr>
-            <tr>
-                <th>
-                    @*                 @foreach (var item in Model.Tegs)
-                {
-                @Html.DisplayNameFor(model => model.Tegs.FirstOrDefault())
-                } *@
-                    здесь будут теги
-                </th>
-            </tr>
-        </thead>
+    @foreach (var item in Model.UserPosts)
+    {
+        <div style="color: bisque; background-color:steelblue">
+            здесь будут теги
+        </div>
+        <div style="background-color:bisque;"> @item.Text</div>
+        <div style="color: bisque; background-color:steelblue">
+            Дата публикации: @item.PublicationDate
+        </div>
+        <hr />
+    }
+    @*                 {
+    @Html.DisplayNameFor(model => model.Tegs.FirstOrDefault())
+    }  *@
+</div>
+@*         @foreach (var item in Model)
+    {
+    <tr>
+    <td>
+    @Html.DisplayFor(model => item.PublicationDate)
+    </td>
+    <td>
+    @Html.DisplayFor(model => item.Text)
+    </td>
+    <td>
+    <button asp-controller="Account" asp-action="EditUser">Сохранить</button>
+    </td>
+    </tr>
+    } *@
 
-        <tbody>
-            <tr>
-                <td>
-                    <div>
-                        <form style="display:grid">
-                            <output>здесь будет время публикации</output>
-                            <output>здесь будет сам пост</output>
-                            <input type="submit" value="Оставить комментарий" />
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    asdasdasd
-                </td>
-            </tr>
-            @*         @foreach (var item in Model)
-        {
-        <tr>
-        <td>
-        @Html.DisplayFor(model => item.PublicationDate)
-        </td>
-        <td>
-        @Html.DisplayFor(model => item.Text)
-        </td>
-        <td>
-        <button asp-controller="Account" asp-action="EditUser">Сохранить</button>
-        </td>
-        </tr>
-        } *@
-        </tbody>
-    </table>
 
 

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MainBlog.Migrations
 {
     [DbContext(typeof(MainBlogDBContext))]
-    [Migration("20231101211509_comment")]
-    partial class comment
+    [Migration("20231102195337_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,10 +30,9 @@ namespace MainBlog.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CommentText")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
@@ -83,8 +82,7 @@ namespace MainBlog.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("TegTitle")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -307,21 +305,15 @@ namespace MainBlog.Migrations
 
             modelBuilder.Entity("MainBlog.Models.Comment", b =>
                 {
-                    b.HasOne("MainBlog.Models.Post", "Post")
+                    b.HasOne("MainBlog.Models.Post", null)
                         .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PostId");
 
-                    b.HasOne("MainBlog.Models.User", "User")
+                    b.HasOne("MainBlog.Models.User", null)
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MainBlog.Models.Post", b =>

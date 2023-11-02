@@ -15,6 +15,7 @@ namespace MainBlog.ViewModels
         [Required(ErrorMessage = "Поле tegs является обязательным")]
         [DataType(DataType.Text)]
         public string tegs { get; set; }
+        public List<Post> UserPosts { get; set; }
         public UserBlogViewModel() 
         {
         }
@@ -31,7 +32,7 @@ namespace MainBlog.ViewModels
                 foreach (string teg in words)
                 {
                     Teg teg1 = new Teg();
-                    teg1.Name = teg;
+                    teg1.TegTitle = teg;
                     Tegs.Add(teg1);
                 }
                 return Tegs;
