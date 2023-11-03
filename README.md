@@ -1,5 +1,5 @@
 для Index страницы:
-```razor
+```cshtml
 @using Microsoft.AspNet.Identity.EntityFramework;
 
 @{
