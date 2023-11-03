@@ -12,10 +12,10 @@ namespace MainBlog.Controllers
 {
     public class AuthRegController : Controller
     {
-        private UserManager<User> _userManager;
-        private SignInManager<User> _signInManager;
+        private UserManager<Models.User> _userManager;
+        private SignInManager<Models.User> _signInManager;
         private IWebHostEnvironment _env;
-        public AuthRegController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+        public AuthRegController(UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -31,13 +31,13 @@ namespace MainBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> RegistrateUser(RegistrateViewModel viewModel)
         {
-            User user = null!;
+            Models.User user = null!;
             if (ModelState.IsValid)
             {
                 user = await _userManager.FindByEmailAsync(viewModel.Email);
                 if (user == null)
                 {
-                    user = new User();
+                    user = new Models.User();
                     user.UserName = viewModel.Name;
                     user.Age = viewModel.Age;
                     user.Email = viewModel.Email;
@@ -49,7 +49,7 @@ namespace MainBlog.Controllers
                     if (result.Succeeded)
                     {
                         string[] roles = new[] { "Administrator", "Moderator", "User" };
-                        await _userManager.AddToRoleAsync(user, roles[2]);
+                        await _userManager.AddToRoleAsync(user, roles[0]);
                         await _signInManager.SignInAsync(user, false);
 
                         //Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
@@ -101,8 +101,8 @@ namespace MainBlog.Controllers
                     await fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid!");
                     fs.Close();
                 }
-                
-                User user = await _userManager.FindByEmailAsync(model.Email);
+
+                Models.User user = await _userManager.FindByEmailAsync(model.Email);
 
                 if (user == null)// || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
                 {
@@ -115,7 +115,7 @@ namespace MainBlog.Controllers
                     
                     return Content($"{new Exception("Пользователь не найден!")}");
                 }
-                //await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
+                await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
                 SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
                 if (signInResult.Succeeded)
                 {
@@ -153,7 +153,7 @@ namespace MainBlog.Controllers
         [ValidateAntiForgeryToken] //ValidateAntiForgeryToken будет работать только, с HttpPost, причем в cshtml надо указать именно <form method="post">
         public async Task<IActionResult> Logout()
         {
-            User a = await _signInManager.UserManager.GetUserAsync(User);
+            Models.User a = await _signInManager.UserManager.GetUserAsync(User);
 
             string logFile = Path.Combine(_env.ContentRootPath, "Logs", "LogOutLogs.txt");
             using (StreamWriter sw = new(logFile, true))

@@ -9,12 +9,12 @@ namespace MainBlog.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private UserManager<User> _userManager;
-        private SignInManager<User> _signInManager;
+        private UserManager<Models.User> _userManager;
+        private SignInManager<Models.User> _signInManager;
         private IWebHostEnvironment _env;
         //private readonly Imylog _imylog;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+        public HomeController(ILogger<HomeController> logger, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
         {
             _logger = logger;
             _userManager = userManager;
@@ -27,7 +27,7 @@ namespace MainBlog.Controllers
         {
                 return View();
         }
-
+        [Authorize]
         public async Task<IActionResult> Privacy()
         {
             _logger.LogInformation("Nen ldfgdfg");

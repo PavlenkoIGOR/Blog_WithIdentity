@@ -13,13 +13,18 @@ html {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+
 }
 
 body {
-  margin-bottom: 60px;
-  background-image: url(../img/bg.jpg)
+    margin-bottom: 60px;
+    background: url(../img/bg.jpg)no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .userPostsTextArea {
@@ -50,4 +55,8 @@ body {
 }
 #SetCommentButton {
 
+}
+
+.divHead {
+    background-color: teal;
 }

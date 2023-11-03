@@ -11,10 +11,10 @@ namespace MainBlog.Controllers
     public class CommentController : Controller
     {
         private MainBlogDBContext _context;
-        private UserManager<User> _userManager;
-        private SignInManager<User> _signInManager;
+        private UserManager<Models.User> _userManager;
+        private SignInManager<Models.User> _signInManager;
         private IWebHostEnvironment _env;
-        public CommentController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, MainBlogDBContext context)
+        public CommentController(UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment, MainBlogDBContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;

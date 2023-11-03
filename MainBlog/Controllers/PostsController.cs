@@ -12,10 +12,10 @@ namespace MainBlog.Controllers
     public class PostsController : Controller
     {
         private MainBlogDBContext _context;
-        private UserManager<User> _userManager;
-        private SignInManager<User> _signInManager;
+        private UserManager<Models.User> _userManager;
+        private SignInManager<Models.User> _signInManager;
         private IWebHostEnvironment _env;
-        public PostsController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+        public PostsController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -32,6 +32,7 @@ namespace MainBlog.Controllers
 
             UserBlogViewModel model = new UserBlogViewModel();
             model.UserPosts = await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
+            model.Id = userId;
             return View(model);
         }
         [HttpPost]
@@ -133,11 +134,11 @@ namespace MainBlog.Controllers
         [HttpGet]
         public async Task<IActionResult> PostDiscussion(int id)
         {
-            User? user = await _context.Users.FirstOrDefaultAsync();
+            Models.User? user = await _context.Users.FirstOrDefaultAsync();
             //string AuthorOfPost = user.Posts.;
             CommentViewModel? CVM = await _context.Comments.Where(c=>c.PostId == id).Select(s=> new CommentViewModel
             {
-                CommentText = s.CommentText, Author = "VasyaPupkin", PublicationDate = s.CommentPublicationTime
+                /*CommentText = s.CommentText,*/ Author = s.User.UserName, PostId = id, CommentId = s.Id, PublicationDate = s.CommentPublicationTime
             }).FirstOrDefaultAsync();
             PostViewModel? PVM = await _context.Posts.Where(x => x.Id == id).Select(p => new PostViewModel
             {
@@ -157,7 +158,17 @@ namespace MainBlog.Controllers
             return View("PostDiscussion", dpVM);
             //return RedirectToAction("PostDiscussion", "Posts");
         }
-        [HttpPost]
+            /*
+            public class CommentViewModel
+                {
+                    public string Author { get; set; }
+                    public DateTime PublicationDate { get; set; }
+                    public int CommentId { get; set; }
+                    public int PostId { get; set; }
+                    public string CommentText { get; set; }
+                }
+            */
+            [HttpPost]
         public async Task<IActionResult> SetComment(DiscussionPostViewModel cVM)
         {
             var currentUser = HttpContext.User;

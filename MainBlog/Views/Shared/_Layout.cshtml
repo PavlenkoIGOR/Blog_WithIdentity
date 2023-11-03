@@ -32,14 +32,14 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
-                        @{
-                            if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой Блог</a>
-                                </li>
-                            }
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой Блог</a>
+                            </li>
                         }
+
 
                         @{
                             if (User.IsInRole("Administrator"))

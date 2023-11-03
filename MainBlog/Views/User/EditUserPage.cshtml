@@ -1,0 +1,54 @@
+﻿@model MainBlog.ViewModels.UsersViewModel
+﻿﻿@using Microsoft.AspNetCore.Identity;
+@using MainBlog.Models;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Редактирование профиля";
+}
+<div class="divHead" >
+    <h1>Редактирование профиля @Model.Name, @Model.Email</h1>
+</div>
+<div style="background-color:steelblue; position: relative;  display: flex;">
+    <form style="display: inline-grid; position: relative; margin: auto;" method="post" asp-controller="" asp-action="">
+
+        <span asp-validation-for="Name">Имя пользователя</span>
+        <input asp-for="Name" value="@Model.Name"></input>
+
+        <span asp-validation-for="Age">Возраст пользователя</span>
+        <input asp-for="Age" value="@Model.Age"></input>
+
+        <span asp-validation-for="Email">Email пользователя</span>
+        <input asp-for="Email" value=" @Model.Email"></input>
+        @if (User.IsInRole("Administrator"))
+        {
+            <span asp-validation-for="RoleType">Роль пользователя</span>
+                <input asp-for="RoleType" value=" @Model.RoleType"></input>
+        }
+        <hr/>
+        <button type="submit">Сохранить изменения</button>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

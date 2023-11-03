@@ -6,7 +6,7 @@ namespace MainBlog.ViewModels
 {
     public class UserBlogViewModel
     {
-        //public string Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         [DataType(DataType.MultilineText)]
         [Required]

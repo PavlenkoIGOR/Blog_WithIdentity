@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<MainBlog.ViewModels.UsersViewModel>
-@using MainBlog.ViewModels
+@using MainBlog.ViewModels;
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<User> SignInManager;
 @inject UserManager<User> UserManager;
@@ -22,9 +22,12 @@
     <table border="1" cellpadding="5" width="100%">
         <thead>
             <tr>
-                <td bgcolor="steelblue" colspan="6" style="color: bisque">Таблица учётных записей</td>
+                <td bgcolor="steelblue" colspan="7" style="color: bisque">
+                    Таблица учётных записей
+                </td>
             </tr>
-            <tr>
+            <tr style="text-shadow: white 1px 1px 0, white -1px -1px 0,
+                    white -1px 1px 0, white 1px -1px 0;">
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
@@ -41,9 +44,9 @@
             </tr>
         </thead>
         <tbody>
-          @foreach (var item in Model)
+            @foreach (var item in Model)
             {
-                <tr>
+                <tr style="background-color:rgba(0, 128, 128, 0.9); font-family:Arial; font-size:large;">
                     <td>
                         @Html.DisplayFor(model => item.Name)
                     </td>
@@ -66,12 +69,25 @@
                         @using (Html.BeginForm("DeleteUser", "Blog", new { Id = item.Id }, FormMethod.Post))
                         {
                             @* ниже: создание кнопки и привязка к контроллеру *@
-                            @Html.ActionLink("Удалить", "DeleteUser", "Blog", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px" })
+                            @Html.ActionLink("Удалить", "DeleteUser", "Blog", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px; background-color: rgb(200,40,40);" })
                             @* <button class="btn btn-danger btn-xs" type="submit">Удалить</button> *@
                         }
                     </td>
                     <td>
-                        <button asp-controller="Blog" asp-action="EditUser">Сохранить</button>
+@*                         <form method="get" asp-controller="User" asp-action="EditUserPage">
+                            <input type="hidden" asp-for="@item.Id"></input>
+                            <button type="submit" style="color:bisque; background-color:rgb(180, 100, 10)">Редактировать</button>
+                        </form> *@
+                        @* ниже: создание <form></form> *@
+                        @using (Html.BeginForm("EditUserPage", "User", new { Id = item.Id }, FormMethod.Post))
+                        {
+                            @* ниже: создание кнопки и привязка к контроллеру *@
+                            @Html.ActionLink("Редактировать", "EditUserPage", "User", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px; background-color: rgb(180,100,100);" })
+                            @* <button class="btn btn-danger btn-xs" type="submit">Удалить</button> *@
+                        }
+                    </td>
+                    <td>
+                        <button asp-controller="Blog" asp-action="SaveUser" style="color:bisque; background-color:rgb(10, 100, 10)">Сохранить</button>
                     </td>
                 </tr>
             }
@@ -79,4 +95,37 @@
     </table>
 
 }
+
+@*
+public class UserViewModel
+{
+    public int Id { get; set; }
+}
+Контроллер (UserController.cs):
+public class UserController : Controller
+{
+    [HttpGet]
+    public IActionResult EditUserPage(int id)
+    {
+        // Логика получения данных пользователя по id
+        UserViewModel viewModel = GetUserById(id);
+        return View(viewModel);
+    }
+    [HttpPost]
+    public IActionResult EditUser(UserViewModel viewModel)
+    {
+        // Логика обновления данных пользователя
+        UpdateUser(viewModel);
+        return RedirectToAction("Index", "Home");
+    }
+}
+Страница cshtml (EditUserPage.cshtml):
+@model UserViewModel
+<form method="post" asp-controller="User" asp-action="EditUser">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" style="color:bisque; background-color:rgb(180, 100, 10)">Редактировать</button>
+</form>
+*@
+
+
 

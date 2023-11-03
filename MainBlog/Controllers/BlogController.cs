@@ -17,10 +17,10 @@ namespace MainBlog.Controllers
     public class BlogController : Controller
     {
         private MainBlogDBContext _context;
-        private UserManager<User> _userManager;
-        private SignInManager<User> _signInManager;
+        private UserManager<Models.User> _userManager;
+        private SignInManager<Models.User> _signInManager;
         private IWebHostEnvironment _env;
-        public BlogController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+        public BlogController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;

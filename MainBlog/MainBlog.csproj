@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="bin\**" />
+    <Compile Remove="Views\Comment\**" />
     <Content Remove="bin\**" />
+    <Content Remove="Views\Comment\**" />
     <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="Views\Comment\**" />
     <None Remove="bin\**" />
+    <None Remove="Views\Comment\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Data\DB\" />
-    <Folder Include="Views\Comment\" />
     <Folder Include="Logs\" />
   </ItemGroup>
 

@@ -19,8 +19,13 @@ else
     </form>
 
 } *@
-<H1>Страница пользователя @User.Identity.Name</H1>
-
+<div class="divHead">
+    <H1>Страница пользователя @User.Identity.Name</H1>
+    <form method="get" asp-controller="User" asp-action="EditUserPage">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit">Редактировать данные профиля</button>
+    </form>
+</div>
 <div style="width: 100%; height: 100%; background-color: darkred">
     <div id="PostField" style="background-color: steelblue">
         <form method="post" asp-controller="Posts" asp-action="UserBlog">
@@ -52,24 +57,5 @@ else
         </div>
         <hr />
     }
-    @*                 {
-    @Html.DisplayNameFor(model => model.Tegs.FirstOrDefault())
-    }  *@
 </div>
-@*         @foreach (var item in Model)
-    {
-    <tr>
-    <td>
-    @Html.DisplayFor(model => item.PublicationDate)
-    </td>
-    <td>
-    @Html.DisplayFor(model => item.Text)
-    </td>
-    <td>
-    <button asp-controller="Account" asp-action="EditUser">Сохранить</button>
-    </td>
-    </tr>
-    } *@
-
-
 

@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "Ваш Блог";
 }
-<div>
+<div style="background-color:steelblue;">
     <div>
         <h1>Вы смотрите пост "@Model.PostVM.Title" @Model.PostVM.Id</h1>
         <h3>Автор @Model.PostVM.AuthorOfPost</h3>
@@ -20,28 +20,21 @@
         @using (Html.BeginForm("SetComment", "Posts", new {  Id = Model.PostVM.Id }, FormMethod.Post))
         {
             <textarea asp-for="CommentVM.CommentText"></textarea>
-            <button id="SetCommentButton" type="submit">Оставить комментарий</button>
             @Html.HiddenFor(model => model.PostVM.Id)
             @Html.HiddenFor(model => model.CommentVM.CommentText)
+
+            <button id="SetCommentButton" type="submit">Оставить комментарий</button>
         }
-        @*         <form style="display: inline-grid;" method="post" asp-controller="Posts" asp-action="SetComment">
-            <textarea asp-for="CommentVM.CommentText"></textarea>
-
-            @Html.HiddenFor(model => model.PostVM.Id)
-            @Html.HiddenFor(model => model.CommentVM.CommentText)
-
-            <button id="SetCommentButton" type="submit">Оставить комментарий</button>
-        </form> *@
     </div>
-    <div>
+    <div style="background-color:steelblue;">
         <span>Комментарии</span>
     </div>
     @foreach (var comment in Model.PostVM.CommentsOfPost)
     {
         <div>
-            @* <div>@comment.User.Id</div> **************************************** почему null? *@ 
-            <div>@comment.CommentPublicationTime</div>
-            <div>
+            <div style="background-color:bisque;">@comment.UserId</div> @**************************************** почему null? *@
+            <div style="background-color:bisque;">@comment.CommentPublicationTime</div>
+            <div style="background-color:whitesmoke;">
                 @comment.CommentText
             </div>
             @if (User.IsInRole("Administrator"))
@@ -55,6 +48,29 @@
         </div>
     }
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @* ОРИГИНАЛ
