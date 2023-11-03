@@ -1,16 +1,17 @@
-# Blog_WithIdentity
+для Index страницы:
+```razor
+@using Microsoft.AspNet.Identity.EntityFramework;
 
-скрытые поля для DiscussionPage
-
-@Html.HiddenFor(model => model.Id)
-@Html.HiddenFor(model => model.Title)
-@Html.HiddenFor(model => model.Text)
-@Html.HiddenFor(model => model.PublicationDate)
-@Html.HiddenFor(model => model.UserId)
-@Html.HiddenFor(model => model.User)
-@foreach (var comment in Model.Comments){
-@Html.HiddenFor(model => comment)
+@{
+  var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+  var currentUser = userManager.FindById(User.Identity.GetUserId());
 }
-@foreach (var teg in Model.Tegs){
-@Html.HiddenFor(model => teg)
+@if (currentUser != null)
+{
+  <div>User exists!</div>
 }
+else
+{
+  <div>User does not exist.</div>
+}
+```
