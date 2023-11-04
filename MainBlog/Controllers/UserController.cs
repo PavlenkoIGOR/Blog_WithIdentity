@@ -72,8 +72,6 @@ namespace MainBlog.Controllers
                     user.Email = usersVM.Email;
                     user.UserName = usersVM.Name;
 
-
-
                     await _userManager.UpdateAsync(user);
                     await _userManager.AddToRoleAsync(user, usersVM.RoleType);
                 }

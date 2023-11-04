@@ -62,12 +62,35 @@ body {
 }
 .AccountButton {
     width: fit-content;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.6);
     Color: rgb(57,227,237);
     position: relative;
     display: flex;
     margin-left: auto;
     margin-right: auto;
     font-size: x-large;
-    border-color: rgb(57,227,237)
+    border-color: rgb(57,227,237);
+}
+
+#topDivMain {
+
+}
+#bottomDivMain {
+    position: relative;
+    display: inline-flex;
+}
+#leftDivMain{
+    display:inline-block;
+    width: 50vh;
+}
+#rightDivMain {
+    display: inline-flex;
+}
+#photoPlace {
+    color: white;
+    background-color: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 300px;
+    border: solid 4px rgb(57,227,237);
+    /*border-radius: 20px;*/
 }

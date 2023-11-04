@@ -6,16 +6,17 @@ namespace MainBlog.ViewModels
 {
     public class UserBlogViewModel
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
+        public string? Id { get; set; }
+        public string? Title { get; set; }
         [DataType(DataType.MultilineText)]
         [Required]
-        public string Text { get; set; }
+        public string? Text { get; set; }
         public DateTime PublicationDate { get; set; }
         [Required(ErrorMessage = "Поле tegs является обязательным")]
         [DataType(DataType.Text)]
-        public string tegs { get; set; }
-        public List<Post> UserPosts { get; set; }
+        public string? tegs { get; set; }
+        public List<Teg>? tegsList { get; set; }
+        public List<Post>? UserPosts { get; set; }
         public UserBlogViewModel() 
         {
         }

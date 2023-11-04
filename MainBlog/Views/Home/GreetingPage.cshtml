@@ -7,26 +7,29 @@
     // Или получите имя пользователя из куки
     //string registeredUsername = Context.Request.Cookies["RegisteredUsername"];
     //string loginUsername = Context.Request.Cookies["LoginUsername"];
-    var user = UserManager.Users.FirstOrDefault(x => x.UserName == "User1");
+    //var user = UserManager.Users.FirstOrDefault(x => x.UserName == "User1");
 }
 
 <style>
-    #h1 {
-        display: flex;
-        position: absolute;
+    #H1 {
+        display:block;
         text-align: center;
         vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        color: rgba(57,227,237,1);
+        top: 50%;
+        position:relative;
+    }
+
+    .H1Class{
+        background-color:rgba(0,0,0,0.7);
+        text-align:center;
+        margin: 0;
+        height:90vh;
+        position: relative;
     }
 </style>
-@{
-    if (User.Identity.IsAuthenticated)
-    {
-        <h1 id="H1">Добро пожаловать, @User.Identity.Name !</h1>
-        <br />
-        <h1 id="H1">С возвращением, @User.Identity.Name</h1>
-    }
-    else
-    {
-        <h1>Пожалуйста, пройдите регистрацию или выполните вход на сайт!</h1>
-    }
-}
+<div class="H1Class">
+    <h1 id="H1">С возвращением, @User.Identity.Name</h1>
+</div>

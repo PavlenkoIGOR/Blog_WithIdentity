@@ -16,27 +16,27 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-custom border-bottom box-shadow mb-3" style="background-color: rgba(0,0,0,0.5);">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MainBlog</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                        aria-expanded="false" aria-label="Toggle navigation" style="border-color:rgba(57,227,237,1);">
+                    <span class="navbar-toggler-icon" style="color:rgba(57,227,237,1);"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
 
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой Блог</a>
+                                <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой Блог</a>
                             </li>
                         }
 
@@ -45,19 +45,22 @@
                             if (User.IsInRole("Administrator"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="ShowUsers">Показать всех пользователей</a>
+                                    <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="ShowUsers">Показать всех пользователей</a>
                                 </li>
                             }
                         }
+                        <li class="nav-item__Reg">
+                            <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="AllPostsPage">Все посты</a>
+                        </li>
 
                         <li class="nav-item__Reg">
-                            <a class="nav-link text-dar" asp-area="" asp-controller="Blog" asp-action="ForAuthUsersOnly">ТолькоДляАутентифицированных</a>
+                            <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="ForAuthUsersOnly">ТолькоДля Аутентифицированных</a>
                         </li>
                         <li class="nav-item__Reg">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="AuthReg" asp-action="RegistrateUser">Регистрация</a>
+                            <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="AuthReg" asp-action="RegistrateUser">Регистрация</a>
                         </li>
                         <li class="nav-item__Reg">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="AuthReg" asp-action="Login">Залогиниться</a>
+                            <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="AuthReg" asp-action="Login">Залогиниться</a>
                         </li>
                         <li class="nav-item__Reg">
                             <partial name="_partialLogout.cshtml" />
@@ -69,9 +72,6 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <div>
-                <a class="" asp-area="" asp-controller="Blog" asp-action="AllPostsPage">Постмотреть все посты</a>
-            </div>
             @RenderBody()
         </main>
     </div>

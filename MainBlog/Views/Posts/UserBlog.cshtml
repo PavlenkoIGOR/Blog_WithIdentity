@@ -19,42 +19,64 @@ else
     </form>
 
 } *@
-<div class="divHead">
+<div id="topDivMain" class="divHead">
     <H1>Страница пользователя @User.Identity.Name</H1>
-    <form method="get" asp-controller="User" asp-action="EditUserPage">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <button type="submit">Редактировать данные профиля</button>
-    </form>
 </div>
-<div style="width: 100%; height: 100%; background-color: darkred">
-    <div id="PostField" style="background-color: steelblue">
-        <form method="post" asp-controller="Posts" asp-action="UserBlog">
-            @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" })
-            @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
-            <span style="color:bisque">Введите незвание тегов через запятую в формате "#Название тега"</span>
-            @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
-            <button type="submit">Опубликовать</button>
-        </form>
+
+<div id="bottomDivMain">
+
+    <div id="leftDivMain">
+        <div id="photoPlace">
+            место для фото
+        </div>
+        <div>
+            <form method="get" asp-controller="User" asp-action="EditUserPage">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button class="AccountButton" type="submit">Редактировать данные профиля</button>
+            </form>
+        </div>
     </div>
 
-    <div id="allUserPosts"></div>
-</div>
-<div style="position: relative; display:inline-block;">
-    <div style="color: bisque; background-color:steelblue; text-align: center;">Все Ваши посты</div>
+    <div>
 
-    @foreach (var item in Model.UserPosts)
-    {
-        <div style="color: bisque; background-color:steelblue">
-            @foreach (var teg in item.Tegs)
+        <div id="rightDivMain" style="width: 100%; height: 100%; background-color: darkred">
+            <div id="PostField" style="background-color: steelblue">
+                <form method="post" asp-controller="Posts" asp-action="UserBlog">
+                    @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" })
+                    @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
+                    <span style="color:bisque">Введите незвание тегов через запятую в формате "#Название тега"</span>
+                    @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
+                    <button type="submit">Опубликовать</button>
+                </form>
+            </div>
+            <div id="allUserPosts"></div>
+        </div>
+
+        <div style="position: relative; display:inline-block;">
+            <div style="color: bisque; background-color:steelblue; text-align: center;">Все Ваши посты</div>
+
+            @foreach (var item in Model.UserPosts)
             {
-                @teg.TegTitle
+                <div style="color: bisque; background-color:steelblue">
+                    @foreach (var teg in item.Tegs)
+                    {
+                        @teg.TegTitle
+                    }
+                </div>
+                <div style="background-color:bisque;"> @item.Text</div>
+                <div style="color: bisque; background-color:steelblue">
+                    Дата публикации: @item.PublicationDate
+                </div>
+                <div>
+                    <form method="get" asp-action="EditPost" asp-controller="Posts">
+                        <input type="hidden" name="postId" value="@item.Id" />
+                        <button type="submit">Редактировать писанину</button>
+                    </form>
+                </div>
+                <hr />
             }
         </div>
-        <div style="background-color:bisque;"> @item.Text</div>
-        <div style="color: bisque; background-color:steelblue">
-            Дата публикации: @item.PublicationDate
-        </div>
-        <hr />
-    }
-</div>
 
+    </div>
+
+</div>

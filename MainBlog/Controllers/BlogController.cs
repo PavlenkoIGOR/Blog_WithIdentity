@@ -45,11 +45,6 @@ namespace MainBlog.Controllers
                     Email = u.Email,
                     RoleType = _userManager.GetRolesAsync(u).Result.FirstOrDefault()
                 }).ToList();
-                //var data2 = _context.Roles.ToList();
-                //var roles = from item1 in data1
-                //            join item2 in data2 on item1.RoleId equals item2.Id
-                //            select item1.Role.RoleType;
-                //ViewBag.Roles = roles;
                 return View(users);
             }
             return RedirectToAction("Index", "Home");
@@ -76,7 +71,7 @@ namespace MainBlog.Controllers
         #endregion
 
         
-        #region DeleteUser Настроено!
+        #region DeleteUser
         [HttpGet]
         public async Task<ActionResult> DeleteUser(string Id)
         {

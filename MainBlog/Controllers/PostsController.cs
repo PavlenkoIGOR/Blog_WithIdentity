@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 
@@ -104,7 +105,7 @@ namespace MainBlog.Controllers
                 Id = id,
                 CommentsOfPost = post.Comments,
                 Title = post.Title,
-                AuthorOfPost = post.Title,
+                AuthorOfPost = post.User.UserName,
                 Text = post.Text,
                 Tegs = post.Tegs
             };    
@@ -138,6 +139,33 @@ namespace MainBlog.Controllers
             return RedirectToAction("AllPostsPage", "Blog");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditPost(int postId)
+        {
+            Post? post = await _context.Posts.Include(u => u.User).FirstOrDefaultAsync();
+            if (post == null)
+            { return BadRequest(); }
+            //PostViewModel pVM = new PostViewModel() 
+            //{
+            //    Id = postId,
+            //    Title = post.Title,
+            //    Text = post.Text,
+            //    PublicationDateOfPost = post.PublicationDate,
+            //    AuthorOfPost = post.User.UserName,
+            //    UserId = post.UserId,
+            //    User  = post.User,
+            //    Tegs = post.Tegs
+            //};
+            UserBlogViewModel ubVM = new UserBlogViewModel()
+            {
+                Title = post.Title,
+                Text = post.Text,
+                PublicationDate = post.PublicationDate,
+                tegsList = post.Tegs
+            };
+
+            return View("EditPost", ubVM);
+        }
     }
 }
 
