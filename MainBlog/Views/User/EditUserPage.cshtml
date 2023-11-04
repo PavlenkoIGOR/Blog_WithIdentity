@@ -10,20 +10,22 @@
     <h1>Редактирование профиля @Model.Name, @Model.Email</h1>
 </div>
 <div style="background-color:steelblue; position: relative;  display: flex;">
-    <form style="display: inline-grid; position: relative; margin: auto;" method="post" asp-controller="" asp-action="">
+    <form style="display: inline-grid; position: relative; margin: auto;" method="post" asp-controller="User" asp-action="EditUserByAdmin">
+
+        <input asp-for="Id" type="hidden" value="@Model.Id">
 
         <span asp-validation-for="Name">Имя пользователя</span>
-        <input asp-for="Name" value="@Model.Name"></input>
+        <input asp-for="Name" value="@Model.Name"/>
 
         <span asp-validation-for="Age">Возраст пользователя</span>
-        <input asp-for="Age" value="@Model.Age"></input>
+        <input asp-for="Age" value="@Model.Age"/>
 
         <span asp-validation-for="Email">Email пользователя</span>
-        <input asp-for="Email" value=" @Model.Email"></input>
+        <input asp-for="Email" value="@Model.Email"/>
         @if (User.IsInRole("Administrator"))
         {
             <span asp-validation-for="RoleType">Роль пользователя</span>
-                <input asp-for="RoleType" value=" @Model.RoleType"></input>
+                <input asp-for="RoleType" value="@Model.RoleType"/>
         }
         <hr/>
         <button type="submit">Сохранить изменения</button>

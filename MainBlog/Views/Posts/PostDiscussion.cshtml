@@ -8,20 +8,24 @@
 }
 <div style="background-color:steelblue;">
     <div>
-        <h1>Вы смотрите пост "@Model.PostVM.Title" @Model.PostVM.Id</h1>
+        <h1>Вы смотрите пост "@Model.PostVM.Title"</h1>
         <h3>Автор @Model.PostVM.AuthorOfPost</h3>
     </div>
+    @foreach(var teg in Model.PostVM.Tegs)
+    {
+    <div>@teg.TegTitle</div>
+    }
     <div id="textPost">
         @Model.PostVM.Text
     </div>
     <div>
     </div>
     <div style="position:relative;">
-        @using (Html.BeginForm("SetComment", "Posts", new {  Id = Model.PostVM.Id }, FormMethod.Post))
+        @using (Html.BeginForm("SetComment", "Posts", new {  Id = Model.Id }, FormMethod.Post))
         {
-            <textarea asp-for="CommentVM.CommentText"></textarea>
+            <textarea asp-for="CommentText"></textarea>
             @Html.HiddenFor(model => model.PostVM.Id)
-            @Html.HiddenFor(model => model.CommentVM.CommentText)
+            @Html.HiddenFor(model => model.CommentText)
 
             <button id="SetCommentButton" type="submit">Оставить комментарий</button>
         }
@@ -32,8 +36,12 @@
     @foreach (var comment in Model.PostVM.CommentsOfPost)
     {
         <div>
-            <div style="background-color:bisque;">@comment.UserId</div> @**************************************** почему null? *@
+            <div style="background-color:bisque;">@comment.User.Email</div>
             <div style="background-color:bisque;">@comment.CommentPublicationTime</div>
+            @* @foreach(var teg in comment.)
+            {
+            <div style="background-color:bisque;">@teg.TegTitle</div>
+            } *@
             <div style="background-color:whitesmoke;">
                 @comment.CommentText
             </div>
@@ -50,7 +58,63 @@
 </div>
 
 
-
+@*
+    оригинал2
+    @model MainBlog.ViewModels.DiscussionPostViewModel
+﻿﻿@using Microsoft.AspNetCore.Identity;
+@using MainBlog.Models;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Ваш Блог";
+}
+<div style="background-color:steelblue;">
+    <div>
+        <h1>Вы смотрите пост "@Model.PostVM.Title" @Model.PostVM.Id</h1>
+        <h3>Автор @Model.PostVM.AuthorOfPost</h3>
+    </div>
+    <div id="textPost">
+        @Model.PostVM.Text
+    </div>
+    <div>
+    </div>
+    <div style="position:relative;">
+        @using (Html.BeginForm("SetComment", "Posts", new {  Id = Model.PostVM.Id }, FormMethod.Post))
+@* @*         {
+            @* <textarea asp-for="CommentVM.CommentText"></textarea> *@
+@*@Html.HiddenFor(model => model.PostVM.Id)*@
+@* @* @Html.HiddenFor(model => model.CommentVM.CommentText) *@
+@* 
+<button id="SetCommentButton" type="submit">Оставить комментарий</button>
+        }
+    </div>
+<div style="background-color:steelblue;">
+    <spa @*n>Комментарии</span>
+</div> *@
+@* @foreach (var comment in Model.PostVM.CommentsOfPost)
+{
+    <div> *@
+@*         <div style="background-color:bisque;">@comment.UserId</div> @**************************************** почему null? *@
+@*         <div style="background-color:bisque;">@comment.CommentPublicationTime</div>
+        @foreach (var teg in comment.Post.Tegs)
+        {
+            <div style="background-color:bisque;">@teg.TegTitle</div>
+        }
+        <div style="background-color:whitesmoke;">
+            @comment.CommentText
+        </div>
+        @if (User.IsInRole("Administrator")) *@
+@*         {
+            <div>
+                <form method="post" asp-action="" asp-controller="">
+                    <button type="submit">Редактировать</button>
+                </form>
+            </div>
+        }
+    </div>
+}
+</div>
+*@ 
 
 
 

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MainBlog.Migrations
 {
     [DbContext(typeof(MainBlogDBContext))]
-    [Migration("20231103151422_InitialCreate2")]
+    [Migration("20231104150528_InitialCreate2")]
     partial class InitialCreate2
     {
         /// <inheritdoc />
@@ -309,11 +309,13 @@ namespace MainBlog.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("PostId");
 
-                    b.HasOne("MainBlog.Models.User", null)
+                    b.HasOne("MainBlog.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MainBlog.Models.Post", b =>

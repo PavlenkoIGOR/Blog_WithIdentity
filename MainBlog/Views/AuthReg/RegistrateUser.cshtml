@@ -5,11 +5,11 @@
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.10/jquery.validate.unobtrusive.min.js"></script>
 <div class="text-center">
-<h1>Окно регистрации</h1>
+    <h1 style="color: rgba(57,227,237,1); font-family:Arial">Окно регистрации</h1>
 </div>
 <hr />
 
-<div style="position: relative">
+<div style="position: relative; position: relative; background-color: rgba(0,0,0,0.5); color: rgba(57,227,237,1)">
     <form asp-controller="AuthReg" asp-action="RegistrateUser" style="display: grid">
 
         <label asp-for="Name"></label>
@@ -30,6 +30,6 @@
         <input asp-for="ComparePassword" />
         <span asp-validation-for="ComparePassword"></span>
 
-        <input type="submit" value="Create" />
+        <input class="AccountButton" type="submit" value="Зарегестрироваться" />
     </form>
 </div>

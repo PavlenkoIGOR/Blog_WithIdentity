@@ -9,7 +9,7 @@ namespace MainBlog.ViewModels
         public string Text { get; set; } = null!;
         public DateTime PublicationDateOfPost { get; set; }
         public string AuthorOfPost { get; set; } = null!;
-        public string UserId { get; set; } = null!;
+        public string UserId { get; set; }
         public User User { get; set; } = null!;
 
         public List<Comment>? CommentsOfPost { get; set; }

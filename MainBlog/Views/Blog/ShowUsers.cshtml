@@ -22,7 +22,7 @@
     <table border="1" cellpadding="5" width="100%">
         <thead>
             <tr>
-                <td bgcolor="steelblue" colspan="7" style="color: bisque">
+                <td bgcolor="steelblue" colspan="6" style="color: bisque">
                     Таблица учётных записей
                 </td>
             </tr>
@@ -36,9 +36,6 @@
                 </th>
                 <th>
                     @Html.DisplayName("Role")
-                </th>
-                <th>
-                    @Html.DisplayName("Изменить роль")
                 </th>
                 <th></th>
             </tr>
@@ -56,14 +53,14 @@
                     <td>
                         @Html.DisplayFor(model => item.RoleType)
                     </td>
-                    <td>
-                        <form asp-controller="Blog" asp-action="EditUser">
+                    @* <td> *@
+@*                         <form asp-controller="Blog" asp-action="EditUser">
                             <select asp-items="Html.GetEnumSelectList<MainBlog.ViewModels.RolesViewModel>()" name="userRole">
                                 <option value="Выбрать роль">Выбрать роль</option>
                             </select>
-                        </form>
+                        </form> *@
 
-                    </td>
+@*                     </td> *@
                     <td>
                         @* ниже: создание <form></form> *@
                         @using (Html.BeginForm("DeleteUser", "Blog", new { Id = item.Id }, FormMethod.Post))
@@ -74,10 +71,6 @@
                         }
                     </td>
                     <td>
-@*                         <form method="get" asp-controller="User" asp-action="EditUserPage">
-                            <input type="hidden" asp-for="@item.Id"></input>
-                            <button type="submit" style="color:bisque; background-color:rgb(180, 100, 10)">Редактировать</button>
-                        </form> *@
                         @* ниже: создание <form></form> *@
                         @using (Html.BeginForm("EditUserPage", "User", new { Id = item.Id }, FormMethod.Post))
                         {
@@ -93,39 +86,5 @@
             }
         </tbody>
     </table>
-
 }
-
-@*
-public class UserViewModel
-{
-    public int Id { get; set; }
-}
-Контроллер (UserController.cs):
-public class UserController : Controller
-{
-    [HttpGet]
-    public IActionResult EditUserPage(int id)
-    {
-        // Логика получения данных пользователя по id
-        UserViewModel viewModel = GetUserById(id);
-        return View(viewModel);
-    }
-    [HttpPost]
-    public IActionResult EditUser(UserViewModel viewModel)
-    {
-        // Логика обновления данных пользователя
-        UpdateUser(viewModel);
-        return RedirectToAction("Index", "Home");
-    }
-}
-Страница cshtml (EditUserPage.cshtml):
-@model UserViewModel
-<form method="post" asp-controller="User" asp-action="EditUser">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" style="color:bisque; background-color:rgb(180, 100, 10)">Редактировать</button>
-</form>
-*@
-
-
 

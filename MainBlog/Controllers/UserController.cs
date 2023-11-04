@@ -1,7 +1,9 @@
-﻿using MainBlog.Data;
+﻿using MainBlog.BL.Services;
+using MainBlog.Data;
 using MainBlog.Models;
 using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using SQLitePCL;
 
@@ -13,12 +15,16 @@ namespace MainBlog.Controllers
         SignInManager<Models.User> _signInManager;
         IWebHostEnvironment _env;
         MainBlogDBContext _context;
-        public UserController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
+        private readonly IUserService _userService;
+
+        public UserController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _env = environment;
             _context = blogDBContext;
+
+            _userService = userService;
         }
         [HttpGet]
         public async Task<IActionResult> EditUserPage(string id)
@@ -35,22 +41,48 @@ namespace MainBlog.Controllers
             viewModel.Name = user.UserName;
             viewModel.Age = user.Age;
             viewModel.RoleType = role.FirstOrDefault();
-                
+
             return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUserByAdmin(string id)//UsersViewModel uVM)
+        public async Task<IActionResult> EditUserByAdmin(UsersViewModel usersVM)
         {
-            Models.User user = await _context.Users.FindAsync(id);
-            if (user == null)
+            if (ModelState.IsValid)
             {
-                return BadRequest("Пользователь не найден!");
+                UsersViewModel uVM = new UsersViewModel();
+                User user = await _context.Users.FindAsync(usersVM.Id);
+                if (user == null)
+                {
+                    return BadRequest("Пользователь не найден!");
+                }
+                else
+                {
+                    var role = await _userManager.GetRolesAsync(user);
+
+                    user.Id = usersVM.Id;
+                    uVM.Id = usersVM.Id;
+                    uVM.Email = user.Email;
+                    uVM.Name = user.UserName;
+                    uVM.Age = usersVM.Age;
+                    uVM.RoleType = usersVM.RoleType;
+
+                    user.Age = usersVM.Age;
+                    user.Id = usersVM.Id;
+                    user.Email = usersVM.Email;
+                    user.UserName = usersVM.Name;
+
+
+
+                    await _userManager.UpdateAsync(user);
+                    await _userManager.AddToRoleAsync(user, usersVM.RoleType);
+                }
+
+                IList<string> roles = await _userManager.GetRolesAsync(user);
+
+                return View("EditUserPage", uVM);
             }
-            UsersViewModel model = new UsersViewModel();
-            model.Email = user.Email;
-            model.Name = user.UserName;
-            return View("EditUser", model);
+            return BadRequest("Пользователь не найден!");
         }
     }
 }

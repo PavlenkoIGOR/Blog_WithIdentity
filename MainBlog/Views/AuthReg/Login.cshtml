@@ -3,11 +3,11 @@
     ViewData["Title"] = "Логинимся!";
 }
 
-<h1>Логинься!</h1>
+<h1 style="color: rgba(57,227,237,1); font-family:Arial">Логинься!</h1>
 <hr />
-<div style="position: relative; background-color: greenyellow;">
+<div style="position: relative; background-color: rgba(0,0,0,0.5); color: rgba(57,227,237,1)">
     <form method="post" asp-controller="AuthReg" asp-action="Login" style="display: grid">
-        
+
         <label asp-for="Email"></label>
         <input asp-for="Email" />
         <span style="color:red;" asp-validation-for="Email"></span>
@@ -16,8 +16,9 @@
         <input asp-for="Password" />
         <span style="color:red;" asp-validation-for="Password"></span>
         <div>
-            <input class="radio" asp-for="RememberMe" type="radio" value="true"/>RememberMe<Br>
+            <input class="radio" asp-for="RememberMe" type="radio" value="true" />RememberMe<Br>
         </div>
-        <input type="submit" value="Войти" />
+        <input class="AccountButton" type="submit" value="Войти" 
+                style="" />
     </form>
 </div>

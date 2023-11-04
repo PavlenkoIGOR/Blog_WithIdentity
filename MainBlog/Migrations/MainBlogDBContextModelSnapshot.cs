@@ -306,11 +306,13 @@ namespace MainBlog.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("PostId");
 
-                    b.HasOne("MainBlog.Models.User", null)
+                    b.HasOne("MainBlog.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MainBlog.Models.Post", b =>

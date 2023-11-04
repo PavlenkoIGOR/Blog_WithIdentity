@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
 
 namespace MainBlog.Controllers
@@ -32,7 +33,7 @@ namespace MainBlog.Controllers
 
             UserBlogViewModel model = new UserBlogViewModel();
             model.UserPosts = await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
-            model.Id = userId;
+            model.Id = userId;//Guid.Parse(userId);
             return View(model);
         }
         [HttpPost]
@@ -85,90 +86,38 @@ namespace MainBlog.Controllers
             //return RedirectToAction("UserPosts", "Posts");
         }
 
-        //неработающий оригинал
-        //[HttpGet]
-        //public async Task<IActionResult> PostDiscussion2(DiscussionPostViewModel cVM)
-        //{
-        //    //var comment = await _context.Comments.;
-        //    var post = await _context.Posts.Where(x => x.Id == cVM.PostId).Select(p => new DiscussionPostViewModel
-        //    {
-        //        Id = cVM.PostId,
-        //        AuthorOfPost = p.User.UserName,
-        //        PublicationTime = p.PublicationDate,
-        //        Title = p.Title,
-        //        Text = p.Text,
-        //        UsersComments = p.Comments,
-        //    }).FirstOrDefaultAsync();
-
-        //    if (post == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(post);
-        //}
-
-        //оригинал
-        //[HttpGet]
-        //public async Task<IActionResult> PostDiscussion(int id)
-        //{
-        //    //var comment = await _context.Comments.Join(_context.Users, c => c.UserId, u => u.Id, (c, u) => { c.User.UserName = u.UserName; });
-        //    var post = await _context.Posts.Where(x => x.Id == id).Select(p => new DiscussionPostViewModel
-        //    {
-        //        Id = id,
-        //        AuthorOfPost = p.User.UserName,
-        //        PublicationTime = p.PublicationDate,
-        //        Title = p.Title,
-        //        Text = p.Text,
-        //        UsersComments = p.Comments
-        //    }).FirstOrDefaultAsync();
-
-        //    if (post == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(post);
-        //}
-
         [HttpGet]
         public async Task<IActionResult> PostDiscussion(int id)
         {
-            Models.User? user = await _context.Users.FirstOrDefaultAsync();
-            //string AuthorOfPost = user.Posts.;
-            CommentViewModel? CVM = await _context.Comments.Where(c=>c.PostId == id).Select(s=> new CommentViewModel
-            {
-                /*CommentText = s.CommentText,*/ Author = s.User.UserName, PostId = id, CommentId = s.Id, PublicationDate = s.CommentPublicationTime
-            }).FirstOrDefaultAsync();
-            PostViewModel? PVM = await _context.Posts.Where(x => x.Id == id).Select(p => new PostViewModel
+            List<Comment> comments = await _context.Comments
+                .Include(u => u.User)
+                //.ThenInclude(ui => ui.UserIdentity)
+                //.Include(p => p.Post)
+                .ToListAsync();
+            List<Post> posts = await _context.Posts.ToListAsync();
+
+            //List<Teg> tegs = await _context.Tegs.Join(posts, t=>t.Id, p => p.Comments.Where(c=>c. )).ToListAsync();
+
+            var post = await _context.Posts.Include(t => t.Tegs).FirstOrDefaultAsync(i => i.Id == id);
+            PostViewModel pVM = new PostViewModel() 
             {
                 Id = id,
-                AuthorOfPost = p.User.UserName,
-                PublicationDateOfPost = p.PublicationDate,
-                Title = p.Title,
-                Text = p.Text,
-                CommentsOfPost = p.Comments
-            }).FirstOrDefaultAsync();
-            DiscussionPostViewModel dpVM = new DiscussionPostViewModel { PostVM = PVM, CommentVM = CVM };
+                CommentsOfPost = post.Comments,
+                Title = post.Title,
+                AuthorOfPost = post.Title,
+                Text = post.Text,
+                Tegs = post.Tegs
+            };    
+            CommentViewModel cVM = new CommentViewModel();
+            DiscussionPostViewModel dpVM = new DiscussionPostViewModel { PostVM = pVM, CommentVM = comments };
             if (dpVM == null)
             {
                 return NotFound();
             }
-
             return View("PostDiscussion", dpVM);
-            //return RedirectToAction("PostDiscussion", "Posts");
         }
-            /*
-            public class CommentViewModel
-                {
-                    public string Author { get; set; }
-                    public DateTime PublicationDate { get; set; }
-                    public int CommentId { get; set; }
-                    public int PostId { get; set; }
-                    public string CommentText { get; set; }
-                }
-            */
-            [HttpPost]
+
+        [HttpPost]
         public async Task<IActionResult> SetComment(DiscussionPostViewModel cVM)
         {
             var currentUser = HttpContext.User;
@@ -178,7 +127,7 @@ namespace MainBlog.Controllers
             Comment comment = new Comment()
             {
                 UserId = userId!,
-                CommentText = cVM.CommentVM.CommentText,
+                CommentText = cVM.CommentText,
                 PostId = cVM.PostVM.Id,
                 CommentPublicationTime = DateTime.UtcNow
             };
@@ -186,7 +135,7 @@ namespace MainBlog.Controllers
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("PostDiscussion", "Posts");
+            return RedirectToAction("AllPostsPage", "Blog");
         }
 
     }

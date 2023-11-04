@@ -15,7 +15,7 @@ namespace MainBlog.Models
         public Post Post { get; } = null!;
 
         public string UserId { get; set; }
-        public User User { get; } = null!;
+        public User User { get; set; } = null!;
     }
 }
 /* 

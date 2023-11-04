@@ -14,7 +14,7 @@ namespace MainBlog.Models
         public string Text { get; set; }     
         public DateTime PublicationDate { get; set; }
         [ForeignKey("Id")]
-        public string UserId { get; set; } = null!;
+        public string UserId { get; set; }
         //[Comment("Vghjdfkjhdfkjhg")] //так можно сделать комментарий для таблицы в БД
         public User User { get; set; } = null!;
 

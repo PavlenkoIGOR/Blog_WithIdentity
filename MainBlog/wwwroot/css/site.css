@@ -20,7 +20,7 @@ html {
 
 body {
     margin-bottom: 60px;
-    background: url(../img/bg.jpg)no-repeat center center fixed;
+    background: url(../img/bg.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -59,4 +59,15 @@ body {
 
 .divHead {
     background-color: teal;
+}
+.AccountButton {
+    width: fit-content;
+    background-color: rgba(0,0,0,0.5);
+    Color: rgb(57,227,237);
+    position: relative;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: x-large;
+    border-color: rgb(57,227,237)
 }
