@@ -100,7 +100,7 @@ namespace MainBlog.Controllers
             //List<Teg> tegs = await _context.Tegs.Join(posts, t=>t.Id, p => p.Comments.Where(c=>c. )).ToListAsync();
 
             var post = await _context.Posts.Include(t => t.Tegs).FirstOrDefaultAsync(i => i.Id == id);
-            PostViewModel pVM = new PostViewModel() 
+            PostViewModel pVM = new PostViewModel()
             {
                 Id = id,
                 CommentsOfPost = post.Comments,
@@ -108,7 +108,7 @@ namespace MainBlog.Controllers
                 AuthorOfPost = post.User.UserName,
                 Text = post.Text,
                 Tegs = post.Tegs
-            };    
+            };
             CommentViewModel cVM = new CommentViewModel();
             DiscussionPostViewModel dpVM = new DiscussionPostViewModel { PostVM = pVM, CommentVM = comments };
             if (dpVM == null)
@@ -142,7 +142,7 @@ namespace MainBlog.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPost(int postId)
         {
-            Post? post = await _context.Posts.Include(u => u.User).FirstOrDefaultAsync();
+            Post? post = await _context.Posts.Include(u => u.Tegs).FirstOrDefaultAsync();
             if (post == null)
             { return BadRequest(); }
             //PostViewModel pVM = new PostViewModel() 
@@ -161,7 +161,8 @@ namespace MainBlog.Controllers
                 Title = post.Title,
                 Text = post.Text,
                 PublicationDate = post.PublicationDate,
-                tegsList = post.Tegs
+                tegsList = post.Tegs,
+                tegs = string.Join(", ", post.Tegs.Select(t => t.TegTitle))
             };
 
             return View("EditPost", ubVM);
