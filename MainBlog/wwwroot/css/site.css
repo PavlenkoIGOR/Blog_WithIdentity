@@ -94,3 +94,7 @@ body {
     border: solid 4px rgb(57,227,237);
     /*border-radius: 20px;*/
 }
+.userPostsTextArea {
+    background-color: black;
+    color: rgb(57,227,237);
+}

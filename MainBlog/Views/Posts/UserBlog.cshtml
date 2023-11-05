@@ -39,39 +39,41 @@ else
 
     <div>
 
-        <div id="rightDivMain" style="width: 100%; background-color: darkred">
-            <div id="PostField" style="background-color: steelblue">
+        <div id="rightDivMain" style="width: 100%; background-color:rgba(0,0,0,0.5)">
+            <div id="PostField" style="background-color: rgba(0,0,0,0.5)">
                 <form method="post" asp-controller="Posts" asp-action="UserBlog">
+                    <span style="color: rgba(57,227,237,1)">Введите название Вашей статьи</span>
                     @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" })
+                    <span style="color: rgba(57,227,237,1)">Введите текст Вашей статью</span>
                     @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
-                    <span style="color:bisque">Введите незвание тегов через запятую в формате "#Название тега"</span>
+                    <span style="color: rgba(57,227,237,1)">Введите незвание тегов через запятую в формате "#Название тега"</span>
                     @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
                     
-                    <button type="submit">Опубликовать</button>
+                    <button class="AccountButton" type="submit">Опубликовать</button>
                 </form>
             </div>
             <div id="allUserPosts"></div>
         </div>
 
         <div style="position: relative; display:inline-block;">
-            <div style="color: bisque; background-color:steelblue; text-align: center;">Все Ваши посты</div>
+            <div style="color: bisque; background-color:teal; text-align: center;">Все Ваши посты</div>
 
             @foreach (var item in Model.UserPosts)
             {
-                <div style="color: bisque; background-color:steelblue">
+                <div style="color: bisque; background-color:teal">
                     @foreach (var teg in item.Tegs)
                     {
                         @teg.TegTitle
                     }
                 </div>
                 <div style="background-color:bisque;"> @item.Text</div>
-                <div style="color: bisque; background-color:steelblue">
+                <div style="color: bisque; background-color:teal">
                     Дата публикации: @item.PublicationDate
                 </div>
                 <div>
                     <form method="get" asp-action="EditPost" asp-controller="Posts">
                         <input type="hidden" name="postId" value="@item.Id" />
-                        <button type="submit">Редактировать писанину</button>
+                        <button class="AccountButton" type="submit">Редактировать писанину</button>
                     </form>
                 </div>
                 <hr />
