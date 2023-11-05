@@ -18,9 +18,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-custom border-bottom box-shadow mb-3" style="background-color: rgba(0,0,0,0.5);">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MainBlog</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation" style="border-color:rgba(57,227,237,1);">
+
                     <span class="navbar-toggler-icon" style="color:rgba(57,227,237,1);"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -31,16 +31,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-
-
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой Блог</a>
                             </li>
                         }
-
-
                         @{
                             if (User.IsInRole("Administrator"))
                             {
@@ -66,7 +62,7 @@
             </div>
         </nav>
     </header>
-    <div class="container" style="overflow-y: scroll;">
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

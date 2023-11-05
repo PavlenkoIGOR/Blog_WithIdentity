@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "Ваш Блог";
 }
-<div style="background-color:rgba(0,0,0,0.5);">
+<div style="background-color:rgba(0,0,0,0.5); overflow-y: scroll;">
     <div style="position: relative; background-color: rgba(0,0,0,0.5); color: rgba(57,227,237,1)">
         <h1>Вы смотрите пост: "@Model.PostVM.Title"</h1>
         <h3>Автор: @Model.PostVM.AuthorOfPost</h3>
@@ -67,76 +67,3 @@
         </div>
     }
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@* ОРИГИНАЛ
-    @model MainBlog.ViewModels.DiscussionPostViewModel
-﻿﻿@using Microsoft.AspNetCore.Identity;
-@using MainBlog.Models;
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
-@{
-    ViewData["Title"] = "Ваш Блог";
-}
-<div>
-    <div>
-        <h1>Вы смотрите пост "@Model.Title" @Model.Id</h1>
-        <h3>Автор @Model.AuthorOfPost</h3>
-    </div>
-    <div id="textPost">
-        @Model.Text
-    </div>
-    <div>
-    </div>
-    <div style="position:relative;">
-        <form style="display: inline-grid;" method="post" asp-controller="Posts" asp-action="SetComment">
-            <textarea asp-for="CommentText"></textarea>
-
-            @Html.HiddenFor(model => model.Id)
-            @Html.HiddenFor(model => model.CommentText)
-
-            <button id="SetCommentButton" type="submit">Комментировать</button>
-        </form>
-    </div>
-    <div>
-        <span>Комментарии</span>
-    </div>
-    @foreach (var comment in Model.UsersComments)
-    {
-        <div>
-            <div>@comment.User.UserName</div>
-            <div>@comment.CommentPublicationTime</div>
-            <div>
-                @comment.CommentText
-            </div>
-            @if (User.IsInRole("Administrator"))
-            {
-                <div>
-                    <form method="post" asp-action="" asp-controller="">
-                        <button type="submit">Редактировать</button>
-                    </form>
-                </div>
-            }
-        </div>
-    }
-</div> *@
-
-

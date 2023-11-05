@@ -6,42 +6,45 @@
 @{
     ViewData["Title"] = "Все посты";
 }
-@{
-    foreach (var post in Model)
-    {
-        <div id="postBlock" style="cursor:pointer;">
-            <div>
-                @Html.DisplayFor(p => post.Author)
+<div style="height: 80vh; margin: 0 auto; overflow-y: auto;">
+    @{
+        foreach (var post in Model)
+        {
+            <div id="postBlock" style="cursor:pointer;">
+                <div>
+                    @Html.DisplayFor(p => post.Author)
+                </div>
+                <div>
+                    @Html.DisplayFor(p => post.Title)
+                </div>
+                <div>
+                    @Html.DisplayFor(p => post.PublicationTime)
+                </div>
+                <div id="textBlock">
+                    @Html.DisplayFor(p => post.Text)
+                </div>
+                <div style="text-align: right;">
+                    <a style="" href="@Url.Action("PostDiscussion", "Posts", new {id = post.Id})">Перейти к обсуждению</a>
+                </div>
+                <div class="buttonsLine">
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                    {
+                        <form method="get" asp-controller="Posts" asp-action="EditPost">
+                            <input type="hidden" name="postId" value="@post.Id" />
+                            <button class="AccountButton" type="submit">Редактировать статью</button>
+                        </form>
+                    }
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <form method="post" asp-controller="Posts" asp-action="DeletePostByAdmin">
+                            <input type="hidden" name="postId" value="@post.Id" />
+                            <button class="AccountButton" type="submit">Удалить статью</button>
+                        </form>
+                    }
+                </div>
             </div>
-            <div>
-                @Html.DisplayFor(p => post.Title)
-            </div>
-            <div>
-                @Html.DisplayFor(p => post.PublicationTime)
-            </div>
-            <div id="textBlock">
-                @Html.DisplayFor(p => post.Text)
-            </div>
-            <div>
-                <a href="@Url.Action("PostDiscussion", "Posts", new {id = post.Id})">Перейти к обсуждению</a>
-            </div>
-            @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
-            {
-                <form method="get" asp-controller="Posts" asp-action="EditPost">
-                    <input type="hidden" name="postId" value="@post.Id" />
-                    <button class="AccountButton" type="submit">Редактировать статью</button>
-                </form>
-            }
-            @if (User.IsInRole("Administrator"))
-            {
-                <form method="post" asp-controller="Posts" asp-action="DeletePostByAdmin">
-                    <input type="hidden" name="postId" value="@post.Id" />
-                    <button class="AccountButton" type="submit">Удалить статью</button>
-                </form>
-            }
-        </div>
+        }
     }
-}
 
-
+</div>
 
