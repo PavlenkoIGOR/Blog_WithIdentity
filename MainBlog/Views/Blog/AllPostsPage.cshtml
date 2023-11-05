@@ -25,6 +25,20 @@
             <div>
                 <a href="@Url.Action("PostDiscussion", "Posts", new {id = post.Id})">Перейти к обсуждению</a>
             </div>
+            @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+            {
+                <form method="get" asp-controller="Posts" asp-action="EditPost">
+                    <input type="hidden" name="postId" value="@post.Id" />
+                    <button class="AccountButton" type="submit">Редактировать статью</button>
+                </form>
+            }
+            @if (User.IsInRole("Administrator"))
+            {
+                <form method="post" asp-controller="Posts" asp-action="DeletePostByAdmin">
+                    <input type="hidden" name="postId" value="@post.Id" />
+                    <button class="AccountButton" type="submit">Удалить статью</button>
+                </form>
+            }
         </div>
     }
 }

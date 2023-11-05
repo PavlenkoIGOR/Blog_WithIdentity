@@ -52,10 +52,6 @@
                         <li class="nav-item__Reg">
                             <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="AllPostsPage">Все посты</a>
                         </li>
-
-                        <li class="nav-item__Reg">
-                            <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="ForAuthUsersOnly">ТолькоДля Аутентифицированных</a>
-                        </li>
                         <li class="nav-item__Reg">
                             <a class="nav-link text-custom" style="color: rgba(57,227,237,1); font-family:Arial; font-size:x-large;" asp-area="" asp-controller="AuthReg" asp-action="RegistrateUser">Регистрация</a>
                         </li>
@@ -70,7 +66,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container" style="overflow-y: scroll;">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

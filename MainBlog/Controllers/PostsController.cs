@@ -14,10 +14,10 @@ namespace MainBlog.Controllers
     public class PostsController : Controller
     {
         private MainBlogDBContext _context;
-        private UserManager<Models.User> _userManager;
-        private SignInManager<Models.User> _signInManager;
+        private UserManager<User> _userManager;
+        private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
-        public PostsController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
+        public PostsController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -34,7 +34,8 @@ namespace MainBlog.Controllers
 
             UserBlogViewModel model = new UserBlogViewModel();
             model.UserPosts = await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
-            model.Id = userId;//Guid.Parse(userId);
+            model.Id = userId;
+            
             return View(model);
         }
         [HttpPost]
@@ -43,9 +44,6 @@ namespace MainBlog.Controllers
             var currentUser = HttpContext.User;
             var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
 
-            //var user = User;
-            //var infoAboutUser = await _userManager.GetUserAsync(user);
-            //Необходимая логика обработки текста из Textarea
             string postContent = viewModel.Text;
             Post post = new Post()
             {
@@ -56,35 +54,18 @@ namespace MainBlog.Controllers
                 UserId = userId!,
                 Tegs = viewModel.HasWritingTags()
             };
-            await _context.Posts.AddAsync(post);
+            var postExist = await _context.Posts.FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+            if (postExist == null)
+            {
+                await _context.Posts.AddAsync(post);
+            }
+            else 
+            {
+                post.Id = viewModel.PostId;
+                _context.Entry(postExist).CurrentValues.SetValues(post);
+            }
             await _context.SaveChangesAsync();
-
             return RedirectToAction("UserBlog", "Posts");
-            //if (_signInManager.IsSignedIn(User))
-            //{
-            //    string logFile1 = Path.Combine(_env.ContentRootPath, "Logs", "UserPostsLogs.txt");
-            //    using (StreamWriter sw = new StreamWriter(logFile1, true))
-            //    {
-            //        await sw.WriteLineAsync($"signInManager сработал");
-            //        sw.Close();
-            //    }
-            //    // Получаем данные текущего аутентифицированного пользователя
-
-            //    if (ModelState.IsValid)
-            //    {
-            //        using (StreamWriter sw = new StreamWriter(logFile1, true))
-            //        {
-            //            await sw.WriteLineAsync($"{viewModel.Name} Валидна. {viewModel.PublicationDate}. ");
-            //            sw.Close();
-            //        }
-
-            //        // Верните результат или выполните другие действия
-            //        return RedirectToAction("UserPosts", "Posts");
-            //    }
-            //}
-
-
-            //return RedirectToAction("UserPosts", "Posts");
         }
 
         [HttpGet]
@@ -142,22 +123,14 @@ namespace MainBlog.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPost(int postId)
         {
-            Post? post = await _context.Posts.Include(u => u.Tegs).FirstOrDefaultAsync();
+            Post? post = await _context.Posts.Include(u => u.Tegs).FirstOrDefaultAsync(p => p.Id == postId);
+
             if (post == null)
             { return BadRequest(); }
-            //PostViewModel pVM = new PostViewModel() 
-            //{
-            //    Id = postId,
-            //    Title = post.Title,
-            //    Text = post.Text,
-            //    PublicationDateOfPost = post.PublicationDate,
-            //    AuthorOfPost = post.User.UserName,
-            //    UserId = post.UserId,
-            //    User  = post.User,
-            //    Tegs = post.Tegs
-            //};
+
             UserBlogViewModel ubVM = new UserBlogViewModel()
             {
+                PostId = postId,
                 Title = post.Title,
                 Text = post.Text,
                 PublicationDate = post.PublicationDate,
@@ -167,7 +140,64 @@ namespace MainBlog.Controllers
 
             return View("EditPost", ubVM);
         }
+        [HttpGet]
+        public async Task<IActionResult> EditPostByAdminModer(UserBlogViewModel viewModel)
+        {
+            var currentUser = HttpContext.User;
+            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
+
+            string postContent = viewModel.Text;
+            Post post = new Post()
+            {
+                Title = viewModel.Title,
+                PublicationDate = DateTime.UtcNow,
+                Text = postContent,
+                UserId = userId!,
+                Tegs = viewModel.HasWritingTags()
+            };
+
+            var postExist = await _context.Posts.FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+            if (postExist == null)
+            {
+                await _context.Posts.AddAsync(post);
+            }
+            else
+            {
+                post.Id = viewModel.PostId;
+                _context.Entry(postExist).CurrentValues.SetValues(post);
+            }
+            await _context.SaveChangesAsync();
+                        
+            Post? post1 = await _context.Posts.Include(u => u.Tegs).FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+            if (post == null)
+            { return BadRequest(); }
+            UserBlogViewModel ubVM = new UserBlogViewModel()
+            {
+                PostId = viewModel.PostId,
+                Title = post1.Title,
+                Text = post1.Text,
+                PublicationDate = post1.PublicationDate,
+                tegsList = post1.Tegs,
+                tegs = string.Join(", ", post1.Tegs.Select(t => t.TegTitle))
+            };
+            
+            return View("EditPost", ubVM);
+        }
+
+        #region Удаление статьи администратором
+        [HttpPost]
+        public async Task<IActionResult> DeletePostByAdmin(int postId)
+        {
+            Post postfodDelete = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+            if (postfodDelete == null) {  return BadRequest(); }
+            else
+            {
+                _context.Posts.Remove(postfodDelete);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("AllPostsPage", "Blog");
+        }
+        #endregion
     }
 }
-
-

@@ -22,7 +22,7 @@
     <table border="1" cellpadding="5" width="100%">
         <thead>
             <tr>
-                <td bgcolor="steelblue" colspan="6" style="color: bisque">
+                <td bgcolor="steelblue" colspan="5" style="color: bisque">
                     Таблица учётных записей
                 </td>
             </tr>
@@ -78,9 +78,6 @@
                             @Html.ActionLink("Редактировать", "EditUserPage", "User", new { Id = item.Id }, new { @class = "btn btn-primary btn-xs", style= "float:left; margin-right:5px; background-color: rgb(180,100,100);" })
                             @* <button class="btn btn-danger btn-xs" type="submit">Удалить</button> *@
                         }
-                    </td>
-                    <td>
-                        <button asp-controller="Blog" asp-action="SaveUser" style="color:bisque; background-color:rgb(10, 100, 10)">Сохранить</button>
                     </td>
                 </tr>
             }

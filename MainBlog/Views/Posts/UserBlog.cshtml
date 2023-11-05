@@ -39,13 +39,14 @@ else
 
     <div>
 
-        <div id="rightDivMain" style="width: 100%; height: 100%; background-color: darkred">
+        <div id="rightDivMain" style="width: 100%; background-color: darkred">
             <div id="PostField" style="background-color: steelblue">
                 <form method="post" asp-controller="Posts" asp-action="UserBlog">
                     @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" })
                     @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
                     <span style="color:bisque">Введите незвание тегов через запятую в формате "#Название тега"</span>
                     @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
+                    
                     <button type="submit">Опубликовать</button>
                 </form>
             </div>
