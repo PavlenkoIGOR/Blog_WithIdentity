@@ -22,8 +22,6 @@ public class Program
 
         builder.Services.AddDbContext<MainBlogDBContext>(options => options.UseSqlite(connectionString)).AddDatabaseDeveloperPageExceptionFilter()
             //.AddUnitOfWork()
-            //.AddCustomRepository<Friend, FriendsRepository>()
-            //.AddCustomRepository<Message, MessageRepository>()
             .AddIdentity<User, IdentityRole>(opts =>
             {                   
                 opts.Password.RequiredLength = 4;

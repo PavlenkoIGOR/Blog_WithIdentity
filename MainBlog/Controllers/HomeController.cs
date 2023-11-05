@@ -1,5 +1,4 @@
 ﻿using MainBlog.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +9,12 @@ namespace MainBlog.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private UserManager<Models.User> _userManager;
-        private SignInManager<Models.User> _signInManager;
+        private UserManager<User> _userManager;
+        private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
         //private readonly Imylog _imylog;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _logger = logger;
             _userManager = userManager;

@@ -1,12 +1,14 @@
-﻿using Blog;
+﻿using MainBlog.BL;
+using Blog;
 using MainBlog.Models;
-using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using Microsoft.AspNetCore.Hosting;
+using MainBlog.ViewModels;
 
 namespace MainBlog.Controllers
 {

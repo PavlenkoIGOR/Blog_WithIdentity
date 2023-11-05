@@ -1,16 +1,8 @@
-﻿using Blog;
-using MainBlog.Data;
-using MainBlog.Models;
+﻿using MainBlog.Data;
 using MainBlog.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using System.Xml.Linq;
 
 namespace MainBlog.Controllers
 {

@@ -2,10 +2,9 @@
 using MainBlog.Data;
 using MainBlog.Models;
 using MainBlog.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using SQLitePCL;
 
 namespace MainBlog.Controllers
 {
