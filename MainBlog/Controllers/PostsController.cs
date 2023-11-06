@@ -52,19 +52,10 @@ namespace MainBlog.Controllers
                 UserId = userId!,
                 Tegs = viewModel.HasWritingTags()
             };
-         
-            var postExist = await _context.Posts
-                                            .Include(p => p.Tegs) // Включаем связанные объекты Tegs для поста
-                                            .FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
-            if (postExist == null)
-            {
-                post.Id = viewModel.PostId;
-                await _context.Posts.AddAsync(post);
-            }
-            else
-            {
-                post.Id = viewModel.PostId;
-            }
+
+            post.Id = viewModel.PostId;
+            await _context.Posts.AddAsync(post);
+
             await _context.SaveChangesAsync();
             return RedirectToAction("UserBlog", "Posts");
         }
