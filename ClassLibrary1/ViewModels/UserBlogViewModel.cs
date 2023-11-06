@@ -28,7 +28,7 @@ namespace MainBlog.ViewModels
             { return null; }
             else
             {
-                char[] delimiters = new char[] { '\r', '\n', ',' };
+                char[] delimiters = new char[] { '\r', '\n', ',', ' '};
 
                 var words = tegs.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string teg in words)

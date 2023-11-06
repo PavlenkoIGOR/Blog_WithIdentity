@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Security.Claims;
 
 namespace MainBlog.Controllers
@@ -45,22 +46,24 @@ namespace MainBlog.Controllers
             string postContent = viewModel.Text;
             Post post = new Post()
             {
-                //Name = viewModel.Name, //название статьи
                 Title = viewModel.Title,
                 PublicationDate = DateTime.UtcNow,
                 Text = postContent,
                 UserId = userId!,
                 Tegs = viewModel.HasWritingTags()
             };
-            var postExist = await _context.Posts.FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+         
+            var postExist = await _context.Posts
+                                            .Include(p => p.Tegs) // Включаем связанные объекты Tegs для поста
+                                            .FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
             if (postExist == null)
             {
+                post.Id = viewModel.PostId;
                 await _context.Posts.AddAsync(post);
             }
-            else 
+            else
             {
                 post.Id = viewModel.PostId;
-                _context.Entry(postExist).CurrentValues.SetValues(post);
             }
             await _context.SaveChangesAsync();
             return RedirectToAction("UserBlog", "Posts");
@@ -71,13 +74,8 @@ namespace MainBlog.Controllers
         {
             List<Comment> comments = await _context.Comments
                 .Include(u => u.User)
-                //.ThenInclude(ui => ui.UserIdentity)
-                //.Include(p => p.Post)
                 .ToListAsync();
             List<Post> posts = await _context.Posts.ToListAsync();
-
-            //List<Teg> tegs = await _context.Tegs.Join(posts, t=>t.Id, p => p.Comments.Where(c=>c. )).ToListAsync();
-
             var post = await _context.Posts.Include(t => t.Tegs).FirstOrDefaultAsync(i => i.Id == id);
             PostViewModel pVM = new PostViewModel()
             {
@@ -150,24 +148,31 @@ namespace MainBlog.Controllers
                 Title = viewModel.Title,
                 PublicationDate = DateTime.UtcNow,
                 Text = postContent,
-                UserId = userId!,
-                Tegs = viewModel.HasWritingTags()
+                UserId = userId!
             };
+            var tegs = await _context.Tegs.ToListAsync();
+            var posts = await _context.Posts.Include(p => p.Tegs).Where(i => i.Id == viewModel.PostId).ToListAsync();
+            foreach (var item in posts)
+            {
+                item.Tegs = viewModel.HasWritingTags();
+            }
 
-            var postExist = await _context.Posts.FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+            var postExist = await _context.Posts
+                                            .Include(p => p.Tegs) // Включаем связанные объекты Tegs для поста
+                                            .FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
             if (postExist == null)
             {
+                post.Id = viewModel.PostId;
                 await _context.Posts.AddAsync(post);
             }
             else
             {
                 post.Id = viewModel.PostId;
-                _context.Entry(postExist).CurrentValues.SetValues(post);
             }
-            await _context.SaveChangesAsync();
-                        
+            await _context.SaveChangesAsync();    
+            
             Post? post1 = await _context.Posts.Include(u => u.Tegs).FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
-            if (post == null)
+            if (post1 == null)
             { return BadRequest(); }
             UserBlogViewModel ubVM = new UserBlogViewModel()
             {
@@ -177,8 +182,7 @@ namespace MainBlog.Controllers
                 PublicationDate = post1.PublicationDate,
                 tegsList = post1.Tegs,
                 tegs = string.Join(", ", post1.Tegs.Select(t => t.TegTitle))
-            };
-            
+            };            
             return View("EditPost", ubVM);
         }
 
