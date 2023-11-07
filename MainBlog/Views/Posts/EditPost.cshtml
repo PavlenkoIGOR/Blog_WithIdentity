@@ -30,6 +30,7 @@ else
             <span style="color:bisque">Введите незвание тегов через запятую в формате "#Название тега"</span>
             @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
             <input type="hidden" name="PostId" value="@Model.PostId" />
+            <input type="hidden" name="Id" value="@Model.Id" />
             <button class="AccountButton" type="submit">Опубликовать</button>
         </form>
     </div>

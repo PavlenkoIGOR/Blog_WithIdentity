@@ -5,7 +5,28 @@
 @inject UserManager<User> UserManager;
 @{
     ViewData["Title"] = "Все посты";
+    ViewBag.Title = "AllPostsPage"; //добавляет Hash из контроллера AllPostsPage для вывода всех Teg
+    int i = 1;
 }
+<form>
+    <div>
+        <input id="searchPostsByTeg" value="Поиск по тегу" />
+        <input id="searchPostsByTegButton" type="submit" value="Найти" />
+    </div>
+</form>
+<div style="background-color: rgba(0,0,0,0.5);">
+    @foreach (var item in ViewBag.List)
+    {
+        <div style="color:orange; display:inline-flex;">
+            <a>@item</a>
+            @{
+                i++;
+            }
+
+        </div>
+
+    }
+</div>
 <div style="height: 80vh; margin: 0 auto; overflow-y: auto;">
     @{
         foreach (var post in Model)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Security.Claims;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MainBlog.Controllers
 {
@@ -40,23 +41,33 @@ namespace MainBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> UserBlog(UserBlogViewModel viewModel)
         {
+            #region получение Id активного пользователя
             var currentUser = HttpContext.User;
             var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
+            #endregion
 
             string postContent = viewModel.Text;
-            Post post = new Post()
+            var post = _context.Posts.Include(t=>t.Tegs).FirstOrDefault();            
+
+            #region выдёргивание из БД модели Post по Id
+            var existingPost = await _context.Posts.Include(t=>t.Tegs).Include(u=>u.User).FirstOrDefaultAsync(i=>i.Id == viewModel.PostId);
+            existingPost.Title = viewModel.Title;
+            existingPost.PublicationDate = DateTime.UtcNow;
+            existingPost.Text = postContent;
+            existingPost.UserId = userId!;
+            existingPost.Tegs = viewModel.HasWritingTags();
+            //проверка существует ли такой Post
+            if (existingPost != null)
             {
-                Title = viewModel.Title,
-                PublicationDate = DateTime.UtcNow,
-                Text = postContent,
-                UserId = userId!,
-                Tegs = viewModel.HasWritingTags()
-            };
-
-            post.Id = viewModel.PostId;
-            await _context.Posts.AddAsync(post);
-
+                _context.Posts.Update(existingPost);
+            }
+            else 
+            {
+                existingPost.Id = viewModel.PostId;
+                await _context.Posts.AddAsync(existingPost);
+            }
             await _context.SaveChangesAsync();
+            #endregion
             return RedirectToAction("UserBlog", "Posts");
         }
 
@@ -133,13 +144,16 @@ namespace MainBlog.Controllers
             var currentUser = HttpContext.User;
             var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
 
+            var postByAuthor = await _context.Posts.Include(u => u.User).FirstOrDefaultAsync(x => x.Id == viewModel.PostId);
+
             string postContent = viewModel.Text;
             Post post = new Post()
             {
+                //Id = viewModel.PostId,
                 Title = viewModel.Title,
                 PublicationDate = DateTime.UtcNow,
                 Text = postContent,
-                UserId = userId!
+                UserId = postByAuthor.UserId
             };
             var tegs = await _context.Tegs.ToListAsync();
             var posts = await _context.Posts.Include(p => p.Tegs).Where(i => i.Id == viewModel.PostId).ToListAsync();
@@ -150,6 +164,7 @@ namespace MainBlog.Controllers
 
             var postExist = await _context.Posts
                                             .Include(p => p.Tegs) // Включаем связанные объекты Tegs для поста
+                                            .Include(p => p.User)
                                             .FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
             if (postExist == null)
             {
@@ -158,7 +173,8 @@ namespace MainBlog.Controllers
             }
             else
             {
-                post.Id = viewModel.PostId;
+                //post.Id = viewModel.PostId;
+                _context.Posts.Update(post);
             }
             await _context.SaveChangesAsync();    
             

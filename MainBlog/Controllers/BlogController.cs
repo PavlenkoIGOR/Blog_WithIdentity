@@ -1,8 +1,10 @@
 ﻿using MainBlog.Data;
+using MainBlog.Models;
 using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MainBlog.Controllers
 {
@@ -101,14 +103,25 @@ namespace MainBlog.Controllers
         [HttpGet]
         public async Task<IActionResult> AllPostsPage()
         {
-            var post = _context.Posts.Select(p => new AllPostsViewModel {
+            HashSet<Teg> tegsModel = _context.Tegs.ToHashSet();
+            HashSet<string> tegForView = new HashSet<string>();
+            foreach (var tegsItem in tegsModel)
+            {
+                tegForView.Add(tegsItem.TegTitle);
+            }
+            HashSet<Teg> tegs1 = new HashSet<Teg>();
+
+
+            var post = _context.Posts.Include(t=>t.Tegs).Select(p => new AllPostsViewModel {
                 Id = p.Id,
                 Author = p.User.UserName,
                 PublicationTime = p.PublicationDate,
                 Title = p.Title,
-                Text = p.Text
+                Text = p.Text,
+                TegsList = tegForView
             });
-            return View(post);
+            ViewBag.List = tegForView;
+            return View("AllPostsPage",post);
         }
         [HttpPost]
         public async Task<IActionResult> AllPostsPage(string selectedRole)
