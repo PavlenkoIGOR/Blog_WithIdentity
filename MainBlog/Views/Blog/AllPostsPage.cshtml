@@ -31,21 +31,23 @@
         {
             <div id="postBlock" style="cursor:pointer;">
                 <div>
-                    @Html.DisplayFor(p => post.Author)
-                </div>
-                <div>
                     @Html.DisplayFor(p => post.Title)
-                </div>
-                <div>
-                    @Html.DisplayFor(p => post.PublicationTime)
                 </div>
                 <div id="textBlock">
                     @Html.DisplayFor(p => post.Text)
                 </div>
+                <div>
+                    Дата публикации: @Html.DisplayFor(p => post.PublicationTime)
+                </div>
+                <div>
+                    Автор: @Html.DisplayFor(p => post.Author)
+                </div>
+
                 <div style="text-align: right;">
-                    <a style="" href="@Url.Action("PostDiscussion", "Posts", new {id = post.Id})">Перейти к обсуждению</a>
+                    
                 </div>
                 <div class="buttonsLine">
+                    <a class="AccountButton" style="text-decoration:none; bore" href="@Url.Action("PostDiscussion", "Posts", new {id = post.Id})">Перейти к обсуждению</a>
                     @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
                     {
                         <form method="get" asp-controller="Posts" asp-action="EditPost">

@@ -129,7 +129,7 @@ namespace MainBlog.Controllers
         }
         #endregion
 
-        #region показ статей с определенным тегом
+         #region показ статей с определенным тегом
         [HttpGet]
         public async Task<IActionResult> ShowPostsByTeg(string tegTitle)
         {

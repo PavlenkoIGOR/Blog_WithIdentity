@@ -1,24 +1,42 @@
 ﻿@model MainBlog.ViewModels.LoginViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Логинимся!";
 }
 
-<h1 style="color: rgba(57,227,237,1); font-family:Arial">Логинься!</h1>
+<h1 style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;">Логинься!</h1>
 <hr />
 <div style="position: relative; background-color: rgba(0,0,0,0.5); color: rgba(57,227,237,1)">
-    <form method="post" asp-controller="AuthReg" asp-action="Login" style="display: grid">
+    <form method="post" asp-controller="AuthReg" asp-action="Login" onsubmit="return validateForm()" style="display: grid">
 
         <label asp-for="Email"></label>
-        <input asp-for="Email" />
+        <input class="inputMain" asp-for="Email" />
         <span style="color:red;" asp-validation-for="Email"></span>
 
         <label asp-for="Password"></label>
-        <input asp-for="Password" />
+        <input class="inputMain" asp-for="Password" />
         <span style="color:red;" asp-validation-for="Password"></span>
         <div>
             <input class="radio" asp-for="RememberMe" type="radio" value="true" />RememberMe<Br>
         </div>
-        <input class="AccountButton" type="submit" value="Войти" 
-                style="" />
+        <input id="SentFormButton" class="AccountButton" type="submit" value="Войти" style="" />
     </form>
 </div>
+
+
+@*В этом примере используется обработчик события `onsubmit`, который вызывает JavaScript-функцию `validateForm()`. Функция `validateForm()` проверяет все поля ввода с классом `inputMain` 
+    и устанавливает красный фон и текст заполнителя, если поле оказывается пустым. Если хотя бы одно поле пустое, функция возвращает `false`, что предотвращает отправку формы на сервер. 
+    Если все поля заполнены, форма будет отправлена на сервер для дальнейшей обработки.*@
+<script>
+    function validateForm() {
+        let inputs = document.getElementsByClassName('inputMain');
+        for (var elem of inputs) {
+            if (elem.value.trim() === '') {
+                elem.style.backgroundColor = 'red';
+                elem.setAttribute('placeholder', 'Поле обязательно для заполнения!');
+                return false; // не отправлять форму
+            }
+        }
+        return true; // отправить форму на сервер
+    }
+</script>

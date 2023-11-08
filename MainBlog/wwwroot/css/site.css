@@ -25,7 +25,7 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    /*overflow-y: hidden;*/
+    font-family: Lucida Console, Arial, sans-serif;
 }
 
 .userPostsTextArea {    
@@ -35,6 +35,12 @@ body {
 }
 
 /*мои элементы*/
+a {
+    color: orange;
+}
+   a:hover {
+        color: rgb(57,227,237);
+    }
 #logoutBttn {
     border: 0;
     height: 35px;
@@ -44,11 +50,14 @@ body {
 }
 #postBlock {
     background-color: rgba(200,200,200,0.9);
-    border: solid 1px blue;
+    border: solid 2px rgb(57,227,237);
     margin: 5px 0 5px 0;
 }
+    #postBlock:hover {
+        background-color: rgb(57,227,237);
+    }
 #textBlock {
- background-color: floralwhite;
+    background-color: floralwhite;
 }
 #textPost {
     background-color: rgba(200,200,200,0.9);
