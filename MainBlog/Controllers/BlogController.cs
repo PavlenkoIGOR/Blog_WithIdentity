@@ -109,8 +109,6 @@ namespace MainBlog.Controllers
             {
                 tegForView.Add(tegsItem.TegTitle);
             }
-            HashSet<Teg> tegs1 = new HashSet<Teg>();
-
 
             var post = _context.Posts.Include(t=>t.Tegs).Select(p => new AllPostsViewModel {
                 Id = p.Id,
@@ -131,6 +129,38 @@ namespace MainBlog.Controllers
         }
         #endregion
 
+        #region показ статей с определенным тегом
+        [HttpGet]
+        public async Task<IActionResult> ShowPostsByTeg(string tegTitle)
+        {
+            var tegsModel = await _context.Tegs.Where(t => t.TegTitle == tegTitle).Include(p => p.Posts).ToListAsync();
+            HashSet<string> tegForView = new HashSet<string>();
+            foreach (var tegsItem in tegsModel)
+            {
+                tegForView.Add(tegsItem.TegTitle);
+            }
+
+            var posts = await _context.Posts
+                .Where(p => p.Tegs.Any(t => t.TegTitle == tegTitle))
+                .Include(p => p.User)
+                .ToListAsync();
+
+            var allPostsViewModels = posts.Select(p => new AllPostsViewModel
+            {
+                Id = p.Id,
+                Author = p.User.UserName,
+                PublicationTime = p.PublicationDate,
+                Title = p.Title,
+                Text = p.Text,
+                TegsList = tegForView
+            });
+
+            ViewBag.List = tegForView;
+
+
+            return View("AllPostsPage", allPostsViewModels);
+        }
+        #endregion
 
 
         //[Authorize]

@@ -193,6 +193,7 @@ namespace MainBlog.Controllers
             return View("EditPost", ubVM);
         }
 
+
         #region Удаление статьи администратором
         [HttpPost]
         public async Task<IActionResult> DeletePostByAdmin(int postId)
