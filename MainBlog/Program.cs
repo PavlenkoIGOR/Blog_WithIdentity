@@ -1,8 +1,10 @@
+using Blog;
 using MainBlog.BL.Services;
 using MainBlog.Data;
 using MainBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ILogger = Blog.ILogger;
 
 namespace MainBlog;
 
@@ -19,6 +21,7 @@ public class Program
 
         builder.Services.AddTransient<IServiceCollection, ServiceCollection>();
         builder.Services.AddTransient<IUserService, UserService>();
+        builder.Services.AddTransient<ILogger, Logger>();
 
         builder.Services.AddDbContext<MainBlogDBContext>(options => options.UseSqlite(connectionString)).AddDatabaseDeveloperPageExceptionFilter()
             //.AddUnitOfWork()

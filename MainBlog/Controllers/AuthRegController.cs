@@ -12,6 +12,7 @@ using MainBlog.ViewModels;
 
 namespace MainBlog.Controllers
 {
+    
     public class AuthRegController : Controller
     {
         private UserManager<Models.User> _userManager;
