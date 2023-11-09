@@ -31,15 +31,25 @@
     }
 </style>
 <script>
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+
     window.onload = function PrintTextH1() {
         var te = document.getElementById('H1').innerHTML;
-        var myChar = te.toCharArray();
-        myChar.foreach(function (elem) =>
-            {
-                setInterval(function() {
-                    console.log(elem);
-                }, 1000);
+        var myChar = Array.from(te);
+        document.getElementById('H1').innerHTML = "";
+        var index = 0;
+        var interval = setInterval(function () {
+            if (index < myChar.length) {                
+                document.getElementById('H1').innerHTML += myChar[index];
+                console.log(myChar[index]);
+                index++;
+            } else {
+                clearInterval(interval);
             }
+        }, getRandomArbitrary(50, 200));
     }
 </script>
 
