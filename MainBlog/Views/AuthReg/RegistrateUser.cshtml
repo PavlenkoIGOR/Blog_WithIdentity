@@ -18,22 +18,38 @@
 
         <label asp-for="Name"></label>
         <input asp-for="Name" />
+        <span asp-validation-for="Name" style="color:red;"></span>
 
         <label asp-for="Age"></label>
         <input asp-for="Age" />
+        <span asp-validation-for="Age" style="color:red;"></span>
 
         <label asp-for="Email"></label>
         <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+        <span asp-validation-for="Email" style="color:red;"></span>
 
         <label asp-for="Password"></label>
         <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
+        <span asp-validation-for="Password" style="color:red;"></span>
 
         <label asp-for="ComparePassword"></label>
         <input asp-for="ComparePassword" />
-        <span asp-validation-for="ComparePassword"></span>
+        <span asp-validation-for="ComparePassword" style="color:red;"></span>
 
         <input class="AccountButton" type="submit" value="Зарегестрироваться" />
     </form>
 </div>
+
+<script>
+    function validateForm() {
+        let inputs = document.getElementsByClassName('inputMain');
+        for (var elem of inputs) {
+            if (elem.value.trim() === '') {
+                elem.style.backgroundColor = 'red';
+                elem.setAttribute('placeholder', 'Поле обязательно для заполнения!');
+                return false; // не отправлять форму
+            }
+        }
+        return true; // отправить форму на сервер
+    }
+</script>
