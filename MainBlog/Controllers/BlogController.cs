@@ -1,6 +1,7 @@
 ﻿using MainBlog.Data;
 using MainBlog.Models;
 using MainBlog.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -57,14 +58,14 @@ namespace MainBlog.Controllers
         public async Task<IActionResult> EditUser(string userRole)
         {
             //userRole;
-                var user = User;
-          
+            var user = User;
+
 
             return RedirectToAction("ShowUsers", "Blog");
         }
         #endregion
 
-        
+
         #region DeleteUser
         [HttpGet]
         public async Task<ActionResult> DeleteUser(string Id)
@@ -72,7 +73,7 @@ namespace MainBlog.Controllers
             var user = await _userManager.FindByIdAsync(Id);
             if (user == null)
             {
-                return Content("user не найден");                
+                return Content("user не найден");
             }
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
@@ -83,6 +84,7 @@ namespace MainBlog.Controllers
                     await fs.WriteLineAsync($"{DateTime.UtcNow} Пользователь удалён! Почта: {user.Email}, пароль {user.PasswordHash}");
                     fs.Close();
                 }
+                
                 // Обработка успешного удаления пользователя
                 return RedirectToAction("ShowUsers", "Blog"); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!сделать без обновления страницы!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
@@ -100,6 +102,7 @@ namespace MainBlog.Controllers
 
 
         #region ShowAllPosts
+        
         [HttpGet]
         public async Task<IActionResult> AllPostsPage()
         {

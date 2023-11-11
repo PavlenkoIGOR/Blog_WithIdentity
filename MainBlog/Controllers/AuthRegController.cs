@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using Microsoft.AspNetCore.Hosting;
 using MainBlog.ViewModels;
+using System.Security.Authentication;
+using SQLitePCL;
 
 namespace MainBlog.Controllers
 {
@@ -81,10 +83,6 @@ namespace MainBlog.Controllers
         
 
 
-
-
-
-
         #region Login
         [HttpGet]
         public IActionResult Login()//string rtrnUrl)
@@ -94,11 +92,11 @@ namespace MainBlog.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)//, string retrnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             string filePath22 = Path.Combine(_env.ContentRootPath, "Logs", "LoginStateLogs.txt");
             if (ModelState.IsValid)
-            {                
+            {
                 using (StreamWriter fs = new(filePath22, true))
                 {
                     await fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid!");
@@ -107,8 +105,10 @@ namespace MainBlog.Controllers
 
                 Models.User user = await _userManager.FindByEmailAsync(model.Email);
 
+
                 if (user == null)// || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
                 {
+
                     string filePath = Path.Combine(_env.ContentRootPath, "Logs", "LoginLogs.txt");
                     using (StreamWriter fs = new(filePath, true))
                     {
@@ -116,7 +116,7 @@ namespace MainBlog.Controllers
                         fs.Close();
                     }
                     
-                    return Content($"{new Exception("Пользователь не найден!")}");
+                    return RedirectToPage("/ErrorEnter");//($"{new Exception("Пользователь не найден!")}");
                 }
                 await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
                 SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
@@ -125,23 +125,20 @@ namespace MainBlog.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
                     //Response.Cookies.Append("LoginUsername", user.UserName); //запись в куки
-
+                    
                     return RedirectToAction("GreetingPage", "Home");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Неправильный логин и/или пароль");
-                }
-
                 //var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, false);
                 return RedirectToAction("UserPosts", "Blog");
             }
-            else if (String.IsNullOrEmpty(model.Email) || String.IsNullOrEmpty(model.Password))
-                throw new ArgumentNullException(model.Email);
-            else
-            {
-                ModelState.AddModelError("", "Неправильный логин и (или) пароль");
-            }
+            ////это не нужно, так как за пустые поля отвечает script на странице логин
+            //if (String.IsNullOrEmpty(model.Email) || String.IsNullOrEmpty(model.Password))
+            //    throw new ArgumentNullException(model.Email);
+            //тоже не нужно, не отработает, т.к. есть проверка на null
+            //if (!ModelState.IsValid)
+            //{
+            //    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+            //}
             using (StreamWriter fs = new(filePath22, true))
             {
                 await fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid = false!");

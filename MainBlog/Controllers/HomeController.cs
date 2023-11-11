@@ -28,7 +28,7 @@ namespace MainBlog.Controllers
                 return View();
         }
 
-        [Authorize]//(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)//]
+        [Authorize(Roles = "Administrator")]//(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)//]
         public async Task<IActionResult> Privacy()
         {
             _logger.LogInformation("Nen ldfgdfg");
