@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<User> SignInManager;
 @inject UserManager<User> UserManager;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "ShowUsers";
     //SignInManager.IsSignedIn();
@@ -10,10 +11,6 @@
 }
 @if (User.IsInRole("Administrator"))
 {
-
-
-
-
     <h1>Пользователи</h1>
 
     <p>
@@ -53,14 +50,7 @@
                     <td>
                         @Html.DisplayFor(model => item.RoleType)
                     </td>
-                    @* <td> *@
-@*                         <form asp-controller="Blog" asp-action="EditUser">
-                            <select asp-items="Html.GetEnumSelectList<MainBlog.ViewModels.RolesViewModel>()" name="userRole">
-                                <option value="Выбрать роль">Выбрать роль</option>
-                            </select>
-                        </form> *@
 
-@*                     </td> *@
                     <td>
                         @* ниже: создание <form></form> *@
                         @using (Html.BeginForm("DeleteUser", "Blog", new { Id = item.Id }, FormMethod.Post))

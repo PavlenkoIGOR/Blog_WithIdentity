@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MainBlog.Controllers
 {
+    [ApiController]
     public class BlogController : Controller
     {
         private MainBlogDBContext _context;
@@ -24,9 +25,9 @@ namespace MainBlog.Controllers
         }
 
 
-        #region ShowUsers Настроено!
-        //[Authorize]
-        //[Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin". На данный момент настроено через проверку в View Index
+		#region ShowUsers Настроено!
+		[Route("ShowUsers")]
+		//[Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin". На данный момент настроено через проверку в View Index
         [HttpGet]
         public IActionResult ShowUsers()
         {
@@ -44,7 +45,7 @@ namespace MainBlog.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-
+        [Route("ShowUsers")]
         [HttpPost]
         public IActionResult ShowUsers(string selectedRole)
         {
@@ -55,7 +56,8 @@ namespace MainBlog.Controllers
 
 
         #region EditUser
-        public async Task<IActionResult> EditUser(string userRole)
+        [Route("EditUser")]
+		public async Task<IActionResult> EditUser(string userRole)
         {
             //userRole;
             var user = User;
@@ -63,11 +65,12 @@ namespace MainBlog.Controllers
 
             return RedirectToAction("ShowUsers", "Blog");
         }
-        #endregion
+		#endregion
 
 
-        #region DeleteUser
-        [HttpGet]
+		#region DeleteUser
+		[Route("DeleteUser")]
+		[HttpGet]
         public async Task<ActionResult> DeleteUser(string Id)
         {
             var user = await _userManager.FindByIdAsync(Id);
@@ -98,12 +101,12 @@ namespace MainBlog.Controllers
             }
             return RedirectToAction("ShowUsers");
         }
-        #endregion
+		#endregion
 
 
-        #region ShowAllPosts
-        
-        [HttpGet]
+		#region ShowAllPosts
+		[Route("AllPostsPage")]
+		[HttpGet]
         public async Task<IActionResult> AllPostsPage()
         {
             HashSet<Teg> tegsModel = _context.Tegs.ToHashSet();
@@ -124,16 +127,18 @@ namespace MainBlog.Controllers
             ViewBag.List = tegForView;
             return View("AllPostsPage",post);
         }
-        [HttpPost]
+		[Route("AllPostsPage")]
+		[HttpPost]
         public async Task<IActionResult> AllPostsPage(string selectedRole)
         {
             //var data = _context.Users.ToList();
             return View(/*data*/);
         }
-        #endregion
+		#endregion
 
-         #region показ статей с определенным тегом
-        [HttpGet]
+		#region показ статей с определенным тегом
+		[Route("ShowPostsByTeg")]
+		[HttpGet]
         public async Task<IActionResult> ShowPostsByTeg(string tegTitle)
         {
             var tegsModel = await _context.Tegs.Where(t => t.TegTitle == tegTitle).Include(p => p.Posts).ToListAsync();
@@ -163,18 +168,11 @@ namespace MainBlog.Controllers
 
             return View("AllPostsPage", allPostsViewModels);
         }
-        #endregion
+		#endregion
 
 
-        //[Authorize]
-        [HttpGet]
-        public ActionResult ForAuthUsersOnly()
-        {
-            return Content("Аутентифицирован!");
-        }
-
-
-        [HttpPost]
+		[Route("PublicatePost")]
+		[HttpPost]
         public IActionResult PublicatePost(UserBlogViewModel viewModel)
         {
 

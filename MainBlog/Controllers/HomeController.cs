@@ -1,11 +1,13 @@
 ﻿using MainBlog.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace MainBlog.Controllers
 {
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -23,11 +25,13 @@ namespace MainBlog.Controllers
             //_imylog = imylog;
         }
 
+        
         public IActionResult Index()
         {
                 return View();
         }
 
+  
         [Authorize(Roles = "Administrator")]//(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)//]
         public async Task<IActionResult> Privacy()
         {
@@ -41,10 +45,20 @@ namespace MainBlog.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var exception = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            var errorMessage = exception?.Error?.Message;
+
+            // Другие действия для обработки ошибки
+
+            return View("404", errorMessage);
         }
+
     }
 }

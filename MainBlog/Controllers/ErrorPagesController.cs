@@ -4,28 +4,25 @@ namespace MainBlog.Controllers
 {
     public class ErrorPagesController : Controller
     {
-        [Route("Errors/{id?}")]
-        public async Task<IActionResult> ErrorsRedirect(int? statusCode = null)
+        private readonly ILogger<HomeController> _logger;
+        public ErrorPagesController(ILogger<HomeController> logger)
+        { 
+            _logger = logger;
+        }
+        public IActionResult MyErrorsAction(int statusCode) 
         {
-            if (statusCode.HasValue)
+            switch (statusCode)
             {
-                switch (statusCode)
-                {
-                    case 400: return RedirectToPage("/ErrorPages/ResourceIsNotFoundPage");
-                    case 401: return RedirectToPage("/ErrorPages/AccessIsDeniedPage");
-                    default: return RedirectToPage("/ErrorPages/SomethingWrongPage");
-                }
+                case 404:
+                    return View("PagenotFound");
+                case 400:
+                    return View("400");
+                case 403:
+                    return View("403");
             }
-            return RedirectToPage("/ErrorPages");
-        }
-        [Route("FuckingError")]
-        public IActionResult MakeError()
-        {
-            return StatusCode(402);
-        }
-        public IActionResult Index()
-        {
-            return View();
+            
+            return View("Error");
         }
     }
 }
+

@@ -16,8 +16,6 @@ public class Program
 
 
         var connectionString = builder.Configuration.GetConnectionString("BlogContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        //builder.Services.AddDbContext<MainBlogDBContext>(options =>  options.UseSqlite(connectionString));
-        //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddTransient<IServiceCollection, ServiceCollection>();
         builder.Services.AddTransient<IUserService, UserService>();
@@ -35,8 +33,11 @@ public class Program
             }).AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<MainBlogDBContext>();
 
-        //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        //    .AddEntityFrameworkStores<MainBlogDBContext>();
+        // Connect logger
+        builder.Logging
+            .ClearProviders()
+            .SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace)
+            .AddConsole();
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
@@ -45,15 +46,21 @@ public class Program
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (!app.Environment.IsDevelopment())
-        {            
-            app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
+        app.Environment.EnvironmentName = "Production"; // меняем имя окружения
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
             app.UseHsts();
         }
 
-        app.UseHttpsRedirection();
+
+        app.UseStatusCodePagesWithReExecute("/ErrorPages/MyErrorsAction", "?statusCode={0}");
+
         app.UseStaticFiles();
         
         app.UseRouting();
@@ -83,6 +90,7 @@ public class Program
                 }
             }
         }
+
 
         app.Run(); 
     }

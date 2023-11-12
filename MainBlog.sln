@@ -5,9 +5,9 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainBlog", "MainBlog\MainBlog.csproj", "{6C518D28-CB67-49EB-909A-ABE7B22B4FAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainBlog.BL", "ClassLibrary1\MainBlog.BL.csproj", "{EAE5704E-7FB6-4113-A459-1D42156C73C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainBlog.BL", "ClassLibrary1\MainBlog.BL.csproj", "{EAE5704E-7FB6-4113-A459-1D42156C73C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1Tests", "ClassLibrary1Tests\ClassLibrary1Tests.csproj", "{93DB9A61-33CC-4743-800B-EA80C480B00D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainBlogTests", "ClassLibrary1Tests\MainBlogTests.csproj", "{93DB9A61-33CC-4743-800B-EA80C480B00D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
