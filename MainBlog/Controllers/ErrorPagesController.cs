@@ -4,8 +4,8 @@ namespace MainBlog.Controllers
 {
     public class ErrorPagesController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        public ErrorPagesController(ILogger<HomeController> logger)
+        private readonly ILogger<ErrorPagesController> _logger;
+        public ErrorPagesController(ILogger<ErrorPagesController> logger)
         { 
             _logger = logger;
         }
@@ -14,13 +14,16 @@ namespace MainBlog.Controllers
             switch (statusCode)
             {
                 case 404:
+                    _logger.LogInformation($"{DateTime.UtcNow}: возникла ошибка {statusCode}.");
                     return View("PagenotFound");
                 case 400:
-                    return View("400");
+					_logger.LogInformation($"{DateTime.UtcNow}: возникла ошибка {statusCode}.");
+					return View("400");
                 case 403:
-                    return View("403");
+					_logger.LogInformation($"{DateTime.UtcNow}: возникла ошибка {statusCode}.");
+					return View("403");
             }
-            
+            _logger.LogInformation($"{statusCode}");
             return View("Error");
         }
     }

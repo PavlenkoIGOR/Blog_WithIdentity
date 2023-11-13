@@ -1,31 +1,27 @@
 ﻿using MainBlog.BL;
-using Blog;
 using MainBlog.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
-using Microsoft.AspNetCore.Hosting;
 using MainBlog.ViewModels;
-using System.Security.Authentication;
-using SQLitePCL;
-using Microsoft.AspNetCore.Diagnostics;
 
 namespace MainBlog.Controllers
 {
-    
+
     public class AuthRegController : Controller
     {
-        private UserManager<Models.User> _userManager;
+        ILogger<AuthRegController> _logger;
+
+		private UserManager<Models.User> _userManager;
         private SignInManager<Models.User> _signInManager;
         private IWebHostEnvironment _env;
-        public AuthRegController(UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
+        public AuthRegController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, ILogger<AuthRegController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _env = environment;
+            _logger = logger;
         }
         #region RegistrateUser
         [HttpGet]
@@ -100,39 +96,27 @@ namespace MainBlog.Controllers
             string filePath22 = Path.Combine(_env.ContentRootPath, "Logs", "LoginStateLogs.txt");
             if (ModelState.IsValid)
             {
-                using (StreamWriter fs = new(filePath22, true))
-                {
-                    await fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid!");
-                    fs.Close();
-                }
+                await WriteActions.CreateLogFolder_File(_env, "LoginModelState", $"Модель при входе {model.Email} валидна"); //Ы-ы-ы-ы :)
 
                 Models.User user = await _userManager.FindByEmailAsync(model.Email);
 
-
-                if (user == null)// || !await _userManager.CheckPasswordAsync(user, PasswordHash.HashPassword(model.Password)))
+                if (user == null)
                 {
-                    string filePath = Path.Combine(_env.ContentRootPath, "Logs", "LoginLogs.txt");
-                    using (StreamWriter fs = new(filePath, true))
-                    {
-                        await fs.WriteLineAsync($"{DateTime.UtcNow} Неудачная попытка залогиниться! Почта: {model.Email}, пароль {model.Password}");
-                        fs.Close();
-                    }
-                    //return RedirectToAction("ErrorsRedirect");
-                    throw new AuthenticationException("Неверный пароль и/или логин");//($"{new Exception("Пользователь не найден!")}");
-                }
+                    await WriteActions.CreateLogFolder_File(_env, "LoginLogs", $"Неудачная попытка залогиниться! Почта: {model.Email}, пароль {model.Password}"); //Ы-ы-ы-ы :)
+
+                    return StatusCode(400);
+				}
                 await _signInManager.SignOutAsync(); // аннулирует любой имеющийся у пользователя сеанс????
                 SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);//проводит уже саму аутентификацию. Второй false - должна ли учётка блокироваться в случае некорректного пароля
                 if (signInResult.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-
-                    //Response.Cookies.Append("LoginUsername", user.UserName); //запись в куки
-                    
+                    await WriteActions.CreateLogFolder_File(_env, "LoginLogs", $"Выполнен вход! Почта: {model.Email}, пароль {model.Password}"); //Ы-ы-ы-ы :)
                     return RedirectToAction("GreetingPage", "Home");
                 }
                 else 
                 {
-                    return StatusCode(404);
+                    return StatusCode(400);
                 }
             }
             ////это не нужно, так как за пустые поля отвечает script на странице логин
@@ -149,7 +133,6 @@ namespace MainBlog.Controllers
                 fs.Close();
             }
             return StatusCode(404);
-            return RedirectToAction("Index", "Home");
         }
         #endregion
         #region Logout
@@ -159,15 +142,7 @@ namespace MainBlog.Controllers
         public async Task<IActionResult> Logout()
         {
             Models.User a = await _signInManager.UserManager.GetUserAsync(User);
-
-            string logFile = Path.Combine(_env.ContentRootPath, "Logs", "LogOutLogs.txt");
-            using (StreamWriter sw = new(logFile, true))
-            {
-
-                await sw.WriteLineAsync($"{a.Email} выпилился в {DateTime.UtcNow}");
-
-                sw.Close();
-            }
+            await WriteActions.CreateLogFolder_File(_env, "LogOutLogs", $"выпилился {a.Email}"); //Ы-ы-ы-ы :)
             await _signInManager.SignOutAsync();
             //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
             return RedirectToAction("Index", "Home");

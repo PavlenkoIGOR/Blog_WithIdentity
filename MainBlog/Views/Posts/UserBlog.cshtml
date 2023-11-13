@@ -5,20 +5,8 @@
 @inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Ваш Блог";
-    // Layout = null;
-    //string registeredUsername = Context.Request.Cookies["RegisteredUsername"];
-
 }
-@* @if (SignInManager.IsSignedIn(User))
-{
-}
-else
-{
-    <form method="post" asp-controller="AuthReg" asp-action="Logout">
-        <input class="enter_submit" type="submit" value="Выход" />
-    </form>
 
-} *@
 <div id="topDivMain" class="divHead">
     <H1>Страница пользователя @User.Identity.Name</H1>
 </div>
@@ -38,7 +26,6 @@ else
     </div>
 
     <div>
-
         <div id="rightDivMain" style="width: 100%; background-color:rgba(0,0,0,0.5)">
             <div id="PostField" style="background-color: rgba(0,0,0,0.5)">
                 <form method="post" asp-controller="Posts" asp-action="UserBlog">
@@ -66,10 +53,13 @@ else
                         @teg.TegTitle
                     }
                 </div>
+
                 <div style="background-color:bisque;"> @item.Text</div>
+
                 <div style="color: bisque; background-color:teal">
                     Дата публикации: @item.PublicationDate
                 </div>
+
                 <div>
                     <form method="get" asp-action="EditPost" asp-controller="Posts">
                         <input type="hidden" name="postId" value="@item.Id" />

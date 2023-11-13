@@ -5,8 +5,6 @@
 @inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Редактирование статьи";
-    // Layout = null;
-    //string registeredUsername = Context.Request.Cookies["RegisteredUsername"];
 }
 @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
 {

@@ -18,29 +18,5 @@ namespace MainBlog.Controllers
             _env = environment;
             _context = context;
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> PostDiscussion(DiscussionPostViewModel cVM)
-        //{
-        //    var post = await _context.Posts.Where(x => x.Id == cVM.PostVM.Id).Select(p => new DiscussionPostViewModel
-        //    {
-        //        new PostViewModel
-        //        {
-        //            Id = cVM.PostVM.Id,
-        //        AuthorOfPost = p.User.UserName,
-        //        PublicationTime = p.PublicationDate,
-        //        Title = p.Title,
-        //        Text = p.Text,
-        //        UsersComments = p.Comments,
-        //        }
-        //    }).FirstOrDefaultAsync();
-
-        //    if (post == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(post);
-        //}
     }
 }

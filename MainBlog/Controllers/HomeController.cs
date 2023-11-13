@@ -32,7 +32,7 @@ namespace MainBlog.Controllers
         }
 
   
-        [Authorize(Roles = "Administrator")]//(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)//]
+        //[Authorize(Roles = "Administrator")]//(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)//]
         public async Task<IActionResult> Privacy()
         {
             _logger.LogInformation("Nen ldfgdfg");
@@ -45,11 +45,6 @@ namespace MainBlog.Controllers
             return View();
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
         public IActionResult Error()
         {
             var exception = HttpContext.Features.Get<IExceptionHandlerFeature>();

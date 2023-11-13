@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MainBlog.Controllers
 {
-    [ApiController]
+
     public class BlogController : Controller
     {
         private MainBlogDBContext _context;
@@ -26,7 +26,7 @@ namespace MainBlog.Controllers
 
 
 		#region ShowUsers Настроено!
-		[Route("ShowUsers")]
+
 		//[Authorize(Roles = "Administrator")] //так авторизация работает только для пользователей у которых  Role == "admin". На данный момент настроено через проверку в View Index
         [HttpGet]
         public IActionResult ShowUsers()
@@ -45,12 +45,11 @@ namespace MainBlog.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-        [Route("ShowUsers")]
+
         [HttpPost]
         public IActionResult ShowUsers(string selectedRole)
         {
-            //var data = _context.Users.ToList();
-            return View(/*data*/);
+            return View();
         }
         #endregion
 
@@ -59,17 +58,13 @@ namespace MainBlog.Controllers
         [Route("EditUser")]
 		public async Task<IActionResult> EditUser(string userRole)
         {
-            //userRole;
             var user = User;
-
-
             return RedirectToAction("ShowUsers", "Blog");
         }
 		#endregion
 
 
 		#region DeleteUser
-		[Route("DeleteUser")]
 		[HttpGet]
         public async Task<ActionResult> DeleteUser(string Id)
         {
@@ -95,17 +90,12 @@ namespace MainBlog.Controllers
             {
                 // Обработка ошибок при удалении пользователя
                 var errors = result.Errors;
-                // ...
-
                 return Content("Error");
             }
-            return RedirectToAction("ShowUsers");
         }
 		#endregion
 
-
 		#region ShowAllPosts
-		[Route("AllPostsPage")]
 		[HttpGet]
         public async Task<IActionResult> AllPostsPage()
         {
@@ -127,7 +117,7 @@ namespace MainBlog.Controllers
             ViewBag.List = tegForView;
             return View("AllPostsPage",post);
         }
-		[Route("AllPostsPage")]
+
 		[HttpPost]
         public async Task<IActionResult> AllPostsPage(string selectedRole)
         {
@@ -137,7 +127,6 @@ namespace MainBlog.Controllers
 		#endregion
 
 		#region показ статей с определенным тегом
-		[Route("ShowPostsByTeg")]
 		[HttpGet]
         public async Task<IActionResult> ShowPostsByTeg(string tegTitle)
         {
@@ -171,7 +160,6 @@ namespace MainBlog.Controllers
 		#endregion
 
 
-		[Route("PublicatePost")]
 		[HttpPost]
         public IActionResult PublicatePost(UserBlogViewModel viewModel)
         {
