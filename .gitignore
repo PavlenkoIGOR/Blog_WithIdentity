@@ -364,3 +364,6 @@ FodyWeavers.xsd
 /MainBlog/Data/DB/MainBlogDB.db
 /MainBlog/Data/DB/MainBlogDB.db-shm
 /MainBlog/Data/DB/MainBlogDB.db-wal
+/MainBlog/Migrations/20231113204847_initialize.cs
+/MainBlog/Migrations/20231113204847_initialize.Designer.cs
+/MainBlog/Migrations/MainBlogDBContextModelSnapshot.cs
