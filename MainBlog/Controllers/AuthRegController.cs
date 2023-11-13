@@ -55,14 +55,7 @@ namespace MainBlog.Controllers
                         await _signInManager.SignInAsync(user, false);
 
                         //Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
-                        string logFile = Path.Combine(_env.ContentRootPath, "Logs", "RegistrationLogs.txt");
-                        using (StreamWriter sw = new(logFile, true))
-                        {
-
-                            await sw.WriteLineAsync($"{viewModel.Name} зарегестрировался в {user.RegistrationDate}");
-
-                            sw.Close();
-                        }
+                        await WriteActions.CreateLogFolder_File(_env, "RegistrationLogs", $"зарегестрировался пользователь {viewModel.Name}");
                         return RedirectToAction("GreetingPage", "Home");
                     }
                     // Сохраним имя пользователя в TempData
@@ -127,11 +120,7 @@ namespace MainBlog.Controllers
             //{
             //    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
             //}
-            using (StreamWriter fs = new(filePath22, true))
-            {
-                await fs.WriteLineAsync($"{DateTime.UtcNow} ModelState.IsValid = false!");
-                fs.Close();
-            }
+            await WriteActions.CreateLogFolder_File(_env, "LoginLogs", $"ModelState.IsValid = false!: {model.Email}, пароль {model.Password}"); //Ы-ы-ы-ы :)
             return StatusCode(404);
         }
         #endregion
