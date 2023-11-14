@@ -148,59 +148,73 @@ namespace MainBlog.Controllers
             };
             return View("EditPost", ubVM);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPost(UserBlogViewModel viewModel)
+        {
+            var post = await _context.Posts.Include(p => p.Tegs).FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+            if (post == null)
+            {
+                return BadRequest();
+            }
+            // Очистить существующие теги
+            post.Tegs.Clear();
+            // Обновить свойства объекта Post
+            post.Title = viewModel.Title;
+            post.Text = viewModel.Text;
+
+            // Добавить или обновить выбранные теги
+            var tags = viewModel.HasWritingTags(); // Предположим, что HasWritingTags возвращает список объектов Teg
+            foreach (var tag in tags)
+            {
+                var existingTag = await _context.Tegs.FirstOrDefaultAsync(t => t.Id == tag.Id);
+                if (existingTag == null)
+                {
+                    post.Tegs.Add(tag); // Добавить новый тег
+                }
+                else
+                {
+                    post.Tegs.Add(existingTag); // Использовать существующий тег
+                }
+            }
+
+            _context.Posts.Update(post); // Обновить пост в контексте
+
+            await _context.SaveChangesAsync(); // Сохранить изменения
+            return View(viewModel);
+        }
+
         [HttpGet]
         public async Task<IActionResult> EditPostByAdminModer(UserBlogViewModel viewModel)
         {
-            var currentUser = HttpContext.User;
-            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
-
-            var postByAuthor = await _context.Posts.Include(u => u.User).FirstOrDefaultAsync(x => x.Id == viewModel.PostId);
-
-            string postContent = viewModel.Text;
-            Post post = new Post()
+            var post = await _context.Posts.Include(p => p.Tegs).FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+            if (post == null)
             {
-                //Id = viewModel.PostId,
-                Title = viewModel.Title,
-                PublicationDate = DateTime.UtcNow,
-                Text = postContent,
-                UserId = postByAuthor.UserId
-            };
-            var tegs = await _context.Tegs.ToListAsync();
-            var posts = await _context.Posts.Include(p => p.Tegs).Where(i => i.Id == viewModel.PostId).ToListAsync();
-            foreach (var item in posts)
-            {
-                item.Tegs = viewModel.HasWritingTags();
+                return BadRequest();
             }
+            // Очистить существующие теги
+            post.Tegs.Clear();
+            // Обновить свойства объекта Post
+            post.Title = viewModel.Title;
+            post.Text = viewModel.Text;
 
-            var postExist = await _context.Posts
-                                            .Include(p => p.Tegs) // Включаем связанные объекты Tegs для поста
-                                            .Include(p => p.User)
-                                            .FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
-            if (postExist == null)
+            // Добавить или обновить выбранные теги
+            var tags = viewModel.HasWritingTags(); // Предположим, что HasWritingTags возвращает список объектов Teg
+            foreach (var tag in tags)
             {
-                post.Id = viewModel.PostId;
-                await _context.Posts.AddAsync(post);
+                var existingTag = await _context.Tegs.FirstOrDefaultAsync(t => t.Id == tag.Id);
+                if (existingTag == null)
+                {
+                    post.Tegs.Add(tag); // Добавить новый тег
+                }
+                else
+                {
+                    post.Tegs.Add(existingTag); // Использовать существующий тег
+                }
             }
-            else
-            {
-                //post.Id = viewModel.PostId;
-                _context.Posts.Update(post);
-            }
-            await _context.SaveChangesAsync();    
-            
-            Post? post1 = await _context.Posts.Include(u => u.Tegs).FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
-            if (post1 == null)
-            { return BadRequest(); }
-            UserBlogViewModel ubVM = new UserBlogViewModel()
-            {
-                PostId = viewModel.PostId,
-                Title = post1.Title,
-                Text = post1.Text,
-                PublicationDate = post1.PublicationDate,
-                tegsList = post1.Tegs,
-                tegs = string.Join(", ", post1.Tegs.Select(t => t.TegTitle))
-            };            
-            return View("EditPost", ubVM);
+            _context.Posts.Update(post); // Обновить пост в контексте
+            await _context.SaveChangesAsync(); // Сохранить изменения
+            return View("EditPost", viewModel);
         }
 
 
