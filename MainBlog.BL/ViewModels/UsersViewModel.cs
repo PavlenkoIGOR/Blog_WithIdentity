@@ -4,7 +4,7 @@ namespace MainBlog.ViewModels
 {
     public class UsersViewModel
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [Display(Name = "Имя пользователя")]
         public string Name { get; set; }
         [Display(Name = "Возраст пользователя")]

@@ -8,12 +8,14 @@ namespace MainBlog.ViewModels
     {
         public string? Id { get; set; }
         public int PostId { get; set; }
+        [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "Поле для названия статьи является обязательным для заполнения!")]
         public string? Title { get; set; }
         [DataType(DataType.MultilineText)]
-        [Required]
+        [Required(ErrorMessage = "Поле для статьи является обязательным для заполнения!")]
         public string? Text { get; set; }
-        public DateTime PublicationDate { get; set; }
-        [Required(ErrorMessage = "Поле tegs является обязательным")]
+        public DateTime? PublicationDate { get; set; }
+        [Required(ErrorMessage = "Поле tegs является обязательным!")]
         [DataType(DataType.Text)]
         public string? tegs { get; set; }
         public List<Teg>? tegsList { get; set; }

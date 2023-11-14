@@ -41,33 +41,43 @@ namespace MainBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> UserBlog(UserBlogViewModel viewModel)
         {
-            #region получение Id активного пользователя
             var currentUser = HttpContext.User;
-            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.
-            #endregion
+            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier);
 
             string postContent = viewModel.Text;
-            var post = _context.Posts.Include(t=>t.Tegs).FirstOrDefault();            
 
-            #region выдёргивание из БД модели Post по Id
-            var existingPost = await _context.Posts.Include(t=>t.Tegs).Include(u=>u.User).FirstOrDefaultAsync(i=>i.Id == viewModel.PostId);
-            existingPost.Title = viewModel.Title;
-            existingPost.PublicationDate = DateTime.UtcNow;
-            existingPost.Text = postContent;
-            existingPost.UserId = userId!;
-            existingPost.Tegs = viewModel.HasWritingTags();
-            //проверка существует ли такой Post
-            if (existingPost != null)
+            // Проверка существующего поста
+            var existingPost = await _context.Posts
+            .Include(p => p.Tegs)
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+
+            if (existingPost == null)
             {
-                _context.Posts.Update(existingPost);
-            }
-            else 
-            {
-                existingPost.Id = viewModel.PostId;
-                await _context.Posts.AddAsync(existingPost);
+                // Создание нового поста
+                var newPost = new Post
+                {
+                    Title = viewModel.Title,
+                    PublicationDate = DateTime.UtcNow,
+                    Text = postContent,
+                    UserId = userId
+                };
+
+                var tags = viewModel.HasWritingTags();
+                foreach (var tag in tags)
+                {
+                    var existingTag = await _context.Tegs.FirstOrDefaultAsync(t => t.TegTitle == tag.TegTitle);
+                    if (existingTag == null)
+                    {
+                        existingTag = new Teg { TegTitle = tag.TegTitle };
+                        _context.Tegs.Add(existingTag);
+                    }
+                    newPost.Tegs.Add(existingTag); // Добавить тег в пост
+                }
+
+                _context.Posts.Add(newPost);
             }
             await _context.SaveChangesAsync();
-            #endregion
             return RedirectToAction("UserBlog", "Posts");
         }
 
@@ -77,7 +87,7 @@ namespace MainBlog.Controllers
             List<Comment> comments = await _context.Comments
                 .Include(u => u.User)
                 .ToListAsync();
-            List<Post> posts = await _context.Posts.ToListAsync();
+            List<Post> posts = await _context.Posts.Include(u => u.User).ToListAsync();
             var post = await _context.Posts.Include(t => t.Tegs).FirstOrDefaultAsync(i => i.Id == id);
             PostViewModel pVM = new PostViewModel()
             {
@@ -120,13 +130,14 @@ namespace MainBlog.Controllers
 
         [HttpGet]
         public async Task<IActionResult> EditPost(int postId)
-        {
-            Post? post = await _context.Posts.Include(u => u.Tegs).FirstOrDefaultAsync(p => p.Id == postId);
-
+        { 
+            var post = await _context.Posts.Include(p => p.Tegs).FirstOrDefaultAsync(p => p.Id == postId);
             if (post == null)
-            { return BadRequest(); }
+            {
+                return BadRequest();
+            }
 
-            UserBlogViewModel ubVM = new UserBlogViewModel()
+            var ubVM = new UserBlogViewModel
             {
                 PostId = postId,
                 Title = post.Title,
@@ -135,7 +146,6 @@ namespace MainBlog.Controllers
                 tegsList = post.Tegs,
                 tegs = string.Join(", ", post.Tegs.Select(t => t.TegTitle))
             };
-
             return View("EditPost", ubVM);
         }
         [HttpGet]

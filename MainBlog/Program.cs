@@ -91,7 +91,7 @@ public class Program
             }
         }
 
-
+        app.MapRazorPages();
         app.Run(); 
     }
 }

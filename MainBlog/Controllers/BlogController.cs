@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MainBlog.BL;
 
 namespace MainBlog.Controllers
 {
@@ -56,7 +57,7 @@ namespace MainBlog.Controllers
 
         #region EditUser
         [Route("EditUser")]
-		public async Task<IActionResult> EditUser(string userRole)
+		public IActionResult EditUser(string userRole)
         {
             var user = User;
             return RedirectToAction("ShowUsers", "Blog");
@@ -106,28 +107,28 @@ namespace MainBlog.Controllers
                 tegForView.Add(tegsItem.TegTitle);
             }
 
-            var post = _context.Posts.Include(t=>t.Tegs).Select(p => new AllPostsViewModel {
+            var post = await _context.Posts.Include(t=>t.Tegs).Select(p => new AllPostsViewModel {
                 Id = p.Id,
                 Author = p.User.UserName,
                 PublicationTime = p.PublicationDate,
                 Title = p.Title,
                 Text = p.Text,
                 TegsList = tegForView
-            });
+            }).ToListAsync();
             ViewBag.List = tegForView;
             return View("AllPostsPage",post);
         }
 
-		[HttpPost]
-        public async Task<IActionResult> AllPostsPage(string selectedRole)
+        [HttpPost]
+        public IActionResult AllPostsPage(string selectedRole)
         {
-            //var data = _context.Users.ToList();
-            return View(/*data*/);
+            var data = _context.Users.ToList();
+            return View();
         }
-		#endregion
+        #endregion
 
-		#region показ статей с определенным тегом
-		[HttpGet]
+        #region показ статей с определенным тегом
+        [HttpGet]
         public async Task<IActionResult> ShowPostsByTeg(string tegTitle)
         {
             var tegsModel = await _context.Tegs.Where(t => t.TegTitle == tegTitle).Include(p => p.Posts).ToListAsync();
