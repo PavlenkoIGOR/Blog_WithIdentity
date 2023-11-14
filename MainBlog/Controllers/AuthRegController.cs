@@ -53,8 +53,6 @@ namespace MainBlog.Controllers
                         string[] roles = new[] { "Administrator", "Moderator", "User" };
                         await _userManager.AddToRoleAsync(user, roles[2]);
                         await _signInManager.SignInAsync(user, false);
-
-                        //Response.Cookies.Append("RegisteredUsername", user.UserName); //запись в куки
                         await WriteActions.CreateLogFolder_File(_env, "RegistrationLogs", $"зарегестрировался пользователь {viewModel.Name}");
                         return RedirectToAction("GreetingPage", "Home");
                     }
@@ -133,7 +131,7 @@ namespace MainBlog.Controllers
             Models.User a = await _signInManager.UserManager.GetUserAsync(User);
             await WriteActions.CreateLogFolder_File(_env, "LogOutLogs", $"выпилился {a.Email}"); //Ы-ы-ы-ы :)
             await _signInManager.SignOutAsync();
-            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //очистка Cookie'сов
+
             return RedirectToAction("Index", "Home");
         }
         #endregion
