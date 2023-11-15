@@ -1,30 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MainBlog.BL;
+using Microsoft.AspNetCore.Mvc;
+using System.Xml;
 
 namespace MainBlog.Controllers
 {
     public class ErrorPagesController : Controller
     {
         private readonly ILogger<ErrorPagesController> _logger;
-        public ErrorPagesController(ILogger<ErrorPagesController> logger)
+        IWebHostEnvironment _env;
+        public ErrorPagesController(ILogger<ErrorPagesController> logger, IWebHostEnvironment environment)
         { 
             _logger = logger;
+            _env = environment;
         }
-        public IActionResult MyErrorsAction(int statusCode) 
+        public async Task<IActionResult> MyErrorsAction(int statusCode) 
         {
             switch (statusCode)
             {
                 case 404:
                     _logger.LogInformation($"{DateTime.UtcNow}: возникла ошибка {statusCode}.");
+                    await WriteActions.CreateLogFolder_File(_env, "Errors", "Возникла ошибка 404");
                     return View("PagenotFound");
                 case 400:
 					_logger.LogInformation($"{DateTime.UtcNow}: возникла ошибка {statusCode}.");
-					return View("400");
-                case 403:
+                    await WriteActions.CreateLogFolder_File(_env, "Errors", $"Возникла ошибка 400");
+                    return View("400");
+                case 401:
 					_logger.LogInformation($"{DateTime.UtcNow}: возникла ошибка {statusCode}.");
-					return View("403");
+                    await WriteActions.CreateLogFolder_File(_env, "Errors", $"Возникла ошибка 401");
+                    return View("401");
+
             }
             _logger.LogInformation($"{statusCode}");
-            return View("Error");
+            await WriteActions.CreateLogFolder_File(_env, "Errors", $"Возникла ошибка 500");
+            return View("500");
         }
     }
 }

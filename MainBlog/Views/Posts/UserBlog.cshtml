@@ -3,6 +3,7 @@
 @using MainBlog.Models;
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Ваш Блог";
 }
@@ -29,14 +30,25 @@
         <div id="rightDivMain" style="width: 100%; background-color:rgba(0,0,0,0.5)">
             <div id="PostField" style="background-color: rgba(0,0,0,0.5)">
                 <form method="post" asp-controller="Posts" asp-action="UserBlog">
-                    <span style="color: rgba(57,227,237,1)">Введите название Вашей статьи</span>
-                    @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" })
-                    <span style="color: rgba(57,227,237,1)">Введите текст Вашей статью</span>
-                    @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
-                    <span style="color: rgba(57,227,237,1)">Введите незвание тегов через запятую в формате "#Название тега"</span>
-                    @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
-                    
-                    <button class="AccountButton" type="submit">Опубликовать</button>
+
+                    <div>
+                        <label asp-for="Title" style="color: rgba(57,227,237,1)">Введите название Вашей статьи</label>
+                        <input class="userPostsTextArea" asp-for="Title" name="Title" type="text"></input>
+                        @* @Html.TextAreaFor(m => m.Title, new { @class = "userPostsTextArea" }) *@
+                        <span class="text-danger" asp-validation-for="Title"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Text" style="color: rgba(57,227,237,1)">Введите текст Вашей статью</label>
+                        @Html.TextAreaFor(m => m.Text, new { @class = "userPostsTextArea" })
+                        <span class="text-danger" asp-validation-for="Text"></span>
+                    </div>
+                    <div>
+                        <label asp-for="tegs" style="color: rgba(57,227,237,1)">Введите незвание тегов через запятую в формате "#Название_тега"</label>
+                        @Html.TextAreaFor(m => m.tegs, new { @class = "userPostsTextArea", Value = "Начальное значение" })
+                        <span class="text-danger" asp-validation-for="tegs"></span>
+                    </div>
+                    <hr style="background-color:lightseagreen; height:2px;">
+                    <button style="margin-right:0;" class="AccountButton" type="submit">Опубликовать</button>
                 </form>
             </div>
             <div id="allUserPosts"></div>
@@ -44,32 +56,40 @@
 
         <div style="position: relative; display:inline-block;">
             <div style="color: bisque; background-color:teal; text-align: center;">Все Ваши посты</div>
-
-            @foreach (var item in Model.UserPosts)
+            @if (Model.UserPosts != null)
             {
-                <div style="color: bisque; background-color:teal">
-                    @foreach (var teg in item.Tegs)
-                    {
-                        @teg.TegTitle
-                    }
-                </div>
 
-                <div style="background-color:bisque;"> @item.Text</div>
+                @foreach (var item in Model.UserPosts)
+                {
+                    <div style="color: bisque; background-color:teal">
+                        @foreach (var teg in item.Tegs)
+                        {
+                            @teg.TegTitle
+                        }
+                    </div>
 
-                <div style="color: bisque; background-color:teal">
-                    Дата публикации: @item.PublicationDate
-                </div>
+                    <div style="background-color:bisque;"> @item.Text</div>
 
-                <div>
-                    <form method="get" asp-action="EditPost" asp-controller="Posts">
-                        <input type="hidden" name="postId" value="@item.Id" />
-                        <button class="AccountButton" type="submit">Редактировать писанину</button>
-                    </form>
-                </div>
-                <hr />
+                    <div style="color: bisque; background-color:teal">
+                        Дата публикации: @item.PublicationDate
+                    </div>
+
+                    <div>
+                        <form method="get" asp-action="EditPost" asp-controller="Posts">
+                            <input type="hidden" name="postId" value="@item.Id" />
+                            <button class="AccountButton" type="submit">Редактировать писанину</button>
+                        </form>
+                    </div>
+                    <hr />
+                }
+            }
+            else
+            {
+                <h1>ХУЙ!</h1>
             }
         </div>
 
     </div>
 
 </div>
+

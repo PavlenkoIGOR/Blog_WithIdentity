@@ -22,21 +22,21 @@
         <input id="SentFormButton" class="AccountButton" type="submit" value="Войти" style="" />
     </form>
 </div>
-
-
-@*В этом примере используется обработчик события `onsubmit`, который вызывает JavaScript-функцию `validateForm()`. Функция `validateForm()` проверяет все поля ввода с классом `inputMain` 
-    и устанавливает красный фон и текст заполнителя, если поле оказывается пустым. Если хотя бы одно поле пустое, функция возвращает `false`, что предотвращает отправку формы на сервер. 
-    Если все поля заполнены, форма будет отправлена на сервер для дальнейшей обработки.*@
 <script>
     function validateForm() {
         let inputs = document.getElementsByClassName('inputMain');
+        let formIsValid = true;
         for (var elem of inputs) {
-            if (elem.value.trim() === '') {
+            if (elem.value.trim() == '') {
                 elem.style.backgroundColor = 'red';
                 elem.setAttribute('placeholder', 'Поле обязательно для заполнения!');
-                return false; // не отправлять форму
+                formIsValid = false;                
             }
         }
-        return true; // отправить форму на сервер  
+        return formIsValid; // отправить форму на сервер или не отправить в зависимости от formIsValid
     }
 </script>
+
+@*В этой странице используется обработчик события `onsubmit`, который вызывает JavaScript-функцию `validateForm()`. Функция `validateForm()` проверяет все поля ввода с классом `inputMain`
+    и устанавливает красный фон и текст заполнителя, если поле оказывается пустым. Если хотя бы одно поле пустое, функция возвращает `false`, что предотвращает отправку формы на сервер.
+    Если все поля заполнены, форма будет отправлена на сервер для дальнейшей обработки.*@

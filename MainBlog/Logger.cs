@@ -1,20 +1,26 @@
-﻿namespace Blog
+﻿using MainBlog.BL;
+
+namespace MainBlog
 {
     public interface ILogger
     {
-        public void WriteEvent(string eventMessage);
-        public void WriteError(string errorMessage);
+        public Task WriteEvent(string eventMessage);
+        public Task WriteError(string errorMessage);
     }
 
     public class Logger : ILogger
     {
-        public void WriteEvent(string eventMessage)
+        IWebHostEnvironment _env;
+        public Logger(IWebHostEnvironment env) { _env = env; }
+        public async Task WriteEvent(string eventMessage)
         {
             Console.WriteLine(eventMessage);
+            await WriteActions.CreateLogFolder_File(_env, "Logger", $"{eventMessage}");
         }
-        public void WriteError(string errorMessage)
+        public async Task WriteError(string errorMessage)
         {
             Console.WriteLine(errorMessage);
+            await WriteActions.CreateLogFolder_File(_env, "ErrorsLogger", $"{errorMessage}");
         }
     }
 }

@@ -17,12 +17,14 @@ namespace MainBlog.Controllers
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
-        public PostsController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+        ILogger _logger;
+        public PostsController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, ILogger logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _env = environment;
             _context = blogDBContext;
+            _logger = logger;
         }
 
         //[Authorize]
@@ -35,7 +37,7 @@ namespace MainBlog.Controllers
             UserBlogViewModel model = new UserBlogViewModel();
             model.UserPosts = await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
             model.Id = userId;
-            
+
             return View(model);
         }
         [HttpPost]
@@ -44,41 +46,66 @@ namespace MainBlog.Controllers
             var currentUser = HttpContext.User;
             var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            string postContent = viewModel.Text;
-
-            // Проверка существующего поста
-            var existingPost = await _context.Posts
-            .Include(p => p.Tegs)
-            .Include(p => p.User)
-            .FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
-
-            if (existingPost == null)
+            try
             {
-                // Создание нового поста
-                var newPost = new Post
-                {
-                    Title = viewModel.Title,
-                    PublicationDate = DateTime.UtcNow,
-                    Text = postContent,
-                    UserId = userId
-                };
 
-                var tags = viewModel.HasWritingTags();
-                foreach (var tag in tags)
+                if (ModelState.IsValid)
                 {
-                    var existingTag = await _context.Tegs.FirstOrDefaultAsync(t => t.TegTitle == tag.TegTitle);
-                    if (existingTag == null)
+                    string postContent = viewModel.Text;
+
+                    // Проверка существующего поста
+                    var existingPost = await _context.Posts
+                    .Include(p => p.Tegs)
+                    .Include(p => p.User)
+                    .FirstOrDefaultAsync(p => p.Id == viewModel.PostId);
+
+                    if (existingPost == null)
                     {
-                        existingTag = new Teg { TegTitle = tag.TegTitle };
-                        _context.Tegs.Add(existingTag);
-                    }
-                    newPost.Tegs.Add(existingTag); // Добавить тег в пост
-                }
+                        // Создание нового поста
+                        var newPost = new Post
+                        {
+                            Title = viewModel.Title,
+                            PublicationDate = DateTime.UtcNow,
+                            Text = postContent,
+                            UserId = userId
+                        };
 
-                _context.Posts.Add(newPost);
+                        var tags = viewModel.HasWritingTags();
+                        foreach (var tag in tags)
+                        {
+                            var existingTag = await _context.Tegs.FirstOrDefaultAsync(t => t.TegTitle == tag.TegTitle);
+                            if (existingTag == null)
+                            {
+                                existingTag = new Teg { TegTitle = tag.TegTitle };
+                                _context.Tegs.Add(existingTag);
+                            }
+                            newPost.Tegs.Add(existingTag); // Добавить тег в пост
+                        }
+
+                        _context.Posts.Add(newPost);
+                    }
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("UserBlog", "Posts");
+                }
+                else
+                {
+                    var addPosstsForView = await _context.Posts
+                        .Where(u => u.UserId == userId).ToListAsync();
+                    viewModel.UserPosts = addPosstsForView;
+                    return View(viewModel);
+                }
             }
-            await _context.SaveChangesAsync();
-            return RedirectToAction("UserBlog", "Posts");
+            catch (Exception ex)
+            {
+                await _logger.WriteError($"{ex.Message}");
+            }
+            finally
+            {
+                var addPosstsForView = await _context.Posts
+                    .Where(u => u.UserId == userId).ToListAsync();
+                viewModel.UserPosts = addPosstsForView;
+            }
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -124,13 +151,14 @@ namespace MainBlog.Controllers
 
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
+            
 
             return RedirectToAction("AllPostsPage", "Blog");
         }
 
         [HttpGet]
         public async Task<IActionResult> EditPost(int postId)
-        { 
+        {
             var post = await _context.Posts.Include(p => p.Tegs).FirstOrDefaultAsync(p => p.Id == postId);
             if (post == null)
             {
@@ -213,6 +241,7 @@ namespace MainBlog.Controllers
                 }
             }
             _context.Posts.Update(post); // Обновить пост в контексте
+
             await _context.SaveChangesAsync(); // Сохранить изменения
             return View("EditPost", viewModel);
         }
@@ -223,7 +252,7 @@ namespace MainBlog.Controllers
         public async Task<IActionResult> DeletePostByAdmin(int postId)
         {
             Post postfodDelete = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
-            if (postfodDelete == null) {  return BadRequest(); }
+            if (postfodDelete == null) { return BadRequest(); }
             else
             {
                 _context.Posts.Remove(postfodDelete);

@@ -60,10 +60,6 @@ namespace MainBlog.Controllers
                     //TempData["RegisteredUsername"] = user.Name;
                     // Или сохраним имя пользователя в куки
                 }
-                else
-                {
-                    
-                }
             }
             return View(viewModel);
         }
@@ -87,6 +83,11 @@ namespace MainBlog.Controllers
             string filePath22 = Path.Combine(_env.ContentRootPath, "Logs", "LoginStateLogs.txt");
             if (ModelState.IsValid)
             {
+                foreach (var elem in ModelState)
+                {
+                    var k = elem.Key;
+                    var v = elem.Value;
+                }
                 await WriteActions.CreateLogFolder_File(_env, "LoginModelState", $"Модель при входе {model.Email} валидна"); //Ы-ы-ы-ы :)
 
                 Models.User user = await _userManager.FindByEmailAsync(model.Email);

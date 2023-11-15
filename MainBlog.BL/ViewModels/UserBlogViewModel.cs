@@ -1,5 +1,6 @@
 ﻿using MainBlog.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace MainBlog.ViewModels
@@ -8,16 +9,22 @@ namespace MainBlog.ViewModels
     {
         public string? Id { get; set; }
         public int PostId { get; set; }
-        [DataType(DataType.MultilineText)]
-        [Required(ErrorMessage = "Поле для названия статьи является обязательным для заполнения!")]
-        public string? Title { get; set; }
-        [DataType(DataType.MultilineText)]
-        [Required(ErrorMessage = "Поле для статьи является обязательным для заполнения!")]
-        public string? Text { get; set; }
-        public DateTime? PublicationDate { get; set; }
-        [Required(ErrorMessage = "Поле tegs является обязательным!")]
+
         [DataType(DataType.Text)]
-        public string? tegs { get; set; }
+        [Required(ErrorMessage = "Поле для названия статьи является обязательным для заполнения!")]
+        public string Title { get; set; }
+
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "Поле для статьи является обязательным для заполнения!")]
+        public string Text { get; set; }
+
+        public DateTime PublicationDate { get; set; }
+
+        //[RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
+        [Required(ErrorMessage = "Поле tegs является обязательным для заполнения!")]
+        [DataType(DataType.Text)]
+        public string tegs { get; set; }
+
         public List<Teg>? tegsList { get; set; }
         public List<Post>? UserPosts { get; set; }
         public UserBlogViewModel() 

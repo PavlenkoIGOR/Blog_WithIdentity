@@ -4,7 +4,7 @@ using MainBlog.Data;
 using MainBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ILogger = Blog.ILogger;
+using Microsoft.Extensions.Logging;
 
 namespace MainBlog;
 
@@ -33,11 +33,13 @@ public class Program
             }).AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<MainBlogDBContext>();
 
-        // Connect logger
+        // Connect logger -- либо так устанавливается уровень логгирования либо в "Appsettings.json"
         builder.Logging
             .ClearProviders()
-            .SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace)
+            .SetMinimumLevel(LogLevel.Trace)
             .AddConsole();
+
+
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();

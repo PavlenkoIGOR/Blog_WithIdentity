@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MainBlog.BL;
+using System.Security.Claims;
 
 namespace MainBlog.Controllers
 {
@@ -17,12 +18,14 @@ namespace MainBlog.Controllers
         private UserManager<Models.User> _userManager;
         private SignInManager<Models.User> _signInManager;
         private IWebHostEnvironment _env;
-        public BlogController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment)
+        ILogger _logger;
+        public BlogController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment, ILogger logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _env = environment;
             _context = blogDBContext;
+            _logger = logger;
         }
 
 
@@ -116,6 +119,7 @@ namespace MainBlog.Controllers
                 TegsList = tegForView
             }).ToListAsync();
             ViewBag.List = tegForView;
+            await _logger.WriteEvent("Переход на страницу показа всех пользователей");
             return View("AllPostsPage",post);
         }
 
@@ -155,6 +159,9 @@ namespace MainBlog.Controllers
 
             ViewBag.List = tegForView;
 
+            var currentUser = HttpContext.User;
+            var userId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier); //представляет идентификатор пользователя.            
+            await _logger.WriteEvent($"Пользователь {currentUser.Identity.Name}. Показ статей по тегу {tegTitle}");
 
             return View("AllPostsPage", allPostsViewModels);
         }

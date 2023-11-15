@@ -28,25 +28,22 @@
                         <li class="nav-item">
                             <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой Блог</a>
+                                <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="Posts" asp-action="UserBlog">Мой_Блог</a>
                             </li>
                         }
                         @{
                             if (User.IsInRole("Administrator"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="ShowUsers">Показать всех пользователей</a>
+                                    <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="ShowUsers">Показать_всех_пользователей</a>
                                 </li>
                             }
                         }
                         <li class="nav-item__Reg">
-                            <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="AllPostsPage">Все посты</a>
+                            <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="Blog" asp-action="AllPostsPage">Все_посты</a>
                         </li>
                         <li class="nav-item__Reg">
                             <a class="nav-link text-custom" style="color: white; font-family: Lucida Console, Arial, sans-serif; font-size:x-large;" asp-area="" asp-controller="AuthReg" asp-action="RegistrateUser">Регистрация</a>
