@@ -31,7 +31,6 @@ namespace MainBlog.Controllers
 					_logger.LogInformation($"{DateTime.UtcNow}: возникла ошибка {statusCode}.");
                     await WriteActions.CreateLogFolder_File(_env, "Errors", $"Возникла ошибка 401");
                     return View("401");
-
             }
             _logger.LogInformation($"{statusCode}");
             await WriteActions.CreateLogFolder_File(_env, "Errors", $"Возникла ошибка 500");
