@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MainBlog.Models;
+using Microsoft.AspNetCore.Identity;
 
-namespace MainBlog.Models
+namespace MainBlog.Data.Models
 {
     public class User : IdentityUser
     {

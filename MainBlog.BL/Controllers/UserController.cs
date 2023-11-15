@@ -1,5 +1,7 @@
 ﻿using MainBlog.BL.Services;
 using MainBlog.Data;
+using MainBlog.Data.Data;
+using MainBlog.Data.Models;
 using MainBlog.Models;
 using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Hosting;
@@ -10,13 +12,13 @@ namespace MainBlog.Controllers
 {
     public class UserController : Controller
     {
-        UserManager<Models.User> _userManager;
-        SignInManager<Models.User> _signInManager;
+        UserManager<User> _userManager;
+        SignInManager<User> _signInManager;
         IWebHostEnvironment _env;
         MainBlogDBContext _context;
         private readonly IUserService _userService;
 
-        public UserController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment, IUserService userService)
+        public UserController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;

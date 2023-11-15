@@ -1,4 +1,5 @@
-﻿using MainBlog.Models;
+﻿using MainBlog.Data.Models;
+using MainBlog.Models;
 
 namespace MainBlog.ViewModels
 {

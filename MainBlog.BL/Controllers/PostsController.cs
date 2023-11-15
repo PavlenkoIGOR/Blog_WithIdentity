@@ -1,4 +1,6 @@
 ﻿using MainBlog.Data;
+using MainBlog.Data.Data;
+using MainBlog.Data.Models;
 using MainBlog.Models;
 using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Hosting;

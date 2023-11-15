@@ -1,5 +1,7 @@
 ﻿using MainBlog.BL;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Xml;
 
 namespace MainBlog.Controllers

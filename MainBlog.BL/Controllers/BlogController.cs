@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MainBlog.BL;
 using System.Security.Claims;
+using MainBlog.Data.Models;
+using MainBlog.Data.Data;
 
 namespace MainBlog.Controllers
 {
@@ -15,11 +17,11 @@ namespace MainBlog.Controllers
     public class BlogController : Controller
     {
         private MainBlogDBContext _context;
-        private UserManager<Models.User> _userManager;
-        private SignInManager<Models.User> _signInManager;
+        private UserManager<User> _userManager;
+        private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
         ILogger _logger;
-        public BlogController(MainBlogDBContext blogDBContext, UserManager<Models.User> userManager, SignInManager<Models.User> signInManager, IWebHostEnvironment environment, ILogger logger)
+        public BlogController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, ILogger logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;

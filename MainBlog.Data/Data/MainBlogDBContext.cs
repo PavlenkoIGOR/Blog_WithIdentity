@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection.Emit;
 using MainBlog.BL.Repositories;
+using MainBlog.Data.Models;
 
-
-namespace MainBlog.Data
+namespace MainBlog.Data.Data
 {
     public class MainBlogDBContext : IdentityDbContext<User>
     {

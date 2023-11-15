@@ -1,6 +1,8 @@
-﻿using MainBlog.Models;
+﻿using MainBlog.Data.Models;
+using MainBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -10,13 +12,13 @@ namespace MainBlog.Controllers
 
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger _logger;
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
         //private readonly Imylog _imylog;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+        public HomeController(ILogger logger, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _logger = logger;
             _userManager = userManager;
@@ -35,7 +37,7 @@ namespace MainBlog.Controllers
         //[Authorize(Roles = "Administrator")]//(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)//]
         public IActionResult Privacy()
         {
-            _logger.LogInformation("Nen ldfgdfg");
+            _logger.WriteEvent("Nen ldfgdfg");
             return View();
         }
 

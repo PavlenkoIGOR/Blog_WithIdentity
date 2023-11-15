@@ -1,22 +1,23 @@
 ﻿using MainBlog.BL;
-using MainBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using MainBlog.ViewModels;
+using MainBlog.Data.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MainBlog.Controllers
 {
 
     public class AuthRegController : Controller
     {
-        ILogger<AuthRegController> _logger;
+        ILogger _logger;
 
-		private UserManager<Models.User> _userManager;
-        private SignInManager<Models.User> _signInManager;
+		private UserManager<User> _userManager;
+        private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
-        public AuthRegController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, ILogger<AuthRegController> logger)
+        public AuthRegController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, ILogger logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -33,13 +34,13 @@ namespace MainBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> RegistrateUser(RegistrateViewModel viewModel)
         {
-            Models.User user = null!;
+            User user = null!;
             if (ModelState.IsValid)
             {
                 user = await _userManager.FindByEmailAsync(viewModel.Email);
                 if (user == null)
                 {
-                    user = new Models.User();
+                    user = new User();
                     user.UserName = viewModel.Name;
                     user.Age = viewModel.Age;
                     user.Email = viewModel.Email;
@@ -90,7 +91,7 @@ namespace MainBlog.Controllers
                 }
                 await WriteActions.CreateLogFolder_File(_env, "LoginModelState", $"Модель при входе {model.Email} валидна"); //Ы-ы-ы-ы :)
 
-                Models.User user = await _userManager.FindByEmailAsync(model.Email);
+                User user = await _userManager.FindByEmailAsync(model.Email);
 
                 if (user == null)
                 {
@@ -129,7 +130,7 @@ namespace MainBlog.Controllers
         [ValidateAntiForgeryToken] //ValidateAntiForgeryToken будет работать только, с HttpPost, причем в cshtml надо указать именно <form method="post">
         public async Task<IActionResult> Logout()
         {
-            Models.User a = await _signInManager.UserManager.GetUserAsync(User);
+            User a = await _signInManager.UserManager.GetUserAsync(User);
             await WriteActions.CreateLogFolder_File(_env, "LogOutLogs", $"выпилился {a.Email}"); //Ы-ы-ы-ы :)
             await _signInManager.SignOutAsync();
 

@@ -1,6 +1,8 @@
 using Blog;
 using MainBlog.BL.Services;
 using MainBlog.Data;
+using MainBlog.Data.Data;
+using MainBlog.Data.Models;
 using MainBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

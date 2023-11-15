@@ -1,4 +1,5 @@
-﻿using MainBlog.Models;
+﻿using MainBlog.Data.Models;
+using MainBlog.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

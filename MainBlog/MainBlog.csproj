@@ -8,13 +8,21 @@
 
   <ItemGroup>
     <Compile Remove="bin\**" />
+    <Compile Remove="Controllers\**" />
     <Compile Remove="Views\Comment\**" />
     <Content Remove="bin\**" />
+    <Content Remove="Controllers\**" />
     <Content Remove="Views\Comment\**" />
     <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="Controllers\**" />
     <EmbeddedResource Remove="Views\Comment\**" />
     <None Remove="bin\**" />
+    <None Remove="Controllers\**" />
     <None Remove="Views\Comment\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logger.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,10 +43,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MainBlog.BL\MainBlog.BL.csproj" />
+    <ProjectReference Include="..\MainBlog.Data\MainBlog.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\DB\" />
+    <Folder Include="DB\" />
   </ItemGroup>
 
 </Project>
