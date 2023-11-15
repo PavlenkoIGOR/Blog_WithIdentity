@@ -30,6 +30,9 @@ namespace MainBlog.Controllers
         
         public IActionResult Index()
         {
+            //int a = 5;
+            //int b = 0;
+            //var c = a / b;
                 return View();
         }
 

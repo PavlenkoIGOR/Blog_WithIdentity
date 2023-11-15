@@ -101,12 +101,6 @@ namespace MainBlog.Controllers
             {
                 await _logger.WriteError($"{ex.Message}");
             }
-            finally
-            {
-                var addPosstsForView = await _context.Posts
-                    .Where(u => u.UserId == userId).ToListAsync();
-                viewModel.UserPosts = addPosstsForView;
-            }
             return View(viewModel);
         }
 

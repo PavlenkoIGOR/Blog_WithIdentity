@@ -7,6 +7,7 @@ using MainBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Web.Mvc;
 
 namespace MainBlog;
 
@@ -61,6 +62,7 @@ public class Program
             app.UseExceptionHandler("/Error");
             app.UseHsts();
         }
+        
 
 
         app.UseStatusCodePagesWithReExecute("/ErrorPages/MyErrorsAction", "?statusCode={0}");
@@ -94,8 +96,9 @@ public class Program
                 }
             }
         }
-
         app.MapRazorPages();
+        app.UseMiddleware<ExceptionMiddleware>();
+
         app.Run(); 
     }
 }

@@ -1,10 +1,7 @@
-﻿using MainBlog.Models;
+﻿using MainBlog.Data.Models;
+using MainBlog.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using System.Reflection.Emit;
-using MainBlog.BL.Repositories;
-using MainBlog.Data.Models;
 
 namespace MainBlog.Data.Data
 {
