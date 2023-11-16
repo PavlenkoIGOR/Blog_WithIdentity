@@ -16,7 +16,6 @@ public class Program
         var connectionString = builder.Configuration.GetConnectionString("BlogContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
         builder.Services.AddTransient<IServiceCollection, ServiceCollection>();
-        //builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddTransient<ILogger, Logger>();
 
         builder.Services.AddDbContext<MainBlogDBContext>(options => options.UseSqlite(connectionString)).AddDatabaseDeveloperPageExceptionFilter()
@@ -48,7 +47,7 @@ public class Program
         var app = builder.Build();
 
 
-        app.Environment.EnvironmentName = "Production"; // меняем имя окружения
+        //app.Environment.EnvironmentName = "Production"; // меняем имя окружения
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -58,7 +57,7 @@ public class Program
             app.UseExceptionHandler("/Error");
             app.UseHsts();
         }
-        app.UseMiddleware<MyExceptionMiddleware>();
+        app.UseMiddleware<MyExceptionHandlerMiddleware>();
 
 
         app.UseStatusCodePagesWithReExecute("/ErrorPages/MyErrorsAction", "?statusCode={0}");

@@ -30,10 +30,14 @@ namespace MainBlog.Controllers
         
         public IActionResult Index()
         {
-            //int a = 5;
-            //int b = 0;
-            //var c = a / b;
-                return View();
+            try
+            {
+                int a = 5;
+                int b = 0;
+                var c = a / b;
+            }
+            catch (Exception ex) { _logger.WriteError(ex.Message); }
+            return View();
         }
 
   

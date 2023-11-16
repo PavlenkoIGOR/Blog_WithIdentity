@@ -1,23 +1,25 @@
-﻿using MainBlog.Data;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
 
-namespace MainBlog.Data
-{
-    public class MyExceptionMiddleware
-    {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<MyExceptionMiddleware> _logger;
 
-        public MyExceptionMiddleware(RequestDelegate next, ILogger<MyExceptionMiddleware> logger)
+namespace MainBlog
+{
+    public class MyExceptionHandlerMiddleware
+    {
+        #region оригинал
+        /*Оригинал*/
+        private readonly  RequestDelegate _next;
+        private readonly ILogger<MyExceptionHandlerMiddleware> _logger;
+
+        public MyExceptionHandlerMiddleware(RequestDelegate next, ILogger<MyExceptionHandlerMiddleware> logger)
         {
             _next = next;
             _logger = logger;
         }
 
-        public async Task InvokeAsync(HttpContext context, ILogger logg)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -34,7 +36,6 @@ namespace MainBlog.Data
                 await context.Response.WriteAsync(response);
             }
         }
+        #endregion
     }
 }
-
-
