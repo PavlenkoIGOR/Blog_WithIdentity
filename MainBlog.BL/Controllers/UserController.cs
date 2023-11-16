@@ -1,8 +1,5 @@
-﻿using MainBlog.BL.Services;
-using MainBlog.Data;
-using MainBlog.Data.Data;
+﻿using MainBlog.Data.Data;
 using MainBlog.Data.Models;
-using MainBlog.Models;
 using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -16,16 +13,14 @@ namespace MainBlog.Controllers
         SignInManager<User> _signInManager;
         IWebHostEnvironment _env;
         MainBlogDBContext _context;
-        private readonly IUserService _userService;
 
-        public UserController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, IUserService userService)
+
+        public UserController(MainBlogDBContext blogDBContext, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _env = environment;
             _context = blogDBContext;
-
-            _userService = userService;
         }
         [HttpGet]
         public async Task<IActionResult> EditUserPage(string id)

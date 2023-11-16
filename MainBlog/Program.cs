@@ -1,13 +1,8 @@
-using Blog;
-using MainBlog.BL.Services;
 using MainBlog.Data;
 using MainBlog.Data.Data;
 using MainBlog.Data.Models;
-using MainBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.Web.Mvc;
 
 namespace MainBlog;
 
@@ -21,7 +16,7 @@ public class Program
         var connectionString = builder.Configuration.GetConnectionString("BlogContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
         builder.Services.AddTransient<IServiceCollection, ServiceCollection>();
-        builder.Services.AddTransient<IUserService, UserService>();
+        //builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddTransient<ILogger, Logger>();
 
         builder.Services.AddDbContext<MainBlogDBContext>(options => options.UseSqlite(connectionString)).AddDatabaseDeveloperPageExceptionFilter()
@@ -48,6 +43,7 @@ public class Program
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddRazorPages();
+       
 
         var app = builder.Build();
 
@@ -96,8 +92,6 @@ public class Program
                 }
             }
         }
-        app.MapRazorPages();
-        
 
         app.Run(); 
     }

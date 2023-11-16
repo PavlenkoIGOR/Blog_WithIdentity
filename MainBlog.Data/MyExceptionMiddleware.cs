@@ -17,7 +17,7 @@ namespace MainBlog.Data
             _logger = logger;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, ILogger logg)
         {
             try
             {
