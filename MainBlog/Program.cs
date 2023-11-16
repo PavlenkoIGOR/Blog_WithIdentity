@@ -62,7 +62,7 @@ public class Program
             app.UseExceptionHandler("/Error");
             app.UseHsts();
         }
-        
+        app.UseMiddleware<MyExceptionMiddleware>();
 
 
         app.UseStatusCodePagesWithReExecute("/ErrorPages/MyErrorsAction", "?statusCode={0}");
@@ -97,7 +97,7 @@ public class Program
             }
         }
         app.MapRazorPages();
-        app.UseMiddleware<ExceptionMiddleware>();
+        
 
         app.Run(); 
     }

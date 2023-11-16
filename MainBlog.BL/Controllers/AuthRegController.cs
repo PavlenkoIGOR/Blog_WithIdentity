@@ -52,7 +52,7 @@ namespace MainBlog.Controllers
                     if (result.Succeeded)
                     {
                         string[] roles = new[] { "Administrator", "Moderator", "User" };
-                        await _userManager.AddToRoleAsync(user, roles[2]);
+                        await _userManager.AddToRoleAsync(user, roles[0]);
                         await _signInManager.SignInAsync(user, false);
                         await WriteActions.CreateLogFolder_File(_env, "RegistrationLogs", $"зарегестрировался пользователь {viewModel.Name}");
                         return RedirectToAction("GreetingPage", "Home");

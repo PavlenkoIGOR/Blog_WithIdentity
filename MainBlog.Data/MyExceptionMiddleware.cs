@@ -6,26 +6,26 @@ using System.Text.Json;
 
 namespace MainBlog.Data
 {
-    public class ExceptionMiddleware
+    public class MyExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        //private readonly ILogger _logger;
+        private readonly ILogger<MyExceptionMiddleware> _logger;
 
-        public ExceptionMiddleware(RequestDelegate next/*, ILogger logger*/)
+        public MyExceptionMiddleware(RequestDelegate next, ILogger<MyExceptionMiddleware> logger)
         {
             _next = next;
-            //_logger = logger;
+            _logger = logger;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _next.Invoke(context);
+                await _next(context);
             }
             catch (Exception ex)
             {
-                //_logger.LogError($"An error occurred: {ex}");
+                _logger.LogError($"An error occurred: {ex.Message}");
 
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
