@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 
+///попытка написать свой аттрибут
 namespace MainBlog
 {
     public class RangeExceptionAttribute : FilterAttribute, IExceptionFilter
