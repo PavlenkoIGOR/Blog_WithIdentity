@@ -47,7 +47,7 @@ public class Program
         var app = builder.Build();
 
 
-        app.Environment.EnvironmentName = "Production"; // меняем имя окружения
+        //app.Environment.EnvironmentName = "Production"; // меняем имя окружения
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

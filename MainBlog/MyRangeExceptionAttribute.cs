@@ -3,7 +3,7 @@
 ///попытка написать свой аттрибут
 namespace MainBlog
 {
-    public class RangeExceptionAttribute : FilterAttribute, IExceptionFilter
+    public class MyRangeExceptionAttribute : FilterAttribute, IExceptionFilter
     {
         public void OnException(ExceptionContext filterContext)
         {

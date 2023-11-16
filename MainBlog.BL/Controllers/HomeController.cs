@@ -37,7 +37,7 @@ namespace MainBlog.Controllers
 
             }
             catch (Exception ex)
-            { 
+            {
                 _logger.WriteError(ex.Message);
             }
             return View();
