@@ -16,7 +16,6 @@ namespace MainBlog.Controllers
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
         private IWebHostEnvironment _env;
-        //private readonly Imylog _imylog;
 
         public HomeController(ILogger logger, UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
