@@ -36,7 +36,6 @@ namespace MainBlog
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-
                 var response = JsonSerializer.Serialize(new { error = ex.Message });
                 await WriteActions.CreateLogFolder_File(_env, "GlobalErrors", $"{ex.Message}");
                 await context.Response.WriteAsync(response);
