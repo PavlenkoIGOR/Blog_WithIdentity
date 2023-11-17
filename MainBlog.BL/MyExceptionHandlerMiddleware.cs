@@ -1,6 +1,7 @@
 ﻿using MainBlog.BL;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
@@ -10,8 +11,7 @@ namespace MainBlog
 {
     public class MyExceptionHandlerMiddleware
     {
-        #region оригинал
-        /*Оригинал*/
+        #region 
         private readonly  RequestDelegate _next;
         private readonly ILogger<MyExceptionHandlerMiddleware> _logger;
         IWebHostEnvironment _env;
@@ -35,6 +35,7 @@ namespace MainBlog
 
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
 
                 var response = JsonSerializer.Serialize(new { error = ex.Message });
                 await WriteActions.CreateLogFolder_File(_env, "GlobalErrors", $"{ex.Message}");
