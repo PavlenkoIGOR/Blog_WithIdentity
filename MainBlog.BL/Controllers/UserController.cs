@@ -4,6 +4,8 @@ using MainBlog.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Data;
 
 namespace MainBlog.Controllers
 {
@@ -44,6 +46,17 @@ namespace MainBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUserByAdmin(UsersViewModel usersVM)
         {
+            string userRole = String.Empty;
+            foreach (RolesViewModel role in Enum.GetValues(typeof(RolesViewModel)))
+            {
+                if (role.GetHashCode() == Convert.ToInt32(usersVM.RoleType))
+                {
+                    // Найдено соответствующее значение по хэш-коду
+                    Console.WriteLine("Найдено значение: " + role.ToString());
+                    userRole = role.ToString();
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 UsersViewModel uVM = new UsersViewModel();
@@ -61,7 +74,7 @@ namespace MainBlog.Controllers
                     uVM.Email = user.Email;
                     uVM.Name = user.UserName;
                     uVM.Age = usersVM.Age;
-                    uVM.RoleType = usersVM.RoleType;
+                    uVM.RoleType = userRole;
 
                     user.Age = usersVM.Age;
                     user.Id = usersVM.Id;
@@ -69,7 +82,7 @@ namespace MainBlog.Controllers
                     user.UserName = usersVM.Name;
 
                     await _userManager.UpdateAsync(user);
-                    await _userManager.AddToRoleAsync(user, usersVM.RoleType);
+                    await _userManager.AddToRoleAsync(user, userRole);
                 }
 
                 IList<string> roles = await _userManager.GetRolesAsync(user);

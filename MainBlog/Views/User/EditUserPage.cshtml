@@ -1,6 +1,8 @@
 ﻿@model MainBlog.ViewModels.UsersViewModel
+@using MainBlog.ViewModels;
 ﻿﻿@using Microsoft.AspNetCore.Identity;
 @using MainBlog.Data.Models;
+@using MainBlog.BL;
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @{
@@ -25,32 +27,10 @@
         @if (User.IsInRole("Administrator"))
         {
             <span asp-validation-for="RoleType">Роль пользователя</span>
-                <input asp-for="RoleType" value="@Model.RoleType"/>
+            <select asp-for="RoleType" asp-items="Html.GetEnumSelectList(typeof(RolesViewModel))"></select>
+            @* <input asp-for="RoleType" value="@Model.RoleType"/> *@
         }
         <hr/>
         <button type="submit">Сохранить изменения</button>
     </form>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
