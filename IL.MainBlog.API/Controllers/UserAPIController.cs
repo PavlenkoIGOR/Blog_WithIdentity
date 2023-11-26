@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IL.MainBlog.API.Controllers
 {
-    [Route("api/[controller]")]
+     [Route("api/[controller]")]
     [ApiController]
     public class UserAPIController : ControllerBase
     {
