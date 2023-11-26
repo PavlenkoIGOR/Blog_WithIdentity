@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using MainBlog.ViewModels;
 using MainBlog.Data.Models;
+using IL.MainBlog.API;
+using Microsoft.AspNetCore.Antiforgery;
 
 namespace MainBlog.Controllers
 {
@@ -68,14 +70,14 @@ namespace MainBlog.Controllers
         
         #region Login
         [HttpGet("Login")]
-        public IActionResult Login(/*string rtrnUrl*/)
+        public IActionResult Login()
         {
-            return Ok(/*new LoginViewModel { ReturnUrl = rtrnUrl }*/);
+            return Ok("Всё ОК!");
         }
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken] см. "API_описание" на счет применения этого атрибута в сваггере
         public async Task<IActionResult> Login(LoginViewModel model)
         {            
             if (ModelState.IsValid)
@@ -96,7 +98,7 @@ namespace MainBlog.Controllers
                 if (signInResult.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);                    
-                    return Ok(string.Format("Hello {@user}", user));
+                    return Ok(/*string.Format("Hello {0}", user.UserName)*/user);
                 }
                 else 
                 {
@@ -109,7 +111,7 @@ namespace MainBlog.Controllers
         #region Logout
 
         [HttpPost("Logout")]
-        [ValidateAntiForgeryToken] //ValidateAntiForgeryToken будет работать только, с HttpPost, причем в cshtml надо указать именно <form method="post">
+        //[ValidateAntiForgeryToken] //ValidateAntiForgeryToken будет работать только, с HttpPost, причем в cshtml надо указать именно <form method="post">
         public async Task<IActionResult> Logout()
         {
             User a = await _signInManager.UserManager.GetUserAsync(User);
@@ -119,15 +121,7 @@ namespace MainBlog.Controllers
 
         }
         #endregion
-        
     }
 }
 
 
-/*
-  "name": "user2",
-  "age": 22,
-  "email": "user2@mail.ru",
-  "password": "2222",
-  "comparePassword": "2222"
- */
