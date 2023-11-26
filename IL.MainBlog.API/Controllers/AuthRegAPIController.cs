@@ -56,7 +56,7 @@ namespace MainBlog.Controllers
                         string[] roles = new[] { "Administrator", "Moderator", "User" };
                         await _userManager.AddToRoleAsync(user, roles[0]);
                         await _signInManager.SignInAsync(user, false);                        
-                        return RedirectToAction("GreetingPage", "Home");
+                        return Ok(string.Format("Greeting, {0}", user.UserName));
                     }
                 }
             }
