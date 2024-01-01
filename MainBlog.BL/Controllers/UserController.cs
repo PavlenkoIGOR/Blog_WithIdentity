@@ -82,6 +82,7 @@ namespace MainBlog.Controllers
                     user.UserName = usersVM.Name;
 
                     await _userManager.UpdateAsync(user);
+                    await _userManager.RemoveFromRoleAsync(user, role.Take(1));
                     await _userManager.AddToRoleAsync(user, userRole);
                 }
 
